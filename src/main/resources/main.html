@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meeting Management</title>
+  <link rel="stylesheet" href="styles2.css">
+</head>
+<body>
+
+<!-- Header Section -->
+<header>
+  <h1>Meeting Management</h1>
+  <button id="logoutButton" class="btn danger">Logout</button>
+</header>
+
+<!-- Meeting List -->
+<div id="meetingList" class="accordion">
+  <!-- Spotkania będą dodane dynamicznie przez JavaScript -->
+</div>
+
+<!-- Create New Meeting Button -->
+<button id="addMeetingButton" class="btn primary">Add New Meeting</button>
+
+<!-- Create Meeting Modal -->
+<div id="createMeetingModal" class="modal">
+  <div class="modal-content">
+    <h2>Create New Meeting</h2>
+    <label for="meetingTitle">Meeting Title</label>
+    <input type="text" id="meetingTitle" placeholder="Enter meeting title" maxlength="25">
+    <button id="saveMeetingButton" class="btn success">Save</button>
+    <button id="cancelMeetingButton" class="btn danger">Cancel</button>
+  </div>
+</div>
+
+<script src="script2.js"></script>
+</body>
+</html>

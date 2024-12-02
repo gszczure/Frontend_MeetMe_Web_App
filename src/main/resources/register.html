@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="styles.css">
+  <title>Register</title>
+</head>
+<body>
+<div class="container">
+  <h2>Register</h2>
+  <form id="registerForm">
+    <!-- Imię -->
+    <label for="firstName">First Name:</label>
+    <input type="text" id="firstName" name="firstName" required>
+
+    <!-- Nazwisko -->
+    <label for="lastName">Last Name:</label>
+    <input type="text" id="lastName" name="lastName" required>
+
+    <!-- Nazwa użytkownika -->
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username" required>
+
+    <!-- Hasło -->
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" required>
+
+    <!-- Potwierdzenie hasła -->
+    <label for="confirmPassword">Confirm Password:</label>
+    <input type="password" id="confirmPassword" name="confirmPassword" required>
+
+    <!-- Email -->
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" required>
+
+    <!-- Numer telefonu -->
+    <label for="phoneNumber">Phone Number:</label>
+    <input type="text" id="phoneNumber" name="phoneNumber" required>
+
+    <!-- Przycisk wysyłania formularza -->
+    <button type="submit">Register</button>
+  </form>
+  <p id="message"></p>
+  <p>
+    Already have an account? <a href="index.html">Login</a>
+  </p>
+</div>
+<script src="script.js"></script>
+</body>
+</html>
