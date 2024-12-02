@@ -1,0 +1,202 @@
+/* General Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
+
+body {
+    background-color: #f4f4f9;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* Header Styles */
+header {
+    background-color: #4CAF50;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+header .logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+header .logout-button {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+header .logout-button:hover {
+    background-color: #d32f2f;
+}
+
+/* Main Section Styles */
+main {
+    padding: 20px;
+    max-width: 800px;
+    margin: 20px auto;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Section Styles */
+section {
+    margin-bottom: 30px;
+}
+
+section h2 {
+    margin-bottom: 10px;
+    color: #4CAF50;
+}
+
+/* Input and Button Styles */
+input {
+    width: calc(100% - 100px);
+    padding: 10px;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+/* Meeting List Styles */
+.meetings-list {
+    border-top: 2px solid #ccc;
+    padding-top: 20px;
+}
+
+#meeting-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.meeting {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+}
+
+.meeting-title {
+    font-size: 1.2rem;
+    color: #333;
+    cursor: pointer;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+.meeting-title:hover {
+    color: #4CAF50;
+}
+
+/* Szczegóły spotkania */
+.meeting-details {
+    display: none;
+    flex-wrap: wrap; /* Flex wrap dla responsywności */
+    justify-content: space-between;
+    align-items: flex-start; /* Wyrównanie do góry */
+    margin-top: 10px;
+    gap: 10px;
+}
+
+/* Kontener kodu spotkania */
+.meeting-code-container {
+    display: flex;
+    justify-content: flex-end; /* Wyrównanie tekstu do prawej */
+    align-items: center;
+    margin-bottom: 10px; /* Przerwa między kodem a przyciskiem */
+    flex: 1 1 100%; /* Zajmuje całą szerokość */
+    color: red;
+    white-space: nowrap; /* Zapobiega zawijaniu tekstu */
+}
+
+/* Przyciski */
+.details-button-container {
+    display: flex;
+    gap: 10px; /* Odstępy między przyciskami */
+    flex-wrap: wrap; /* Flex wrap, aby dostosować do przestrzeni */
+}
+
+.details-button {
+    background-color: #2196F3;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.details-button:hover {
+    background-color: #1976D2;
+}
+
+/* Przycisk Delete */
+.delete-button {
+    margin-left: auto; /* Przesuwa przycisk na prawo */
+    background-color: #f44336;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    flex-shrink: 0; /* Nie pozwala przyciskowi zmniejszać się */
+}
+
+.delete-button:hover {
+    background-color: #d32f2f;
+}
+
+.meeting-title-container {
+    display: flex;
+    justify-content: space-between; /* Rozstawia nazwę i kod */
+    align-items: center; /* Wyśrodkowuje pionowo */
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.meeting-name {
+    color: #333;
+}
+
+.meeting-code {
+    color: red;
+    font-size: 0.9rem; /* Kod może być nieco mniejszy */
+    margin-left: auto; /* Przesuwa kod na prawo */
+    white-space: nowrap; /* Zapobiega zawijaniu kodu */
+}
+
+

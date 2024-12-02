@@ -1,38 +1,41 @@
 <!DOCTYPE html>
-<html lang="pl">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Meeting Management</title>
+  <title>Meeting Organizer</title>
   <link rel="stylesheet" href="styles2.css">
 </head>
 <body>
-
-<!-- Header Section -->
 <header>
-  <h1>Meeting Management</h1>
-  <button id="logoutButton" class="btn danger">Logout</button>
+  <div class="logo">Meeting Organizer</div>
+  <button class="logout-button">Logout</button>
 </header>
 
-<!-- Meeting List -->
-<div id="meetingList" class="accordion">
-  <!-- Spotkania będą dodane dynamicznie przez JavaScript -->
-</div>
+<main>
+  <!-- Sekcja dodawania nowego spotkania -->
+  <section class="add-meeting">
+    <h2>Add New Meeting</h2>
+    <input type="text" id="meeting-name" placeholder="Meeting Name">
+    <button class="save-button">Save</button>
+  </section>
 
-<!-- Create New Meeting Button -->
-<button id="addMeetingButton" class="btn primary">Add New Meeting</button>
+  <!-- Sekcja dołączania do spotkania -->
+  <section class="join-meeting">
+    <h2>Join a Meeting</h2>
+    <input type="text" id="join-code" placeholder="Enter Meeting Code">
+    <button class="join-button">Join</button>
+  </section>
 
-<!-- Create Meeting Modal -->
-<div id="createMeetingModal" class="modal">
-  <div class="modal-content">
-    <h2>Create New Meeting</h2>
-    <label for="meetingTitle">Meeting Title</label>
-    <input type="text" id="meetingTitle" placeholder="Enter meeting title" maxlength="25">
-    <button id="saveMeetingButton" class="btn success">Save</button>
-    <button id="cancelMeetingButton" class="btn danger">Cancel</button>
-  </div>
-</div>
+  <!-- Lista spotkań -->
+  <section class="meetings-list">
+    <h2>Your Meetings</h2>
+    <div id="meeting-container">
+      <!-- Spotkania będą dodawane dynamicznie przez JavaScript -->
+    </div>
+  </section>
+</main>
 
-<script src="script2.js"></script>
+<script src="script2.js" defer></script>
 </body>
 </html>
