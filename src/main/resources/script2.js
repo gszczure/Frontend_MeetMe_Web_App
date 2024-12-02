@@ -4,6 +4,8 @@ const meetingNameInput = document.querySelector('#meeting-name');
 const meetingContainer = document.querySelector('#meeting-container');
 const joinButton = document.querySelector('.join-button');
 const meetingCodeInput = document.querySelector('#join-code');
+const logoutButton = document.querySelector('.logout-button');
+
 
 let currentlyOpenDetails = null; // Globalna zmienna przechowująca otwarte spotkania
 
@@ -228,6 +230,18 @@ async function handleJoinButtonAction() {
         alert("An error occurred while joining the meeting.");
     }
 }
+
+// Funkcja wylogowania
+function logoutUser() {
+
+    localStorage.removeItem('token');
+    localStorage.removeItem('userId');
+
+    window.location.href = 'index.html';
+}
+
+// Guzik wylogowania
+logoutButton.addEventListener('click', logoutUser);
 
 // Inicjalizacja strony po załadowaniu dokumentu
 document.addEventListener('DOMContentLoaded', () => {
