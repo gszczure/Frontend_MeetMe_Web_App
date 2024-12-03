@@ -1,0 +1,136 @@
+/* General Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
+
+body {
+    background-color: #f4f4f9;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* Header Styles */
+header {
+    background-color: #4CAF50;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+header .logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+header .logout-button {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+header .logout-button:hover {
+    background-color: #d32f2f;
+}
+
+/* Main Section Styles */
+main {
+    padding: 20px;
+    max-width: 800px;
+    margin: 20px auto;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Section Styles */
+section {
+    margin-bottom: 30px;
+}
+
+section h2 {
+    margin-bottom: 10px;
+    color: #4CAF50;
+}
+
+/* Input and Button Styles */
+input {
+    width: calc(100% - 100px);
+    padding: 10px;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+/* Kontener użytkowników */
+.user-info-container {
+    width: 50%;
+    margin: 5% auto;
+    padding: 20px;
+    background-color: #f4f4f4;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+.user-info-container h1 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+#meeting-name-placeholder {
+    font-size: 20px;
+    color: #555;
+    margin-bottom: 20px;
+}
+
+/* Stylizacja dla tytułu spotkania */
+.meeting-title {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+
+#user-list {
+    text-align: left;
+}
+
+.users-list {
+    list-style-type: decimal;
+    padding-left: 20px;
+}
+
+.user-item {
+    background-color: #f4f4f4;
+    margin: 5px 0;
+    padding: 10px;
+    border-radius: 4px;
+    font-size: 1.2em;
+    border-bottom: 1px solid #ddd;
+}
+

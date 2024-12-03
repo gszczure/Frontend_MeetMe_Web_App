@@ -49,6 +49,16 @@ function addMeetingToUI(meeting) {
         button.classList.add('details-button');
         button.textContent = detail;
         buttonContainer.appendChild(button);
+
+        if (detail === 'Users') {
+            button.addEventListener('click', () => {
+                // Przechowaj ID spotkania w localStorage i przekieruj na stronę users.html
+                localStorage.setItem('currentMeetingId', meeting.id);
+                localStorage.setItem('currentMeetingTitle', meeting.name);
+
+                window.location.href = 'users.html';
+            });
+        }
     });
 
     detailsDiv.appendChild(buttonContainer);
@@ -234,8 +244,7 @@ async function handleJoinButtonAction() {
 // Funkcja wylogowania
 function logoutUser() {
 
-    localStorage.removeItem('token');
-    localStorage.removeItem('userId');
+    localStorage.clear()
 
     window.location.href = 'index.html';
 }
