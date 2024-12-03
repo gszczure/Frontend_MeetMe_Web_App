@@ -55,6 +55,7 @@ function addMeetingToUI(meeting) {
                 // Przechowaj ID spotkania w localStorage i przekieruj na stronę users.html
                 localStorage.setItem('currentMeetingId', meeting.id);
                 localStorage.setItem('currentMeetingTitle', meeting.name);
+                localStorage.setItem('meetingOwnerId', meeting.owner.id);
 
                 window.location.href = 'users.html';
             });
