@@ -5,7 +5,7 @@ const meetingContainer = document.querySelector('#meeting-container');
 const joinButton = document.querySelector('.join-button');
 const meetingCodeInput = document.querySelector('#join-code');
 const logoutButton = document.querySelector('.logout-button');
-
+const themeToggle = document.querySelector('.theme-toggle');
 
 let currentlyOpenDetails = null; // Globalna zmienna przechowująca otwarte spotkania
 
@@ -244,9 +244,7 @@ async function handleJoinButtonAction() {
 
 // Funkcja wylogowania
 function logoutUser() {
-
     localStorage.clear()
-
     window.location.href = 'index.html';
 }
 
@@ -255,7 +253,7 @@ logoutButton.addEventListener('click', logoutUser);
 
 // Inicjalizacja strony po załadowaniu dokumentu
 document.addEventListener('DOMContentLoaded', () => {
-    loadMeetings();  // Załaduj spotkania
+    loadMeetings();
 });
 
 // Obsługa kliknięcia przycisku "Save"
@@ -266,3 +264,13 @@ saveButton.addEventListener('click', () => {
 
 // Obsługa kliknięcia przycisku "Join"
 joinButton.addEventListener('click', handleJoinButtonAction);
+
+// Guzik zmiany koloru
+document.addEventListener('DOMContentLoaded', () => {
+    const body = document.body;
+    themeToggle.addEventListener('click', () => {
+        body.classList.toggle('dark-theme');
+        themeToggle.textContent = body.classList.contains('dark-theme') ? '☀️' : '🌙';
+    });
+});
+
