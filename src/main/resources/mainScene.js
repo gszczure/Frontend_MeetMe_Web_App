@@ -265,7 +265,7 @@ saveButton.addEventListener('click', () => {
 // Obsługa kliknięcia przycisku "Join"
 joinButton.addEventListener('click', handleJoinButtonAction);
 
-// Guzik zmiany koloru
+// Guzik zmiany theme
 document.addEventListener('DOMContentLoaded', () => {
     const body = document.body;
     themeToggle.addEventListener('click', () => {
