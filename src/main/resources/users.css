@@ -1,4 +1,42 @@
 /* General Styles */
+:root {
+    --bg-color: #f4f4f9;
+    --text-color: #333;
+    --header-bg: #4CAF50;
+    --header-text: #fff;
+    --button-bg: #4CAF50;
+    --button-hover: #45a049;
+    --meeting-bg: #f9f9f9;
+    --meeting-border: #ddd;
+    --link-hover: #4CAF50;
+    --delete-button-bg: #f44336;
+    --delete-button-hover: #d32f2f;
+    --details-button-bg: #2196F3;
+    --details-button-hover: #1976D2;
+    --meeting-code-color: red;
+    --text: white;
+}
+
+/* Dark Theme Variables */
+body.dark-theme {
+    --bg-color: #1c1c1e;
+    --text-color: #f0f0f0;
+    --header-bg: #0a398f;
+    --header-text: #fff;
+    --button-bg: #0a398f;
+    --button-hover: #2196f3;
+    --meeting-bg: #2e2e2e;
+    --meeting-border: #444;
+    --link-hover: #1e88e5;
+    --delete-button-bg: #d32f2f;
+    --delete-button-hover: #b71c1c;
+    --details-button-bg: #0a398f;
+    --details-button-hover: #2196f3;
+    --meeting-code-color: #ff5252;
+    --text: white;
+}
+
+/* General Styles */
 * {
     margin: 0;
     padding: 0;
@@ -7,15 +45,15 @@
 }
 
 body {
-    background-color: #f4f4f9;
-    color: #333;
+    background-color: var(--bg-color);
+    color: var(--text-color);
     line-height: 1.6;
 }
 
 /* Header Styles */
 header {
-    background-color: #4CAF50;
-    color: #fff;
+    background-color: var(--header-bg);
+    color: var(--header-text);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -29,7 +67,7 @@ header .logo {
 }
 
 header .logout-button {
-    background-color: #f44336;
+    background-color: var(--delete-button-bg);
     color: white;
     border: none;
     padding: 10px 20px;
@@ -39,7 +77,7 @@ header .logout-button {
 }
 
 header .logout-button:hover {
-    background-color: #d32f2f;
+    background-color: var(--delete-button-hover);
 }
 
 /* Main Section Styles */
@@ -47,7 +85,7 @@ main {
     padding: 20px;
     max-width: 800px;
     margin: 20px auto;
-    background: white;
+    background: var(--meeting-bg);
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
@@ -59,7 +97,7 @@ section {
 
 section h2 {
     margin-bottom: 10px;
-    color: #4CAF50;
+    color: var(--link-hover);
 }
 
 /* Input and Button Styles */
@@ -67,14 +105,14 @@ input {
     width: calc(100% - 100px);
     padding: 10px;
     margin-right: 10px;
-    border: 1px solid #ccc;
+    border: 1px solid var(--meeting-border);
     border-radius: 4px;
     font-size: 1rem;
 }
 
 button {
-    background-color: #4CAF50;
-    color: white;
+    background-color: var(--button-bg);
+    color: var(--text);
     border: none;
     padding: 10px 20px;
     border-radius: 4px;
@@ -83,15 +121,15 @@ button {
 }
 
 button:hover {
-    background-color: #45a049;
+    background-color: var(--button-hover);
 }
 
-/* Kontener użytkowników */
+/* User Info Container */
 .user-info-container {
     width: 50%;
     margin: 5% auto;
     padding: 20px;
-    background-color: #f4f4f4;
+    background-color: var(--meeting-bg);
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     text-align: center;
@@ -104,18 +142,18 @@ button:hover {
 
 #meeting-name-placeholder {
     font-size: 20px;
-    color: #555;
+    color: var(--text-color);
     margin-bottom: 20px;
 }
 
-/* Stylizacja dla tytułu spotkania */
+/* Meeting Title Styles */
 .meeting-title {
     text-align: center;
     margin-bottom: 20px;
     font-size: 24px;
 }
 
-/* Lista użytkowników */
+/* User List Styles */
 .users-list {
     list-style-type: decimal;
     padding-left: 40px;
@@ -125,15 +163,15 @@ button:hover {
 .user-item {
     display: list-item;
     position: relative;
-    background-color: #f4f4f4;
+    background-color: var(--meeting-bg);
     margin: 5px 0;
     padding: 10px;
     border-radius: 4px;
     font-size: 1.2em;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid var(--meeting-border);
 }
 
-/* Imię użytkownika i przycisk Delete */
+/* User Name and Delete Button Styles */
 .user-name {
     display: inline-block;
     width: calc(100% - 70px);
@@ -141,7 +179,7 @@ button:hover {
 
 .delete-button {
     float: right;
-    background-color: #f44336;
+    background-color: var(--delete-button-bg);
     color: white;
     border: none;
     padding: 5px 10px;
@@ -151,10 +189,10 @@ button:hover {
 }
 
 .delete-button:hover {
-    background-color: #d32f2f;
+    background-color: var(--delete-button-hover);
 }
 
-/* Styl dla przycisków nawigacyjnych */
+/* Button Container */
 .button-container {
     display: flex;
     justify-content: center;
@@ -163,7 +201,7 @@ button:hover {
 }
 
 .leave-button {
-    background-color: #f44336;
+    background-color: var(--delete-button-bg);
     color: white;
     padding: 10px 20px;
     border: none;
@@ -174,11 +212,11 @@ button:hover {
 }
 
 .leave-button:hover {
-    background-color: #d32f2f;
+    background-color: var(--delete-button-hover);
 }
 
 .back-button {
-    background-color: #4CAF50;
+    background-color: var(--button-bg);
     color: white;
     padding: 10px 20px;
     border: none;
@@ -189,6 +227,5 @@ button:hover {
 }
 
 .back-button:hover {
-    background-color: #45a049;
+    background-color: var(--button-hover);
 }
-

@@ -2,7 +2,7 @@ const logoutButton = document.querySelector('.logout-button');
 const backButton = document.querySelector('.back-button');
 const leaveMeetingButton = document.querySelector('.leave-button');
 const titleElement = document.querySelector('.meeting-title');
-
+const themeToggle = document.querySelector('.theme-toggle');
 
 document.addEventListener('DOMContentLoaded', async () => {
     const meetingId = localStorage.getItem('currentMeetingId');
@@ -53,6 +53,7 @@ async function loadUsersForMeeting(meetingId) {
         }
     } catch (error) {
         console.error('Error loading users:', error);
+        alert('An error occurred while loading meetings.');
     }
 }
 
@@ -142,4 +143,12 @@ leaveMeetingButton.addEventListener('click', () => {
     handleLeaveMeetingButtonClick(meetingId);
 });
 
+// Guzik zmiany theme
+document.addEventListener('DOMContentLoaded', () => {
+    const body = document.body;
+    themeToggle.addEventListener('click', () => {
+        body.classList.toggle('dark-theme');
+        themeToggle.textContent = body.classList.contains('dark-theme') ? '☀️' : '🌙';
+    });
+});
 
