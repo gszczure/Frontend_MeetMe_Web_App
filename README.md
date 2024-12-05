@@ -1,6 +1,6 @@
 # MeetMe_Web_App 
 
-## still a work in progress
+## Still a work in progress
 
 This will be the version of my app that works as a website.
 
