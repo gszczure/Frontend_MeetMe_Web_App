@@ -1,0 +1,88 @@
+/* General Styles */
+:root {
+    --bg-color: #f4f4f9;
+    --text-color: #333;
+    --header-bg: #4CAF50;
+    --header-text: #fff;
+    --button-bg: #4CAF50;
+    --button-hover: #45a049;
+    --meeting-bg: #f9f9f9;
+    --meeting-border: #ddd;
+    --link-hover: #4CAF50;
+    --delete-button-bg: #f44336;
+    --delete-button-hover: #d32f2f;
+    --details-button-bg: #2196F3;
+    --details-button-hover: #1976D2;
+    --meeting-code-color: red;
+    --text: white;
+}
+
+/* Dark Theme Variables */
+body.dark-theme {
+    --bg-color: #1c1c1e;
+    --text-color: #f0f0f0;
+    --header-bg: #0a398f;
+    --header-text: #fff;
+    --button-bg: #0a398f;
+    --button-hover: #2196f3;
+    --meeting-bg: #2e2e2e;
+    --meeting-border: #444;
+    --link-hover: #1e88e5;
+    --delete-button-bg: #d32f2f;
+    --delete-button-hover: #b71c1c;
+    --details-button-bg: #0a398f;
+    --details-button-hover: #2196f3;
+    --meeting-code-color: #ff5252;
+    --text: white;
+}
+
+/*Theme switch button*/
+#theme-switch {
+    height: 50px;
+    width: 50px;
+    padding: 0;
+    border-radius: 50%;
+    background-color: var(--button-bg);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 110px;
+    transition: background-color 0.3s;
+}
+
+/*Theme switch button display (Moon on lightMode, Sun on darkMode)*/
+#theme-switch svg:last-child {
+    display: none;
+}
+.dark-theme #theme-switch svg:first-child {
+    display: none;
+}
+.dark-theme #theme-switch svg:last-child {
+    display: block;
+}
+
+#theme-switch:hover {
+    background-color: var(--button-hover);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+/*Header strony (pasek na górze)*/
+header {
+    background-color: var(--header-bg);
+    color: var(--header-text);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+}
+
+header .logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
