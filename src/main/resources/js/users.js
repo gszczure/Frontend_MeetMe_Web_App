@@ -2,20 +2,21 @@ const logoutButton = document.querySelector('.logout-button');
 const backButton = document.querySelector('.back-button');
 const leaveMeetingButton = document.querySelector('.leave-button');
 const titleElement = document.querySelector('.meeting-title');
+const usersList = document.querySelector('.users-list');
 
+const meetingId = localStorage.getItem('currentMeetingId');
+const meetingTitle = localStorage.getItem('currentMeetingTitle');
+const meetingOwnerId = localStorage.getItem('meetingOwnerId');
+const currentUserId = localStorage.getItem('userId');
+
+//TODO usunqac to ze najpierw musi sie zaladowac bo i tak w html mam defer czyli najpierw beda sie ladowac
 document.addEventListener('DOMContentLoaded', async () => {
-    const meetingId = localStorage.getItem('currentMeetingId');
-    const meetingTitle = localStorage.getItem('currentMeetingTitle');
-    const meetingOwnerId = localStorage.getItem('meetingOwnerId');
-    const currentUserId = localStorage.getItem('userId');
-
     if (meetingId && meetingTitle && meetingOwnerId && currentUserId) {
         titleElement.textContent = `Users for meeting: "${meetingTitle}"`;
 
-        //TODO ta metoda bedzie gdy wlasciceil bedzie usuwac ludzi zeby ludzie sie odswiezyli a nei zeby go wychodzilo na scene poprzednia
         loadUsersForMeeting(meetingId);
 
-        // Sprawdzenie, czy użytkownik jest właścicielem spotkania (jeśli jest to nie widzi guzika leaveMeeting)
+        // Sprawdzenie, czy użytkownik jest właścicielem spotkania (jeśli jest, to nie widzi guzika leaveMeeting)
         if (meetingOwnerId === currentUserId) {
             if (leaveMeetingButton) {
                 leaveMeetingButton.style.display = 'none';
@@ -25,6 +26,46 @@ document.addEventListener('DOMContentLoaded', async () => {
         alert('Meeting ID, title, or owner information not found.');
     }
 });
+
+// Funkcja do wyświetlania użytkowników
+function displayUsers(users) {
+    usersList.innerHTML = '';
+
+    users.forEach((user) => {
+        const userItem = document.createElement('li');
+        userItem.classList.add('user-item');
+
+        // Imię i nazwisko użytkownika
+        const userName = document.createElement('span');
+        userName.textContent = `${user.firstName} ${user.lastName}`;
+        userName.classList.add('user-name');
+
+        // Zamiana na number poniewaz w localstorage wartości przechowywane sa jako stringi
+        const ownerId = Number(meetingOwnerId);
+        const currentUserIdNumber = Number(currentUserId);
+
+        if (ownerId === currentUserIdNumber && user.id !== ownerId) {
+            // Przycisk Delete
+            const deleteButton = document.createElement('button');
+            deleteButton.textContent = 'Delete';
+            deleteButton.classList.add('delete-button');
+
+            // Pobieramy obecny meetingId w którym sie znajdujemy
+            const meetingId = localStorage.getItem('currentMeetingId');
+
+
+            deleteButton.addEventListener('click', () => {
+                // Wywołanie metody do usunięcia użytkownika z meetingu
+                deleteUsersFromMeeting(meetingId, user.username);
+            });
+
+            userItem.appendChild(deleteButton);
+        }
+
+        userItem.appendChild(userName);
+        usersList.appendChild(userItem);
+    });
+}
 
 // Funkcja do ładowania i wyświetlania użytkowników
 async function loadUsersForMeeting(meetingId) {
@@ -45,6 +86,7 @@ async function loadUsersForMeeting(meetingId) {
         if (response.ok) {
             const data = await response.json();
             const users = data.participants;
+            localStorage.setItem('participants', JSON.stringify(users)); // Zapisujemy uzytkowniów by potem do funkcji usuwającej ludzi ze spotkania przesłać username
             displayUsers(users);
         } else {
             console.error('Failed to load users:', response.status);
@@ -56,29 +98,41 @@ async function loadUsersForMeeting(meetingId) {
     }
 }
 
-// Funkcja do wyświetlania użytkowników
-function displayUsers(users) {
-    const usersList = document.querySelector('.users-list');
-    usersList.innerHTML = '';
+async function deleteUsersFromMeeting(meetingId, username) {
+    const token = localStorage.getItem('token');
+    if (!token) {
+        alert("You must be logged in.");
+        return;
+    }
 
-    users.forEach((user) => {
-        const userItem = document.createElement('li');
-        userItem.classList.add('user-item');
+    if (!meetingId) {
+        alert("Meeting ID not found.");
+        return;
+    }
 
-        // Imię i nazwisko użytkownika
-        const userName = document.createElement('span');
-        userName.textContent = `${user.firstName} ${user.lastName}`;
-        userName.classList.add('user-name');
+    try {
+        const response = await fetch(`http://localhost:8080/api/meetings/${meetingId}/participants/${username}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            }
+        });
 
-        // Przycisk Delete
-        const deleteButton = document.createElement('button');
-        deleteButton.textContent = 'Delete';
-        deleteButton.classList.add('delete-button');
-
-        userItem.appendChild(userName);
-        userItem.appendChild(deleteButton);
-        usersList.appendChild(userItem);
-    });
+        if (response.ok) {
+            alert('User deleted successfully');
+            loadUsersForMeeting(meetingId);
+        } else if (response.status === 403) {
+            alert('You are not authorized to remove this participant.');
+        } else {
+            const errorMessage = `Failed to delete user. Server responded with code ${response.status}`;
+            console.error(errorMessage);
+            alert(errorMessage);
+        }
+    } catch (error) {
+        console.error("An error occurred while removing user:", error);
+        alert("An error occurred while removing user.");
+    }
 }
 
 async function handleLeaveMeetingButtonClick(meetingId) {
@@ -99,7 +153,7 @@ async function handleLeaveMeetingButtonClick(meetingId) {
     try {
         // Wysłanie żądania DELETE do API
         const response = await fetch(`http://localhost:8080/api/meetings/${meetingId}/leave`, {
-            method: "DELETE",
+            method: 'DELETE',
             headers: {
                 Authorization: `Bearer ${token}`,
                 "Content-Type": "application/json",
