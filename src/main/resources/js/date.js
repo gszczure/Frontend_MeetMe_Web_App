@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
     //TODO usunać to na samej gorze z najpierw wczytywaniem calego pliku bo i tka juz mam to w html zrobione
     //TODO zrobic zeby pustego przedzialu daty nie mozna save zrobic
     //TODO zrobic by po kliknieciu save dates ta lista byla czyszczona bo jak sie nei czysci to sie dodaje podwojnie
+    //TODO zrobic by na wyswietlanie sie dodanych dat przez uzytkownikow byla osobna lista ponizej tej gdzie pokazuja sie jakie daty chcemy dodac
 
     const selectedDates = [];
 
