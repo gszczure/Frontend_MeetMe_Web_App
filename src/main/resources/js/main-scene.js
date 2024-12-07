@@ -8,6 +8,8 @@ const logoutButton = document.querySelector('.logout-button');
 
 let currentlyOpenDetails = null; // Globalna zmienna przechowująca otwarte spotkania
 
+// TODO zrobic logoutButton jak rheme.js zeby mozna bylo odrazu wszedzie z teo korzystac zamiast an kazdej scenie pisac od nowa ta funkcjie
+
 // Funkcja do sprawdzania, czy użytkownik jest właścicielem spotkania
 function isOwner(ownerId) {
     const currentUserId = localStorage.getItem('userId');
@@ -57,6 +59,12 @@ function addMeetingToUI(meeting) {
                 localStorage.setItem('meetingOwnerId', meeting.owner.id);
 
                 window.location.href = 'users.html';
+            });
+        }
+        if (detail === 'Date') {
+            button.addEventListener('click', () => {
+                localStorage.setItem('currentMeetingId', meeting.id);
+                window.location.href = 'dates.html';
             });
         }
     });
