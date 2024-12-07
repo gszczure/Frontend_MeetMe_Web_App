@@ -1,0 +1,59 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    margin: 0;
+}
+
+main {
+    padding: 20px;
+    max-width: 600px;
+    margin: 20px auto;
+    background: var(--meeting-bg);
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+h2, h3 {
+    color: var(--link-hover);
+}
+
+label {
+    display: block;
+    margin: 10px 0 5px;
+}
+/*TODO zrobic by pasek po prawej stronie tak nie przylegal do kranca main*/
+input {
+    padding: 8px;
+    width: 100%;
+    margin-bottom: 10px;
+    border: 1px solid var(--meeting-border);
+    border-radius: 4px;
+}
+
+button {
+    background-color: var(--button-bg);
+    color: var(--text);
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: var(--button-hover);
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+li {
+    background-color: var(--meeting-bg);
+    border: 1px solid var(--meeting-border);
+    border-radius: 4px;
+    margin: 5px 0;
+    padding: 10px;
+}

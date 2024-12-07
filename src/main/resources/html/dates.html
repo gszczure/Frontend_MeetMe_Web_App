@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meeting Organizer</title>
+  <link rel="stylesheet" href="../css/date.css">
+  <link rel="stylesheet" href="../css/global.css">
+  <script src="../js/date.js" defer></script>
+  <script src="../js/theme.js" defer></script>
+</head>
+<body>
+<header>
+  <div class="logo">MeetMe App</div>
+  <div class="header-controls">
+    <button class="logout-button">Logout</button>
+  </div>
+</header>
+
+<main>
+  <h2>Select Dates for the Meeting</h2>
+  <section>
+    <label for="start-date">Start Date:</label>
+    <input type="date" id="start-date">
+    <label for="end-date">End Date:</label>
+    <input type="date" id="end-date">
+    <button id="add-date-button">Add Date</button>
+    <button id="save-dates-button" style="float:right;">Save Date</button>
+
+  </section>
+  <section>
+    <h3>Added Dates</h3>
+    <ul id="date-list"></ul>
+  </section>
+  <button id="back-button">Back to Meetings</button>
+</main>
+</body>
+</html>
