@@ -9,6 +9,7 @@ const logoutButton = document.querySelector('.logout-button');
 let currentlyOpenDetails = null; // Globalna zmienna przechowująca otwarte spotkania
 
 // TODO zrobic logoutButton jak rheme.js zeby mozna bylo odrazu wszedzie z teo korzystac zamiast an kazdej scenie pisac od nowa ta funkcjie
+// TODO DODAC WSZEDZIE PROGRESSBAR ( PASKI LADOWANIA )
 
 // Funkcja do sprawdzania, czy użytkownik jest właścicielem spotkania
 function isOwner(ownerId) {
