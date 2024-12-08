@@ -4,9 +4,23 @@ document.addEventListener("DOMContentLoaded", () => {
     const addDateButton = document.getElementById("add-date-button");
     const saveDatesButton = document.getElementById("save-dates-button");
     const dateList = document.getElementById("date-list");
+    const addedMeetingsList = document.createElement("ul");
+    addedMeetingsList.id = "added-meetings-list";
+    document.querySelector("main").appendChild(addedMeetingsList);
 
-    //TODO zrobic zeby pustego przedzialu daty nie mozna save zrobic
-    //TODO zrobic by na wyswietlanie sie dodanych dat przez uzytkownikow byla osobna lista ponizej tej gdzie pokazuja sie jakie daty chcemy dodac
+    function formatDateForDisplay(dateString) {
+        const date = new Date(dateString);
+        const options = { day: 'numeric', month: 'long', year: 'numeric' };
+        return new Intl.DateTimeFormat('en-GB', options).format(date);
+    }
+
+    function formatDateForDatabase(dateString) {
+        const date = new Date(dateString);
+        const year = date.getFullYear();
+        const month = ("0" + (date.getMonth() + 1)).slice(-2);
+        const day = ("0" + date.getDate()).slice(-2);
+        return `${year}-${month}-${day}`;
+    }
 
     const selectedDates = [];
 
@@ -14,7 +28,6 @@ document.addEventListener("DOMContentLoaded", () => {
     startDateInput.setAttribute('min', today);
     endDateInput.setAttribute('min', today);
 
-    // Uniemozliwiamy urzytkownikowi wybrac daty wczesniejszej niz start-date
     startDateInput.addEventListener("change", () => {
         const startDate = startDateInput.value;
         if (startDate) {
@@ -27,7 +40,6 @@ document.addEventListener("DOMContentLoaded", () => {
         const endDate = endDateInput.value;
 
         if (startDate && endDate) {
-            // Formatowanie daty na format nazwowy dla wyświetlenia
             const formattedStartDate = formatDateForDisplay(startDate);
             const formattedEndDate = formatDateForDisplay(endDate);
             const dateRange = `${formattedStartDate} to ${formattedEndDate}`;
@@ -49,7 +61,6 @@ document.addEventListener("DOMContentLoaded", () => {
         endDateInput.removeAttribute('min');
     });
 
-    // Obsługuje zapisanie dat do bazy (i pokazuje komunikat z bledem jesli chceby zapisac pusty przedzial)
     saveDatesButton.addEventListener("click", () => {
         if (selectedDates.length === 0) {
             alert("No date ranges to save.");
@@ -61,20 +72,43 @@ document.addEventListener("DOMContentLoaded", () => {
         selectedDates.length = 0;
     });
 
-    // Funkcja formatująca daty na format: 7 December 2024 (dla wyświetlenia)
-    function formatDateForDisplay(dateString) {
-        const date = new Date(dateString);
-        const options = { day: 'numeric', month: 'long', year: 'numeric' };
-        return new Intl.DateTimeFormat('en-GB', options).format(date);
-    }
+    async function loadSavedDateRanges() {
+        const meetingId = localStorage.getItem("currentMeetingId");
+        const token = localStorage.getItem("token");
 
-    // Funkcja formatująca daty na format: 07-12-2024 (do wysyłki na backend)
-    function formatDateForDatabase(dateString) {
-        const date = new Date(dateString);
-        const year = date.getFullYear();
-        const month = ("0" + (date.getMonth() + 1)).slice(-2);
-        const day = ("0" + date.getDate()).slice(-2);
-        return `${year}-${month}-${day}`;
+        if (!token || !meetingId) {
+            alert("You must be logged in and have a valid meeting selected.");
+            return;
+        }
+
+        try {
+            const response = await fetch(`http://localhost:8080/api/date-ranges/meeting/${meetingId}`, {
+                method: "GET",
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
+
+            if (response.ok) {
+                const dateRanges = await response.json();
+
+                addedMeetingsList.innerHTML = "";
+
+                dateRanges.forEach((dateRange) => {
+                    const startDate = formatDateForDisplay(dateRange.startDate);
+                    const endDate = formatDateForDisplay(dateRange.endDate);
+                    const userFullName = dateRange.addedBy;
+                    const listItem = document.createElement("li");
+                    listItem.textContent = `${startDate} to ${endDate} - Added By: ${userFullName}`;
+                    addedMeetingsList.appendChild(listItem);
+                });
+            } else {
+                alert("Failed to load date ranges.");
+            }
+        } catch (error) {
+            console.error("Error loading date ranges:", error);
+            alert("An error occurred while loading date ranges.");
+        }
     }
 
     async function saveDateRanges() {
@@ -109,13 +143,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
             if (response.ok) {
                 alert("Dates successfully saved.");
+                loadSavedDateRanges();
+            } else if (response.status === 409) {
+                const errorMessage = await response.text();
+                alert(errorMessage); // W przypadku konfliktu wyświetlamy komunikat zwrócony przez backend
             } else {
                 const errorData = await response.json();
-                alert(`Error: ${errorData.message || 'Failed to save dates'}`);
+                alert(`Error: ${errorData.message || "Failed to save dates"}`);
             }
         } catch (error) {
             console.error("Error saving dates:", error);
             alert("An error occurred while saving dates.");
         }
     }
+
+    // Ładowanie zapisanych dat po załadowaniu strony
+    loadSavedDateRanges();
 });
