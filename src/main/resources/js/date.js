@@ -2,11 +2,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const startDateInput = document.getElementById("start-date");
     const endDateInput = document.getElementById("end-date");
     const addDateButton = document.getElementById("add-date-button");
+    const backButton = document.getElementById("back-button");
     const saveDatesButton = document.getElementById("save-dates-button");
     const dateList = document.getElementById("date-list");
-    const addedMeetingsList = document.createElement("ul");
-    addedMeetingsList.id = "added-meetings-list";
-    document.querySelector("main").appendChild(addedMeetingsList);
+    const addedMeetingsList = document.getElementById("added-meetings-list");
+
+    //TODO DODAC NAPIS LI W TEAM AVALIBITY JAK W SELECTED  DATE RANGES
 
     function formatDateForDisplay(dateString) {
         const date = new Date(dateString);
@@ -49,6 +50,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 const listItem = document.createElement("li");
                 listItem.textContent = dateRange;
                 dateList.appendChild(listItem);
+
+                const noDatesMessage = document.getElementById("no-dates-message");
+                if (noDatesMessage) {
+                    noDatesMessage.remove();
+                }
             } else {
                 alert("This date range has already been added.");
             }
@@ -156,7 +162,10 @@ document.addEventListener("DOMContentLoaded", () => {
             alert("An error occurred while saving dates.");
         }
     }
-
     // Ładowanie zapisanych dat po załadowaniu strony
     loadSavedDateRanges();
+
+    backButton.addEventListener("click", () => {
+        window.location.href = 'main.html';
+    })
 });
