@@ -5,10 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const saveDatesButton = document.getElementById("save-dates-button");
     const dateList = document.getElementById("date-list");
 
-
-    //TODO usunać to na samej gorze z najpierw wczytywaniem calego pliku bo i tka juz mam to w html zrobione
     //TODO zrobic zeby pustego przedzialu daty nie mozna save zrobic
-    //TODO zrobic by po kliknieciu save dates ta lista byla czyszczona bo jak sie nei czysci to sie dodaje podwojnie
     //TODO zrobic by na wyswietlanie sie dodanych dat przez uzytkownikow byla osobna lista ponizej tej gdzie pokazuja sie jakie daty chcemy dodac
 
     const selectedDates = [];
@@ -16,6 +13,14 @@ document.addEventListener("DOMContentLoaded", () => {
     const today = new Date().toISOString().split('T')[0];
     startDateInput.setAttribute('min', today);
     endDateInput.setAttribute('min', today);
+
+    // Uniemozliwiamy urzytkownikowi wybrac daty wczesniejszej niz start-date
+    startDateInput.addEventListener("change", () => {
+        const startDate = startDateInput.value;
+        if (startDate) {
+            endDateInput.setAttribute('min', startDate);
+        }
+    });
 
     addDateButton.addEventListener("click", () => {
         const startDate = startDateInput.value;
@@ -41,11 +46,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
         startDateInput.value = "";
         endDateInput.value = "";
+        endDateInput.removeAttribute('min');
     });
 
-    // Obsługuje zapisanie dat do bazy
+    // Obsługuje zapisanie dat do bazy (i pokazuje komunikat z bledem jesli chceby zapisac pusty przedzial)
     saveDatesButton.addEventListener("click", () => {
+        if (selectedDates.length === 0) {
+            alert("No date ranges to save.");
+            return;
+        }
+
         saveDateRanges();
+        dateList.innerHTML = "";
+        selectedDates.length = 0;
     });
 
     // Funkcja formatująca daty na format: 7 December 2024 (dla wyświetlenia)
@@ -63,7 +76,6 @@ document.addEventListener("DOMContentLoaded", () => {
         const day = ("0" + date.getDate()).slice(-2);
         return `${year}-${month}-${day}`;
     }
-
 
     async function saveDateRanges() {
         const meetingId = localStorage.getItem('currentMeetingId');
