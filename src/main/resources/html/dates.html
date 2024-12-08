@@ -18,20 +18,34 @@
 </header>
 
 <main>
-  <h2>Select Dates for the Meeting</h2>
+  <h2>Select Your Validity Dates</h2>
   <section>
     <label for="start-date">Start Date:</label>
     <input type="date" id="start-date">
     <label for="end-date">End Date:</label>
     <input type="date" id="end-date">
     <button id="add-date-button">Add Date</button>
-    <button id="save-dates-button" style="float:right;">Save Date</button>
+  </section>
 
-  </section>
+  <hr>
+
   <section>
-    <h3>Added Dates</h3>
-    <ul id="date-list"></ul>
+    <h3>Selected Date Ranges</h3>
+    <ul id="date-list">
+      <li id="no-dates-message">You haven't selected any date ranges yet.</li>
+    </ul>
   </section>
+  <button id="save-dates-button">Save Date</button>
+
+  <hr>
+
+  <section>
+    <h3>Team Availability</h3> <!-- Dodajemy nowy tytuł -->
+    <ul id="added-meetings-list"></ul> <!-- Lista spotkań pobrana z bazy -->
+  </section>
+
+  <hr>
+
   <button id="back-button">Back to Meetings</button>
 </main>
 </body>
