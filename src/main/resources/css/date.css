@@ -60,3 +60,17 @@ li {
     padding: 10px;
     text-align: center;
 }
+
+header .logout-button {
+    background-color: var(--delete-button-bg);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+header .logout-button:hover {
+    background-color: var(--delete-button-hover);
+}
