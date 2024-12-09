@@ -6,7 +6,8 @@ const joinButton = document.querySelector('.join-button');
 const meetingCodeInput = document.querySelector('#join-code');
 const logoutButton = document.querySelector('.logout-button');
 
-let currentlyOpenDetails = null; // Globalna zmienna przechowująca otwarte spotkania
+// Globalna zmienna przechowująca otwarte spotkania
+let currentlyOpenDetails = null;
 
 // TODO zrobic logoutButton jak rheme.js zeby mozna bylo odrazu wszedzie z teo korzystac zamiast an kazdej scenie pisac od nowa ta funkcjie
 // TODO DODAC WSZEDZIE PROGRESSBAR ( PASKI LADOWANIA )
