@@ -10,6 +10,9 @@ const addedMeetingsList = document.getElementById("added-meetings-list");
 
 //TODO DODAC NAPIS LI W TEAM AVALIBITY JAK W SELECTED  DATE RANGES
 
+// Globalna zmienna przechowująca otwarte spotkania
+let currentlyOpenDetails = null;
+
 function formatDateForDisplay(dateString) {
     const date = new Date(dateString);
     const options = { day: 'numeric', month: 'long', year: 'numeric' };
@@ -82,6 +85,7 @@ saveDatesButton.addEventListener("click", () => {
 async function loadSavedDateRanges() {
     const meetingId = localStorage.getItem("currentMeetingId");
     const token = localStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
 
     if (!token || !meetingId) {
         alert("You must be logged in and have a valid meeting selected.");
@@ -98,7 +102,6 @@ async function loadSavedDateRanges() {
 
         if (response.ok) {
             const dateRanges = await response.json();
-
             addedMeetingsList.innerHTML = "";
 
             dateRanges.forEach((dateRange) => {
@@ -106,7 +109,37 @@ async function loadSavedDateRanges() {
                 const endDate = formatDateForDisplay(dateRange.endDate);
                 const userFullName = dateRange.addedBy;
                 const listItem = document.createElement("li");
+                listItem.classList.add("date-range-item");
                 listItem.textContent = `${startDate} to ${endDate} - Added By: ${userFullName}`;
+                listItem.dataset.dateRangeId = dateRange.id;
+
+                // Sprawdzanie czy użytkownik obecnie zalogowany jest właścicielem przedziału daty
+                if (dateRange.userId === parseInt(userId)) {
+                    // Tworzymy przycisk "Usuń"
+                    const deleteButton = document.createElement("button");
+                    deleteButton.textContent = "Delete Date Range";
+                    deleteButton.classList.add("delete-date-button");
+
+                    // Obsługa kliknięcia
+                    deleteButton.addEventListener("click", (event) => {
+                        event.stopPropagation();
+                        const dateRangeId = listItem.dataset.dateRangeId; // dateRangeId to po porstu id predziału daty
+                        console.log("Deleting date range with ID:", dateRangeId);
+                        if (dateRangeId) {
+                            deleteDateRange(dateRangeId);
+                        } else {
+                            alert("Invalid date range ID");
+                        }
+                    });
+                    listItem.appendChild(deleteButton);
+                }
+                listItem.addEventListener("click", () => {
+                    if (currentlyOpenDetails && currentlyOpenDetails !== listItem) {
+                        currentlyOpenDetails.classList.remove("open");
+                    }
+                    listItem.classList.toggle("open");
+                    currentlyOpenDetails = listItem.classList.contains("open") ? listItem : null;
+                });
                 addedMeetingsList.appendChild(listItem);
             });
         } else {
@@ -163,6 +196,39 @@ async function saveDateRanges() {
         alert("An error occurred while saving dates.");
     }
 }
+
+async function deleteDateRange(dateRangeId) {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+        alert("You must be logged in to delete a data range.");
+        return;
+    }
+
+    try {
+        const response = await fetch(`http://localhost:8080/api/date-ranges/${dateRangeId}`, {
+            method: "DELETE",
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            },
+        });
+
+        if (response.ok) {
+            alert("Date range successfully deleted.");
+            // Szukamy spotkania o takim Id
+            const listItem = addedMeetingsList.querySelector(`[data-date-range-id="${dateRangeId}"]`);
+            if (listItem) {
+                addedMeetingsList.removeChild(listItem);
+            }
+        } else {
+            alert("Failed to delete date range.");
+        }
+    } catch (error) {
+        console.error("Error deleting date range:", error);
+        alert("An error occurred while deleting date range.");
+    }
+}
+
 
 // Ładowanie zapisanych dat po załadowaniu strony
 loadSavedDateRanges();
