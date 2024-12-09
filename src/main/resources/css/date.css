@@ -74,3 +74,41 @@ header .logout-button {
 header .logout-button:hover {
     background-color: var(--delete-button-hover);
 }
+
+/* Ukryj przycisk usuwania */
+.delete-date-button {
+    display: none;
+    margin-top: 12px;
+    margin-bottom: 5px;
+    background-color: var(--delete-button-bg);
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+}
+
+.delete-date-button:hover {
+    background-color: var(--delete-button-hover);
+}
+
+/* Rozwinięcie listy przycisków po kliknięciu */
+.date-range-item.open .delete-date-button {
+    display: block;
+}
+
+/* Animacja dla wygodniejszego ujawniania */
+.date-range-item {
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.date-range-item:hover {
+    transform: scale(1.05);
+    transition: transform 0.3s ease;
+}
+
+hr {
+    margin-top: 15px;
+}
+

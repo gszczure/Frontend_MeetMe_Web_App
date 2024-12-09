@@ -81,6 +81,7 @@ button:hover {
     gap: 15px;
 }
 
+
 .meeting {
     background-color: var(--meeting-bg);
     border: 1px solid var(--meeting-border);
@@ -91,16 +92,9 @@ button:hover {
     flex-direction: column;
 }
 
-.meeting-title {
-    font-size: 1.2rem;
-    color: var(--text-color);
-    cursor: pointer;
-    font-weight: bold;
-    transition: color 0.3s;
-}
-
-.meeting-title:hover {
-    color: var(--link-hover);
+.meeting:hover{
+    transform: scale(1.04);
+    transition: transform 0.3s ease;
 }
 
 /* Meeting details */
