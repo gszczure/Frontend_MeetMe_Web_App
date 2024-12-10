@@ -229,7 +229,6 @@ async function deleteDateRange(dateRangeId) {
     }
 }
 
-
 // Ładowanie zapisanych dat po załadowaniu strony
 loadSavedDateRanges();
 
