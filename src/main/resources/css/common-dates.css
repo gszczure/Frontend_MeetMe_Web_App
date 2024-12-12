@@ -11,3 +11,12 @@ header .logout-button {
 header .logout-button:hover {
     background-color: var(--delete-button-hover);
 }
+
+main {
+    padding: 20px;
+    max-width: 650px;
+    margin: 20px auto;
+    background: var(--meeting-bg);
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
