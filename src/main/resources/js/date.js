@@ -8,7 +8,12 @@ const saveDatesButton = document.getElementById("save-dates-button");
 const dateList = document.getElementById("date-list");
 const addedMeetingsList = document.getElementById("added-meetings-list");
 
+const meetingId = localStorage.getItem("currentMeetingId");
+const token = localStorage.getItem("token");
+const userId = localStorage.getItem("userId");
+
 //TODO DODAC NAPIS LI W TEAM AVALIBITY JAK W SELECTED  DATE RANGES
+//TODO NAPRAWIC BLAD Z LADOWANIEM DO SPOTKANIA NARAZIE DO WYSZTSKICH SAPOTKAN SIE LADUJA TE SAME PRZEDZIALY
 
 // Globalna zmienna przechowująca otwarte spotkania
 let currentlyOpenDetails = null;
@@ -83,10 +88,9 @@ saveDatesButton.addEventListener("click", () => {
 });
 
 async function loadSavedDateRanges() {
-    const meetingId = localStorage.getItem("currentMeetingId");
-    const token = localStorage.getItem("token");
-    const userId = localStorage.getItem("userId");
+    //TODO sprawdzic dlaczego tutaj nie moge tego dac tylko na poczatku JS
 
+    // const meetingId = localStorage.getItem("currentMeetingId");
     if (!token || !meetingId) {
         alert("You must be logged in and have a valid meeting selected.");
         return;
@@ -152,9 +156,10 @@ async function loadSavedDateRanges() {
 }
 
 async function saveDateRanges() {
-    const meetingId = localStorage.getItem('currentMeetingId');
-    const userId = localStorage.getItem('userId');
-    const token = localStorage.getItem('token');
+    // TODO sprawdzic czy moze byc to zakomentorzowane
+    // const meetingId = localStorage.getItem('currentMeetingId');
+    // const userId = localStorage.getItem('userId');
+    // const token = localStorage.getItem('token');
 
     if (!token) {
         alert("You must be logged in and have a valid meeting selected.");
@@ -198,7 +203,9 @@ async function saveDateRanges() {
 }
 
 async function deleteDateRange(dateRangeId) {
-    const token = localStorage.getItem("token");
+    // TODO sprawdzic czy moze byc to zakomentorzowane
+
+    // const token = localStorage.getItem("token");
 
     if (!token) {
         alert("You must be logged in to delete a data range.");
