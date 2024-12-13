@@ -65,14 +65,13 @@ function addMeetingToUI(meeting) {
         }
         if (detail === 'Date') {
             button.addEventListener('click', () => {
-                //TODO sprawdzic czy to trzeba jak juz powyzej zapisujemy
-
                 localStorage.setItem('currentMeetingId', meeting.id);
                 window.location.href = 'dates.html';
             });
         }
         if (detail === 'Common Date') {
             button.addEventListener('click', () => {
+                localStorage.setItem('currentMeetingId', meeting.id);
                 window.location.href = 'common-dates.html';
             })
         }
