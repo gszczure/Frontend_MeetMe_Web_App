@@ -133,11 +133,10 @@ button:hover {
     background-color: var(--delete-button-bg);
     color: white;
     border: none;
-    padding: 10px 20px;
+    padding: 8px 15px;
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.3s;
-    flex-shrink: 0; /* Nie pozwala przyciskowi zmniejszać się */
 }
 
 .delete-button:hover {
