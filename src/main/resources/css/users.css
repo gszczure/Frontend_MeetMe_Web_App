@@ -81,6 +81,7 @@ button:hover {
 /* Meeting Title Styles */
 .meeting-title {
     text-align: center;
+    color: var(--link-hover);
     margin-bottom: 20px;
     font-size: 24px;
 }
