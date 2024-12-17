@@ -54,3 +54,21 @@ h1 {
     color: var(--link-hover);
     margin-bottom: 20px;
 }
+
+/* Odwołanie do id back-button */
+#back-button {
+    background-color: var(--button-bg);
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    display: block; /* Zajmuje całą szerokość */
+    margin: 20px auto; /* Auto wysrodkowanie */
+}
+
+#back-button:hover {
+    background-color: var(--button-hover);
+}
