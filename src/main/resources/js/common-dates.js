@@ -1,6 +1,8 @@
 const meetingId = localStorage.getItem("currentMeetingId");
 const token = localStorage.getItem("token");
 
+const backButton = document.getElementById("back-button");
+
 async function fetchCommonDates() {
     if (!token || !meetingId) {
         alert("You must be logged in and have a valid meeting selected.");
@@ -98,3 +100,7 @@ function formatDateForDatabase(dateString) {
 }
 
 fetchCommonDates();
+
+backButton.addEventListener("click", () => {
+    window.location.href = 'main.html';
+});
