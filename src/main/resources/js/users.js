@@ -76,7 +76,9 @@ async function loadUsersForMeeting(meetingId) {
     }
 
     try {
-        const response = await fetch(`http://localhost:8080/api/meetings/${meetingId}/participants`, {
+        const response = await fetch(
+            `http://localhost:8080/api/meetings/${meetingId}/participants`,
+            {
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json',
@@ -111,7 +113,9 @@ async function deleteUsersFromMeeting(meetingId, username) {
     }
 
     try {
-        const response = await fetch(`http://localhost:8080/api/meetings/${meetingId}/participants/${username}`, {
+        const response = await fetch(
+            `http://localhost:8080/api/meetings/${meetingId}/participants/${username}`,
+            {
             method: 'DELETE',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -152,7 +156,9 @@ async function handleLeaveMeetingButtonClick(meetingId) {
 
     try {
         // Wysłanie żądania DELETE do API
-        const response = await fetch(`http://localhost:8080/api/meetings/${meetingId}/leave`, {
+        const response = await fetch(
+            `http://localhost:8080/api/meetings/${meetingId}/leave`,
+            {
             method: 'DELETE',
             headers: {
                 Authorization: `Bearer ${token}`,

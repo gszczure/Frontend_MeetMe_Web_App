@@ -128,7 +128,9 @@ async function createMeeting(name) {
     }
 
     try {
-        const response = await fetch('http://localhost:8080/api/meetings/create', {
+        const response = await fetch(
+            'http://localhost:8080/api/meetings/create',
+            {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -161,7 +163,9 @@ async function deleteMeeting(meetingId) {
     }
 
     try {
-        const response = await fetch(`http://localhost:8080/api/meetings/${meetingId}`, {
+        const response = await fetch(
+            `http://localhost:8080/api/meetings/${meetingId}`,
+            {
             method: 'DELETE',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -190,7 +194,9 @@ async function loadMeetings() {
     }
 
     try {
-        const response = await fetch('http://localhost:8080/api/meetings/for-user', {
+        const response = await fetch(
+            'http://localhost:8080/api/meetings/for-user',
+            {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -233,7 +239,9 @@ async function handleJoinButtonAction() {
     }
 
     try {
-        const response = await fetch('http://localhost:8080/api/meetings/join', {
+        const response = await fetch(
+            'http://localhost:8080/api/meetings/join',
+            {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`,

@@ -2,6 +2,7 @@ const meetingId = localStorage.getItem("currentMeetingId");
 const token = localStorage.getItem("token");
 
 const backButton = document.getElementById("back-button");
+const logoutButton = document.querySelector('.logout-button');
 
 async function fetchCommonDates() {
     if (!token || !meetingId) {
@@ -101,6 +102,11 @@ function formatDateForDatabase(dateString) {
 
 fetchCommonDates();
 
-backButton.addEventListener("click", () => {
+backButton.addEventListener('click', () => {
     window.location.href = 'main.html';
 });
+
+logoutButton.addEventListener('click', () => {
+    localStorage.clear();
+    window.location.href = 'index.html'
+})

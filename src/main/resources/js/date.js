@@ -94,7 +94,9 @@ async function loadSavedDateRanges() {
     }
 
     try {
-        const response = await fetch(`http://localhost:8080/api/date-ranges/meeting/${meetingId}`, {
+        const response = await fetch(
+            `http://localhost:8080/api/date-ranges/meeting/${meetingId}`,
+            {
             method: "GET",
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -170,7 +172,9 @@ async function saveDateRanges() {
     });
 
     try {
-        const response = await fetch("http://localhost:8080/api/date-ranges", {
+        const response = await fetch(
+            'http://localhost:8080/api/date-ranges',
+            {
             method: "POST",
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -203,7 +207,9 @@ async function deleteDateRange(dateRangeId) {
     }
 
     try {
-        const response = await fetch(`http://localhost:8080/api/date-ranges/${dateRangeId}`, {
+        const response = await fetch(
+            `http://localhost:8080/api/date-ranges/${dateRangeId}`,
+            {
             method: "DELETE",
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -229,7 +235,7 @@ async function deleteDateRange(dateRangeId) {
 // Ładowanie zapisanych dat po załadowaniu strony
 loadSavedDateRanges();
 
-backButton.addEventListener("click", () => {
+backButton.addEventListener('click', () => {
     window.location.href = 'main.html';
 });
 
