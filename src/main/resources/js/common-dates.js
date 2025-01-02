@@ -83,6 +83,7 @@ async function setMeetingDate(selectedDate) {
 
         if (response.ok) {
             alert("Meeting date has been successfully saved.");
+            window.location.href = 'main.html';
         } else {
             alert(`Failed to save the meeting date. Server responded with code ${response.status}`);
         }
