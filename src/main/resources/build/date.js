@@ -208,7 +208,7 @@ async function deleteDateRange(dateRangeId) {
 
     try {
         const response = await fetch(
-            `hhttps://backendmeetingapp-1.onrender.com/api/date-ranges/${dateRangeId}`,
+            `https://backendmeetingapp-1.onrender.com/api/date-ranges/${dateRangeId}`,
             {
             method: "DELETE",
             headers: {
