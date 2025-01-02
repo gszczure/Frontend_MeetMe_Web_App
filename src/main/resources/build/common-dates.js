@@ -12,7 +12,7 @@ async function fetchCommonDates() {
 
     try {
         const response = await fetch(
-            `hhttps://backendmeetingapp-1.onrender.com/api/date-ranges/meeting/${meetingId}/common-dates`,
+            `https://backendmeetingapp-1.onrender.com/api/date-ranges/meeting/${meetingId}/common-dates`,
             {
                 method: "GET",
                 headers: {
