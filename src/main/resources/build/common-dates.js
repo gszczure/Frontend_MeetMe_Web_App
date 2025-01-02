@@ -31,13 +31,33 @@ async function fetchCommonDates() {
             } else {
                 const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
 
+                // datesArray
+                //     .map(dateString => {
+                //         const [day, month, year] = dateString.split('.');
+                //         const jsDate = new Date(`${year}-${month}-${day}`);
+                //         const formattedDate = new Intl.DateTimeFormat('en-US', options).format(jsDate);
+                //
+                //         return formattedDate;
+                //     })
+                //     .sort((a, b) => new Date(a) - new Date(b))
+                //     .forEach(formattedDate => {
+                //         const dateElement = document.createElement('div');
+                //         dateElement.className = 'date-item';
+                //         dateElement.textContent = formattedDate;
+                //
+                //         dateElement.addEventListener('click', () => {
+                //             setMeetingDate(formattedDate);
+                //         });
+                //
+                //         container.appendChild(dateElement);
+                //     });
+
                 datesArray
                     .map(dateString => {
-                        const [day, month, year] = dateString.split('.');
-                        const jsDate = new Date(`${year}-${month}-${day}`);
-                        const formattedDate = new Intl.DateTimeFormat('en-US', options).format(jsDate);
-
-                        return formattedDate;
+                        const [year, month, day] = dateString.split('-');
+                        // Poprawiony format ISO 8601
+                        const jsDate = new Date(`${year}-${month}-${day}T00:00:00Z`);
+                        return new Intl.DateTimeFormat('en-US', options).format(jsDate);
                     })
                     .sort((a, b) => new Date(a) - new Date(b))
                     .forEach(formattedDate => {
@@ -51,6 +71,8 @@ async function fetchCommonDates() {
 
                         container.appendChild(dateElement);
                     });
+
+
             }
         } else {
             alert(`Failed to fetch dates. Server responded with code ${response.status}`);
