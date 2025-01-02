@@ -45,7 +45,7 @@ function addMeetingToUI(meeting) {
 
     // Dodanie napisu "Date:..." w oddzielnym wierszu
     const dateLabel = document.createElement('div');
-    dateLabel.textContent = 'Date:';
+    dateLabel.textContent = 'Meeting Date:';
     dateLabel.classList.add('meeting-date-label');
     detailsDiv.appendChild(dateLabel);
 
@@ -145,11 +145,11 @@ async function fetchMeetingDate(meetingId, dateLabel) {
             const meetingDate = await response.text();
             if (meetingDate.trim()) {
                 const formattedDate = formatDateForDisplay(meetingDate); // Formatowanie daty na miesiac pisemny
-                dateLabel.textContent = `Date: ${formattedDate}`;
+                dateLabel.textContent = `Meeting Date: ${formattedDate}`;
                 dateLabel.classList.add('set');
                 dateLabel.classList.remove('none');
             } else {
-                dateLabel.textContent = 'Date: None';
+                dateLabel.textContent = 'Meeting Date: None';
                 dateLabel.classList.add('none');
                 dateLabel.classList.remove('set');
             }
