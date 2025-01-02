@@ -43,6 +43,14 @@ function addMeetingToUI(meeting) {
     const detailsDiv = document.createElement('div');
     detailsDiv.classList.add('meeting-details');
 
+    // Dodanie napisu "Date:..." w oddzielnym wierszu
+    const dateLabel = document.createElement('div');
+    dateLabel.textContent = 'Date:';
+    dateLabel.classList.add('meeting-date-label');
+    detailsDiv.appendChild(dateLabel);
+
+    fetchMeetingDate(meeting.id, dateLabel);
+
     // Kontener na trzy przyciski
     const buttonContainer = document.createElement('div');
     buttonContainer.classList.add('details-button-container');
@@ -91,7 +99,7 @@ function addMeetingToUI(meeting) {
                 meetingDiv.remove();
             }
         });
-        detailsDiv.appendChild(deleteButton);
+        buttonContainer.appendChild(deleteButton);
     }
 
     // Obsługa kliknięcia na tytuł spotkania
@@ -114,6 +122,55 @@ function addMeetingToUI(meeting) {
     meetingContainer.appendChild(meetingDiv);
 }
 
+// Funkcja do pobierania daty spotkania
+async function fetchMeetingDate(meetingId, dateLabel) {
+    const token = localStorage.getItem('token');
+    if (!token) {
+        alert("You must be logged in to fetch meeting date.");
+        return;
+    }
+
+    try {
+        const response = await fetch(
+            `http://localhost:8080/api/meetings/${meetingId}/date`,
+            {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            }
+        });
+
+        if (response.ok) {
+            const meetingDate = await response.text();
+            if (meetingDate.trim()) {
+                const formattedDate = formatDateForDisplay(meetingDate); // Formatowanie daty na miesiac pisemny
+                dateLabel.textContent = `Date: ${formattedDate}`;
+                dateLabel.classList.add('set');
+                dateLabel.classList.remove('none');
+            } else {
+                dateLabel.textContent = 'Date: None';
+                dateLabel.classList.add('none');
+                dateLabel.classList.remove('set');
+            }
+        } else {
+            console.error(`Failed to fetch meeting date: ${response.status}`);
+            alert('Failed to fetch meeting date.');
+        }
+    } catch (error) {
+        console.error('Error fetching meeting date:', error);
+        alert('An error occurred while fetching the meeting date.');
+    }
+}
+
+// Funkcja do formatowania daty
+function formatDateForDisplay(dateString) {
+    const date = new Date(dateString);
+    const options = { day: 'numeric', month: 'long', year: 'numeric' };
+    return new Intl.DateTimeFormat('en-GB', options).format(date);
+}
+
+
 // Funkcja do tworzenia nowego spotkania
 async function createMeeting(name) {
     if (!name) {
@@ -121,6 +178,7 @@ async function createMeeting(name) {
         return;
     }
 
+    //TODO wywalic to z tad i dodac na sama gore
     const token = localStorage.getItem('token');
     if (!token) {
         alert("You must be logged in to create a meeting.");
