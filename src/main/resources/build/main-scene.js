@@ -80,6 +80,7 @@ function addMeetingToUI(meeting) {
         if (detail === 'Common Date') {
             button.addEventListener('click', () => {
                 localStorage.setItem('currentMeetingId', meeting.id);
+                localStorage.setItem('meetingOwnerId', meeting.owner.id);
                 window.location.href = 'common-dates.html';
             })
         }

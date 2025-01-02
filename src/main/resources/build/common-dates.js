@@ -1,5 +1,7 @@
 const meetingId = localStorage.getItem("currentMeetingId");
 const token = localStorage.getItem("token");
+const meetingOwnerId = localStorage.getItem("meetingOwnerId");
+const userId = localStorage.getItem("userId");
 
 const backButton = document.getElementById("back-button");
 const logoutButton = document.querySelector('.logout-button');
@@ -52,6 +54,7 @@ async function fetchCommonDates() {
                 //         container.appendChild(dateElement);
                 //     });
 
+                // ZMNIENONY FORMAT DATY PONIEWARZ POPRZEDNI NIE DZIALAL NA SAFARI
                 datesArray
                     .map(dateString => {
                         const [year, month, day] = dateString.split('-');
@@ -87,6 +90,11 @@ async function fetchCommonDates() {
 async function setMeetingDate(selectedDate) {
     if (!token || !meetingId) {
         alert("You must be logged in and have a valid meeting selected.");
+        return;
+    }
+
+    if (meetingOwnerId !== userId) {
+        alert("You are not authorized to set the meeting date.");
         return;
     }
 
