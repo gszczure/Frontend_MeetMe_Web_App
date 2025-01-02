@@ -162,3 +162,21 @@ button:hover {
     margin-left: auto; /* Przesuwa kod na prawo */
     white-space: nowrap; /* Zapobiega zawijaniu kodu */
 }
+
+.meeting-date-label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: var(--text-color); /* Kolor tekstu */
+    text-align: left;
+    font-size: 1rem; /* Rozmiar tekstu */
+    width: 100%; /* Ustaw pełną szerokość */
+}
+
+.meeting-date-label.none {
+    color: red;
+}
+
+.meeting-date-label.set {
+    color: green;
+}
+
