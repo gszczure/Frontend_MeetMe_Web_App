@@ -12,7 +12,7 @@ async function fetchCommonDates() {
 
     try {
         const response = await fetch(
-            `http://localhost:8080/api/date-ranges/meeting/${meetingId}/common-dates`,
+            `hhttps://backendmeetingapp-1.onrender.com/api/date-ranges/meeting/${meetingId}/common-dates`,
             {
                 method: "GET",
                 headers: {
@@ -70,7 +70,7 @@ async function setMeetingDate(selectedDate) {
 
     try {
         const response = await fetch(
-            `http://localhost:8080/api/meetings/${meetingId}/date`,
+            `https://backendmeetingapp-1.onrender.com/api/meetings/${meetingId}/date`,
             {
                 method: "POST",
                 headers: {

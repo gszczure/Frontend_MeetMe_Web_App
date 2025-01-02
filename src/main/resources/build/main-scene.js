@@ -132,7 +132,7 @@ async function fetchMeetingDate(meetingId, dateLabel) {
 
     try {
         const response = await fetch(
-            `http://localhost:8080/api/meetings/${meetingId}/date`,
+            `https://backendmeetingapp-1.onrender.com/api/meetings/${meetingId}/date`,
             {
             method: 'GET',
             headers: {
@@ -187,7 +187,7 @@ async function createMeeting(name) {
 
     try {
         const response = await fetch(
-            'http://localhost:8080/api/meetings/create',
+            'https://backendmeetingapp-1.onrender.com/api/meetings/create',
             {
             method: 'POST',
             headers: {
@@ -222,7 +222,7 @@ async function deleteMeeting(meetingId) {
 
     try {
         const response = await fetch(
-            `http://localhost:8080/api/meetings/${meetingId}`,
+            `https://backendmeetingapp-1.onrender.com/api/meetings/${meetingId}`,
             {
             method: 'DELETE',
             headers: {
@@ -253,7 +253,7 @@ async function loadMeetings() {
 
     try {
         const response = await fetch(
-            'http://localhost:8080/api/meetings/for-user',
+            'https://backendmeetingapp-1.onrender.com/api/meetings/for-user',
             {
             method: 'GET',
             headers: {
@@ -298,7 +298,7 @@ async function handleJoinButtonAction() {
 
     try {
         const response = await fetch(
-            'http://localhost:8080/api/meetings/join',
+            'https://backendmeetingapp-1.onrender.com/api/meetings/join',
             {
             method: 'POST',
             headers: {
