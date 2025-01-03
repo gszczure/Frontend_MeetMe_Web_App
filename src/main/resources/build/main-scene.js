@@ -1,5 +1,5 @@
 // Pobieranie referencji do elementów
-const saveButton = document.querySelector('.save-button');
+const createButton = document.querySelector('.create-button');
 const meetingNameInput = document.querySelector('#meeting-name');
 const meetingContainer = document.querySelector('#meeting-container');
 const joinButton = document.querySelector('.join-button');
@@ -336,8 +336,8 @@ logoutButton.addEventListener('click', logoutUser);
 // Inicjalizacja strony po załadowaniu dokumentu
 loadMeetings();
 
-// Obsługa kliknięcia przycisku "Save"
-saveButton.addEventListener('click', () => {
+// Obsługa kliknięcia przycisku "Create"
+createButton.addEventListener('click', () => {
     const meetingName = meetingNameInput.value.trim();
     createMeeting(meetingName);
 });
