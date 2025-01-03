@@ -40,7 +40,6 @@ document.addEventListener('DOMContentLoaded', () => {
         registerForm.addEventListener('submit', async (e) => {
             e.preventDefault();
 
-            //TODO dodac validacje
             const firstName = document.getElementById('firstName').value;
             const lastName = document.getElementById('lastName').value;
             const username = document.getElementById('username').value;
@@ -49,8 +48,31 @@ document.addEventListener('DOMContentLoaded', () => {
             const email = document.getElementById('email').value;
             const phoneNumber = document.getElementById('phoneNumber').value;
 
+            // Walidacja po stronie frontendu
+            if (firstName === '' || lastName === '') {
+                document.getElementById('message').textContent = 'First and last name are required!';
+                return;
+            }
+            if (username.length < 3 || username.length > 20 || /\s/.test(username)) {
+                document.getElementById('message').textContent = 'Username must be 3-20 characters long and cannot contain spaces!';
+                return;
+            }
+            if (password.length < 6) {
+                document.getElementById('message').textContent = 'Password must be at least 6 characters long!';
+                return;
+            }
             if (password !== confirmPassword) {
                 document.getElementById('message').textContent = 'Passwords do not match!';
+                return;
+            }
+            const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+            if (!emailRegex.test(email)) {
+                document.getElementById('message').textContent = 'Invalid email format!';
+                return;
+            }
+            const phoneRegex = /^\d{9}$/;
+            if (!phoneRegex.test(phoneNumber)) {
+                document.getElementById('message').textContent = 'Phone number must consist of exactly 9 digits!';
                 return;
             }
 
