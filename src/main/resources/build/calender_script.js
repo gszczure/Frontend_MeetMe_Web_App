@@ -7,6 +7,7 @@ const userId = localStorage.getItem("userId");
 // TODO zmniejszyc kalendarz caly
 // TODO zrobic zeby po save przechodzilo na maina lub zeby wyswietlalo kod dolaczenai dla innych
 // TODO wymyslic cos z kodem i kiedy ma sie on wyswietlac
+// TODO dodac aby zapisywac duration, start time
 class Calendar {
     constructor() {
         this.currentDate = new Date();
