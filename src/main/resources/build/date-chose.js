@@ -47,11 +47,12 @@ function createDateItem(dateObj) {
 
     const timeSpan = document.createElement('span');
     timeSpan.className = 'time';
-    timeSpan.textContent = dateObj.startTime ? dateObj.startTime : '';
+    timeSpan.textContent = dateObj.startTime ? `Start Time: ${dateObj.startTime}` : '';
 
     const durationSpan = document.createElement('span');
     durationSpan.className = 'duration';
-    durationSpan.textContent = dateObj.duration || 'All Day';
+    // TODO naprawic wyswietlanei sie h bo sie wyswietla przy none oraz all day na koncu
+    durationSpan.textContent = dateObj.duration ? `Duration: ${dateObj.duration}h` : '';
 
     const votesContainer = document.createElement('div');
     votesContainer.className = 'votes-container';
@@ -74,6 +75,14 @@ function createDateItem(dateObj) {
     votesContainer.appendChild(yesBar);
     votesContainer.appendChild(ifNeededBar);
 
+    const checkboxContainer = document.createElement('div');
+    checkboxContainer.className = 'checkbox-container';
+
+    const checkmark = document.createElement('span');
+    checkmark.className = 'checkmark';
+
+    checkboxContainer.appendChild(checkmark);
+
     // Kliknięcie na kwadrat
     let clickCount = 0;
 
@@ -92,14 +101,20 @@ function createDateItem(dateObj) {
         if (clickCount === 1) {
             yesVotes++;
             dateItem.classList.add('selected-yes');
+            checkmark.classList.add('green-check'); // Zielony ptaszek
+            checkmark.classList.remove('yellow-plus', 'hidden');
         } else if (clickCount === 2) {
             yesVotes--;
             ifNeededVotes++;
             dateItem.classList.remove('selected-yes');
             dateItem.classList.add('selected-if-needed');
+            checkmark.classList.add('yellow-plus'); // Żółty plus
+            checkmark.classList.remove('green-check');
         } else if (clickCount === 3) {
             ifNeededVotes--;
             dateItem.classList.remove('selected-if-needed');
+            checkmark.classList.add('hidden'); // Ukryj checkbox
+            checkmark.classList.remove('green-check', 'yellow-plus');
         }
         if (clickCount === 3) {
             clickCount = 0;
@@ -114,6 +129,7 @@ function createDateItem(dateObj) {
     dateItem.appendChild(timeSpan);
     dateItem.appendChild(durationSpan);
     dateItem.appendChild(votesContainer);
+    dateItem.appendChild(checkboxContainer);
 
     return dateItem;
 }

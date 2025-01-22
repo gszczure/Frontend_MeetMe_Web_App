@@ -3,6 +3,7 @@
     padding: 0;
     box-sizing: border-box;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    text-align: center;
 }
 
 main {
@@ -12,22 +13,6 @@ main {
     background: var(--meeting-bg);
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.header {
-    margin-bottom: 40px;
-}
-
-.header h1 {
-    font-size: 24px;
-    color: #111;
-    margin-bottom: 12px;
-}
-
-.header p {
-    color: #555;
-    margin: 0;
-    margin-bottom: 20px;
 }
 
 .date-list {
@@ -110,6 +95,8 @@ main {
     display: flex;
     gap: 12px;
     margin-bottom: 30px;
+    margin-top: 15px;
+    justify-content: center
 }
 
 .option-btn {
@@ -134,16 +121,35 @@ main {
     border-color: #ffe0b2;
 }
 
-/*header .logout-button {*/
-/*    background-color: var(--delete-button-bg);*/
-/*    color: white;*/
-/*    border: none;*/
-/*    padding: 10px 20px;*/
-/*    border-radius: 4px;*/
-/*    cursor: pointer;*/
-/*    transition: background-color 0.3s;*/
-/*}*/
+.checkbox-container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+    height: 24px;
+}
 
-/*header .logout-button:hover {*/
-/*    background-color: var(--delete-button-hover);*/
-/*}*/
+.checkmark {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    visibility: hidden;
+}
+
+.hidden {
+    visibility: hidden;
+}
+
+.green-check {
+    background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" fill="%2322c55e" viewBox="0 0 24 24"%3E%3Cpath d="M20.285 4.707L9.999 14.993l-4.285-4.285L4.285 12.14l5.714 5.714L21.714 6.14z"%3E%3C/path%3E%3C/svg%3E');
+    visibility: visible;
+}
+
+.yellow-plus {
+    background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" fill="%23f59e0b" viewBox="0 0 24 24"%3E%3Cpath d="M13 11h8v2h-8v8h-2v-8H3v-2h8V3h2v8z"%3E%3C/path%3E%3C/svg%3E');
+    visibility: visible;
+}

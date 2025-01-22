@@ -5,7 +5,7 @@ const userId = localStorage.getItem("userId");
 // TODO zrobic wiekszy X w liscie dat
 // TODO zrobic zeby jak klikne none albo all day to usuwalo sie start time
 // TODO zmniejszyc kalendarz caly
-// TODO zrobic zeby po save przechodzilo na maina lub zeby wyswietlalo kod dolaczenai dla innych
+// TODO zrobic zeby po save przechodzilo na maina lub zeby wyswietlalo kod dolaczenia dla innych
 // TODO wymyslic cos z kodem i kiedy ma sie on wyswietlac
 // TODO dodac aby zapisywac duration, start time
 class Calendar {
@@ -77,6 +77,7 @@ class Calendar {
         const container = document.getElementById('selectedDatesList');
         container.innerHTML = '';
 
+        //TODO zmieni na value zeby zapisywac w badzie danych
         if (this.isApplyAllClicked) {
             // Display a single form for all dates
             const applyAllForm = document.createElement('div');
@@ -124,16 +125,17 @@ class Calendar {
                     <div class="input-group">
                         <div class="input-field">
                             <label>Start Time</label>
-                            <input type="time">
+                            <input type="time" id="startTime-${dateString}" data-date="${dateString}">
                         </div>
                         <div class="input-field">
                             <label>Duration</label>
-                            <select>
-                                <option>1 hour</option>
-                                <option>2 hours</option>
-                                <option>3 hours</option>
-                                <option>All Day</option>
-                                <option>None</option>
+                            <select id="duration-${dateString}" data-date="${dateString}">
+                                <option>Select Duration Time</option>
+                                <option value="none">None</option>
+                                <option value="1">1 hour</option>
+                                <option value="2">2 hours</option>
+                                <option value="3">3 hours</option>
+                                <option value="allDay">All Day</option>
                             </select>
                         </div>
                     </div>
@@ -174,20 +176,39 @@ class Calendar {
 
             await this.saveSelectedDates();
         });
+
+        // TODO zrobic by jak all day to nie podawac godziny (aby usunal sie kwadrat star time)
+        // Event listener for changes in the select boxes or time inputs
+        document.getElementById('selectedDatesList').addEventListener('change', (event) => {
+            if (event.target.tagName === 'SELECT' && (event.target.value === 'allDay' || event.target.value === 'none')) {
+                const date = event.target.dataset.date;
+                const timeInput = document.getElementById(`startTime-${date}`);
+                if (timeInput) {
+                    timeInput.value = '';
+                }
+            }
+        });
     }
 
     async saveSelectedDates() {
-
         if (!meetingId || !token || !userId) {
             alert('You must be logged in and have a valid meeting selected.');
             return;
         }
 
-        const dateRanges = [...this.selectedDates].map(date => ({
-            meetingId: meetingId,
-            userId: userId,
-            startDate: date
-        }));
+        const dateRanges = [...this.selectedDates].map(date => {
+            const startTimeInput = document.getElementById(`startTime-${date}`);
+            const durationSelect = document.getElementById(`duration-${date}`);
+
+            return {
+                meetingId: meetingId,
+                userId: userId,
+                startDate: date,
+                startTime: startTimeInput ? startTimeInput.value : null, // Get startTime
+                duration: durationSelect ? durationSelect.value : null, // Get duration
+                yesVotes: 1
+            };
+        });
 
         try {
             const response = await fetch('http://localhost:8080/api/date-ranges', {
