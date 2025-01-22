@@ -55,7 +55,7 @@ function addMeetingToUI(meeting) {
     const buttonContainer = document.createElement('div');
     buttonContainer.classList.add('details-button-container');
 
-    ['Users', 'Date', 'Common Date'].forEach(detail => {
+    ['Users', 'Date', 'Select Your Dates', 'Common Date'].forEach(detail => {
         const button = document.createElement('button');
         button.classList.add('details-button');
         button.textContent = detail;
@@ -74,7 +74,7 @@ function addMeetingToUI(meeting) {
         if (detail === 'Date') {
             button.addEventListener('click', () => {
                 localStorage.setItem('currentMeetingId', meeting.id);
-                window.location.href = 'dates.html';
+                    window.location.href = 'date-chose.html';
             });
         }
         if (detail === 'Common Date') {
@@ -83,6 +83,12 @@ function addMeetingToUI(meeting) {
                 localStorage.setItem('meetingOwnerId', meeting.owner.id);
                 window.location.href = 'common-dates.html';
             })
+        }
+        if (detail === 'Select Your Dates') {
+            button.addEventListener('click', () => {
+                localStorage.setItem('currentMeetingId', meeting.id);
+                window.location.href = 'calender.html';
+            });
         }
     });
 
@@ -133,7 +139,7 @@ async function fetchMeetingDate(meetingId, dateLabel) {
 
     try {
         const response = await fetch(
-            `https://backendmeetingapp-1.onrender.com/api/meetings/${meetingId}/date`,
+            `http://localhost:8080/api/meetings/${meetingId}/date`,
             {
             method: 'GET',
             headers: {
@@ -188,7 +194,7 @@ async function createMeeting(name) {
 
     try {
         const response = await fetch(
-            'https://backendmeetingapp-1.onrender.com/api/meetings/create',
+            'http://localhost:8080/api/meetings/create',
             {
             method: 'POST',
             headers: {
@@ -223,7 +229,7 @@ async function deleteMeeting(meetingId) {
 
     try {
         const response = await fetch(
-            `https://backendmeetingapp-1.onrender.com/api/meetings/${meetingId}`,
+            `http://localhost:8080/api/meetings/${meetingId}`,
             {
             method: 'DELETE',
             headers: {
@@ -254,7 +260,7 @@ async function loadMeetings() {
 
     try {
         const response = await fetch(
-            'https://backendmeetingapp-1.onrender.com/api/meetings/for-user',
+            'http://localhost:8080/api/meetings/for-user',
             {
             method: 'GET',
             headers: {
@@ -299,7 +305,7 @@ async function handleJoinButtonAction() {
 
     try {
         const response = await fetch(
-            'https://backendmeetingapp-1.onrender.com/api/meetings/join',
+            'http://localhost:8080/api/meetings/join',
             {
             method: 'POST',
             headers: {

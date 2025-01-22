@@ -74,6 +74,7 @@ header {
     background-color: var(--header-bg);
     color: var(--header-text);
     display: flex;
+    z-index: 1000;
     justify-content: space-between;
     align-items: center;
     padding: 10px 20px;
@@ -98,4 +99,18 @@ body {
     background-color: var(--bg-color);
     color: var(--text-color);
     line-height: 1.6;
+}
+
+header .logout-button {
+    background-color: var(--delete-button-bg);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+header .logout-button:hover {
+    background-color: var(--delete-button-hover);
 }
