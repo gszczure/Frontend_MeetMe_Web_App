@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wybór dat w kalendarzu</title>
+  <link rel="stylesheet" href="calender_style.css">
+  <link rel="stylesheet" href="global.css">
+  <script src="theme.js" defer></script>
+  <script src="calender_script.js" defer></script>
+
+</head>
+
+<body>
+<header>
+  <div class="logo">MeetMe App</div>
+  <div class="header-controls">
+    <button class="logout-button">Logout</button>
+  </div>
+</header>
+
+<main>
+  <h1>Add your times</h1>
+
+  <div class="view-toggle">
+    <button class="active">Month</button>
+  </div>
+
+  <div class="calendar-container">
+    <div class="calendar">
+      <div class="calendar-header">
+        <div class="month-nav">
+          <button class="nav-button" id="prevMonth">&larr;</button>
+          <h2 id="currentMonth">January 2025</h2>
+          <button class="nav-button" id="nextMonth">&rarr;</button>
+        </div>
+      </div>
+
+      <div class="calendar-grid" id="calendarGrid">
+        <!-- Kalendarz zostanie wygenerowany tutaj -->
+      </div>
+    </div>
+
+    <div class="selected-dates">
+      <h2>Selected dates:</h2>
+      <div id="selectedDatesList">
+        <!-- Wybrane daty zostaną wygenerowane tutaj -->
+      </div>
+      <button class="apply-all">Zastosuj te same godziny do wszystkich dat</button>
+      <button id="save-dates-button">Save Dates</button>
+    </div>
+  </div>
+</main>
+
+</body>
+</html>

@@ -95,7 +95,7 @@ async function loadSavedDateRanges() {
 
     try {
         const response = await fetch(
-            `https://backendmeetingapp-1.onrender.com/api/date-ranges/meeting/${meetingId}`,
+            `http://localhost:8080/api/date-ranges/meeting/${meetingId}`,
             {
             method: "GET",
             headers: {
@@ -173,7 +173,7 @@ async function saveDateRanges() {
 
     try {
         const response = await fetch(
-            'https://backendmeetingapp-1.onrender.com/api/date-ranges',
+            'http://localhost:8080/api/date-ranges',
             {
             method: "POST",
             headers: {
@@ -208,7 +208,7 @@ async function deleteDateRange(dateRangeId) {
 
     try {
         const response = await fetch(
-            `https://backendmeetingapp-1.onrender.com/api/date-ranges/${dateRangeId}`,
+            `http://localhost:8080/api/date-ranges/${dateRangeId}`,
             {
             method: "DELETE",
             headers: {
