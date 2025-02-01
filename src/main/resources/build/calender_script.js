@@ -204,8 +204,8 @@ class Calendar {
                 meetingId: meetingId,
                 userId: userId,
                 startDate: date,
-                startTime: startTimeInput ? startTimeInput.value : null, // Get startTime
-                duration: durationSelect ? durationSelect.value : null, // Get duration
+                startTime: startTimeInput ? startTimeInput.value : null,
+                duration: durationSelect ? durationSelect.value : null,
                 yesVotes: 1
             };
         });

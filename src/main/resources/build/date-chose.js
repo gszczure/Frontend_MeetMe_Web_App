@@ -1,129 +1,165 @@
 const token = localStorage.getItem("token");
+const userId = localStorage.getItem("userId");
 const meetingId = localStorage.getItem("currentMeetingId");
 
-// Funkcja formatowania daty na odpowiedni format
-function formatDateForDisplay(dateString) {
-    const date = new Date(dateString);
-    const options = { day: 'numeric', month: 'long', year: 'numeric' };
-    return new Intl.DateTimeFormat('en-GB', options).format(date);
-}
-// Funkcja do pobierania danych z API
-async function fetchMeetingDates() {
-    if (!token || !meetingId) {
-        alert("You must be logged in and have a valid meeting selected.");
-        return;
-    }
+// Enum dla stanów wyboru
+const SelectionState = {
+    NONE: "none",
+    YES: "yes",
+    IF_NEEDED: "if_needed",
+};
 
+// Zmienne do przechowywania danych w pamięci podręcznej
+let cachedMeetingDates = null;
+let cachedVoteCounts = null;
+
+// Funkcja do pobierania wszystkich potrzebnych danych
+async function fetchAllData() {
+    if (!cachedMeetingDates) {
+        cachedMeetingDates = await fetchMeetingDates();
+    }
+    cachedVoteCounts = await fetchVoteCounts();
+    const userSelections = await fetchUserSelections();
+    return { meetingDates: cachedMeetingDates, voteCounts: cachedVoteCounts, userSelections };
+}
+
+// Funkcja do pobierania wyborów użytkownika z backendu
+async function fetchUserSelections() {
     try {
-        const response = await fetch(
-            `http://localhost:8080/api/date-ranges/meeting/${meetingId}`,
-            {
-            method: "GET",
+        const response = await fetch(`http://localhost:8080/api/selections/${meetingId}/${userId}/user_selections`, {
             headers: {
-                'Authorization': `Bearer ${token}`,
+                Authorization: `Bearer ${token}`,
             },
         });
-
         if (response.ok) {
-            const data = await response.json();
-            renderDates(data);
+            return await response.json();
         } else {
-            alert("Blad wczytywania dat!")
+            console.error("Nie udało się pobrać wyborów użytkownika");
+            return {};
         }
-
     } catch (error) {
-        console.error('Błąd:', error);
+        console.error("Błąd podczas pobierania wyborów użytkownika:", error);
+        return {};
     }
 }
 
-// Funkcja tworząca elementy daty
-function createDateItem(dateObj) {
-    const dateItem = document.createElement('div');
-    dateItem.className = 'date-item';
+// Funkcja do pobierania liczby głosów
+async function fetchVoteCounts() {
+    try {
+        const response = await fetch(`http://localhost:8080/api/selections/${meetingId}/votes`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        if (response.ok) {
+            return await response.json();
+        } else {
+            console.error("Nie udało się pobrać liczby głosów");
+            return {};
+        }
+    } catch (error) {
+        console.error("Błąd podczas pobierania liczby głosów:", error);
+        return {};
+    }
+}
 
-    const dateSpan = document.createElement('span');
-    dateSpan.className = 'date';
+// Funkcja do aktualizacji wyboru użytkownika w backendzie
+async function updateUserSelection(dateRangeId, selectionState) {
+    try {
+        const response = await fetch(`http://localhost:8080/api/selections/${meetingId}/${userId}/${dateRangeId}/update_selection`, {
+            method: "POST",
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ state: selectionState }),
+        });
+        if (!response.ok) {
+            console.error("Nie udało się zaktualizować wyboru użytkownika");
+        }
+    } catch (error) {
+        console.error("Błąd podczas aktualizacji wyboru użytkownika:", error);
+    }
+}
+
+function createDateItem(dateObj, userSelections, voteCounts) {
+    const dateItem = document.createElement("div");
+    dateItem.className = "date-item";
+    dateItem.dataset.dateRangeId = dateObj.id;
+
+    const dateSpan = document.createElement("span");
+    dateSpan.className = "date";
     dateSpan.textContent = formatDateForDisplay(dateObj.startDate);
 
-    const timeSpan = document.createElement('span');
-    timeSpan.className = 'time';
-    timeSpan.textContent = dateObj.startTime ? `Start Time: ${dateObj.startTime}` : '';
+    const timeSpan = document.createElement("span");
+    timeSpan.className = "time";
+    timeSpan.textContent = dateObj.startTime ? `Start Time: ${dateObj.startTime}` : "";
 
-    const durationSpan = document.createElement('span');
-    durationSpan.className = 'duration';
-    // TODO naprawic wyswietlanei sie h bo sie wyswietla przy none oraz all day na koncu
-    durationSpan.textContent = dateObj.duration ? `Duration: ${dateObj.duration}h` : '';
+    const durationSpan = document.createElement("span");
+    durationSpan.className = "duration";
+    durationSpan.textContent = dateObj.duration ? `Duration: ${dateObj.duration}h` : "";
 
-    const votesContainer = document.createElement('div');
-    votesContainer.className = 'votes-container';
+    const votesContainer = document.createElement("div");
+    votesContainer.className = "votes-container";
 
-    //TODO zrobic cos zeby z bazy pobieralo a nie na 0 odrazu ustwialo
-    let yesVotes = dateObj.yesVotes || 0;
-    let ifNeededVotes = dateObj.ifNeededVotes || 0;
+    const yesBar = document.createElement("div");
+    yesBar.className = "yes-bar";
 
-    // Tworzymy paski
-    const yesBar = document.createElement('div');
-    yesBar.className = 'yes-bar';
-    yesBar.style.width = `${yesVotes * 15}px`;
-    if (yesVotes > 0) yesBar.textContent = `${yesVotes}`;
-
-    const ifNeededBar = document.createElement('div');
-    ifNeededBar.className = 'if-needed-bar';
-    ifNeededBar.style.width = `${ifNeededVotes * 15}px`;
-    if (ifNeededVotes > 0) ifNeededBar.textContent = `${ifNeededVotes}`;
+    const ifNeededBar = document.createElement("div");
+    ifNeededBar.className = "if-needed-bar";
 
     votesContainer.appendChild(yesBar);
     votesContainer.appendChild(ifNeededBar);
 
-    const checkboxContainer = document.createElement('div');
-    checkboxContainer.className = 'checkbox-container';
+    const checkboxContainer = document.createElement("div");
+    checkboxContainer.className = "checkbox-container";
 
-    const checkmark = document.createElement('span');
-    checkmark.className = 'checkmark';
+    const checkmark = document.createElement("span");
+    checkmark.className = "checkmark";
 
     checkboxContainer.appendChild(checkmark);
 
-    // Kliknięcie na kwadrat
-    let clickCount = 0;
+    let currentState = userSelections[dateObj.id] || SelectionState.NONE;
 
-    const updateBars = () => {
+    const updateVotesDisplay = () => {
+        const votes = voteCounts[dateObj.id] || { yes: 0, if_needed: 0 };
+        const yesVotes = votes.yes || 0;
+        const ifNeededVotes = votes.if_needed || 0;
+
         yesBar.style.width = `${yesVotes * 15}px`;
-        if (yesVotes > 0) yesBar.textContent = `${yesVotes}`;
-        else yesBar.textContent = '';
+        yesBar.textContent = yesVotes > 0 ? `${yesVotes}` : "";
 
         ifNeededBar.style.width = `${ifNeededVotes * 15}px`;
-        if (ifNeededVotes > 0) ifNeededBar.textContent = `${ifNeededVotes}`;
-        else ifNeededBar.textContent = '';
+        ifNeededBar.textContent = ifNeededVotes > 0 ? `${ifNeededVotes}` : "";
     };
 
-    const handleClick = () => {
-        clickCount++;
-        if (clickCount === 1) {
-            yesVotes++;
-            dateItem.classList.add('selected-yes');
-            checkmark.classList.add('green-check'); // Zielony ptaszek
-            checkmark.classList.remove('yellow-plus', 'hidden');
-        } else if (clickCount === 2) {
-            yesVotes--;
-            ifNeededVotes++;
-            dateItem.classList.remove('selected-yes');
-            dateItem.classList.add('selected-if-needed');
-            checkmark.classList.add('yellow-plus'); // Żółty plus
-            checkmark.classList.remove('green-check');
-        } else if (clickCount === 3) {
-            ifNeededVotes--;
-            dateItem.classList.remove('selected-if-needed');
-            checkmark.classList.add('hidden'); // Ukryj checkbox
-            checkmark.classList.remove('green-check', 'yellow-plus');
-        }
-        if (clickCount === 3) {
-            clickCount = 0;
+    updateCheckmarkAppearance(checkmark, currentState, dateItem);
+    updateVotesDisplay();
+
+    const handleClick = async () => {
+        switch (currentState) {
+            case SelectionState.NONE:
+                currentState = SelectionState.YES;
+                break;
+            case SelectionState.YES:
+                currentState = SelectionState.IF_NEEDED;
+                break;
+            case SelectionState.IF_NEEDED:
+                currentState = SelectionState.NONE;
+                break;
         }
 
-        updateBars();
+        updateCheckmarkAppearance(checkmark, currentState, dateItem);
+        await updateUserSelection(dateObj.id, currentState);
+
+        // Pobierz zaktualizowane liczby głosów i odśwież wyświetlanie
+        cachedVoteCounts = await fetchVoteCounts();
+        voteCounts = cachedVoteCounts;
+        updateVotesDisplay();
+        await renderPopularTimeSlots();
     };
 
-    dateItem.addEventListener('click', handleClick);
+    dateItem.addEventListener("click", handleClick);
 
     dateItem.appendChild(dateSpan);
     dateItem.appendChild(timeSpan);
@@ -134,22 +170,125 @@ function createDateItem(dateObj) {
     return dateItem;
 }
 
+function updateCheckmarkAppearance(checkmark, state, dateItem) {
+    checkmark.className = "checkmark";
+    dateItem.classList.remove("selected-yes", "selected-if-needed");
+    switch (state) {
+        case SelectionState.YES:
+            checkmark.classList.add("green-check");
+            checkmark.classList.remove("yellow-plus", "hidden");
+            dateItem.classList.add("selected-yes");
+            break;
+        case SelectionState.IF_NEEDED:
+            checkmark.classList.add("yellow-plus");
+            checkmark.classList.remove("green-check", "hidden");
+            dateItem.classList.add("selected-if-needed");
+            break;
+        case SelectionState.NONE:
+            checkmark.classList.add("hidden");
+            checkmark.classList.remove("green-check", "yellow-plus");
+            break;
+    }
+}
+
+// Funkcja do pobierania danych z API
+async function fetchMeetingDates() {
+    if (!token || !meetingId) {
+        alert("You must be logged in and have a valid meeting selected.");
+        return;
+    }
+
+    try {
+        const response = await fetch(`http://localhost:8080/api/date-ranges/meeting/${meetingId}/date`, {
+            method: "GET",
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            return data;
+        } else {
+            alert("Błąd wczytywania dat!");
+            return [];
+        }
+    } catch (error) {
+        console.error("Błąd:", error);
+        return [];
+    }
+}
+
 // Funkcja renderująca wszystkie daty na stronie
-function renderDates(data) {
-    const dateList = document.getElementById('date-list');
+async function renderDates(meetingDates, userSelections, voteCounts) {
+    const dateList = document.getElementById("date-list");
+    dateList.innerHTML = "";
 
-    data.sort((a, b) => new Date(a.startDate) - new Date(b.startDate));
+    meetingDates.sort((a, b) => new Date(a.startDate) - new Date(b.startDate));
 
-    data.forEach((dateObj) => {
-        dateList.appendChild(createDateItem(dateObj));
+    meetingDates.forEach((dateObj) => {
+        dateList.appendChild(createDateItem(dateObj, userSelections, voteCounts));
     });
 }
 
-const logoutButton = document.querySelector('.logout-button');
-logoutButton.addEventListener('click', () => {
-    localStorage.clear();
-    window.location.href = 'index.html';
-});
+function formatDateForDisplay(dateString) {
+    const date = new Date(dateString);
+    const options = { day: "numeric", month: "long", year: "numeric" };
+    return new Intl.DateTimeFormat("en-GB", options).format(date);
+}
 
-// Wywołaj funkcję pobierającą dane
-fetchMeetingDates();
+async function renderPopularTimeSlots() {
+    try {
+        const meetingDates = cachedMeetingDates;
+        const voteCounts = cachedVoteCounts;
+
+        const combinedData = meetingDates.map(date => ({
+            ...date,
+            votes: voteCounts[date.id] || { yes: 0, if_needed: 0 },
+            totalVotes: (voteCounts[date.id]?.yes || 0) + (voteCounts[date.id]?.if_needed || 0)
+        }));
+
+        combinedData.sort((a, b) => b.totalVotes - a.totalVotes);
+
+        const popularSlots = combinedData.slice(0, 3);
+
+        let popularSlotsSection = document.querySelector('.popular-slots');
+        if (!popularSlotsSection) {
+            popularSlotsSection = document.createElement('section');
+            popularSlotsSection.className = 'popular-slots';
+            document.querySelector('main').appendChild(popularSlotsSection);
+        }
+
+        popularSlotsSection.innerHTML = `
+            <h2>Most Popular Time Slots</h2>
+            <div class="popular-slots-list">
+                ${popularSlots.map((slot, index) => `
+                    <div class="popular-slot-card ${['green', 'blue', 'yellow'][index]}">
+                        <div class="popular-slot-date">${formatDateForDisplay(slot.startDate)}</div>
+                        <div class="popular-slot-time">
+                            ${slot.startTime} (${slot.duration}h)
+                        </div>
+                        <div class="vote-circles">
+                            <div class="vote-circle yes">${slot.votes.yes || 0}</div>
+                            <div class="vote-circle if-needed">${slot.votes.if_needed || 0}</div>
+                        </div>
+                        <button class="view-votes-button">
+                            View Votes (${slot.totalVotes})
+                        </button>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+    } catch (error) {
+        console.error("Błąd podczas renderowania popularnych terminów:", error);
+    }
+}
+
+// Główna funkcja renderująca
+async function renderAll() {
+    const { meetingDates, voteCounts, userSelections } = await fetchAllData();
+    renderDates(meetingDates, userSelections, voteCounts);
+    renderPopularTimeSlots();
+}
+
+document.addEventListener("DOMContentLoaded", renderAll);

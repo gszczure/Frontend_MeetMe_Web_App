@@ -74,7 +74,7 @@ function addMeetingToUI(meeting) {
         if (detail === 'Date') {
             button.addEventListener('click', () => {
                 localStorage.setItem('currentMeetingId', meeting.id);
-                    window.location.href = 'date-chose.html';
+                window.location.href = 'date-chose.html';
             });
         }
         if (detail === 'Common Date') {

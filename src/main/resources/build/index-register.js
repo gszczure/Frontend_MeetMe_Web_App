@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             try {
                 const response = await fetch(
-                    'https://backendmeetingapp-1.onrender.com/api/auth/login',
+                    'http://localhost:8080/api/auth/login',
                     {
                     method: 'POST',
                     headers: {
@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             try {
                 const response = await fetch(
-                    'https://backendmeetingapp-1.onrender.com/api/auth/register',
+                    'http://localhost:8080/api/auth/register',
                     {
                     method: 'POST',
                     headers: {
