@@ -66,6 +66,20 @@ async function fetchVoteCounts() {
 // Funkcja do aktualizacji wyboru użytkownika w backendzie
 async function updateUserSelection(dateRangeId, selectionState) {
     try {
+        if (selectionState === SelectionState.NONE) {
+            const response = await fetch(`http://localhost:8080/api/selections/${meetingId}/${userId}/${dateRangeId}/delete_selection`, {
+                method: "DELETE",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+
+            if (!response.ok) {
+                console.error("Nie udało się usunąć wyboru użytkownika");
+            }
+            return;
+        }
+
         const response = await fetch(`http://localhost:8080/api/selections/${meetingId}/${userId}/${dateRangeId}/update_selection`, {
             method: "POST",
             headers: {
@@ -74,6 +88,7 @@ async function updateUserSelection(dateRangeId, selectionState) {
             },
             body: JSON.stringify({ state: selectionState }),
         });
+
         if (!response.ok) {
             console.error("Nie udało się zaktualizować wyboru użytkownika");
         }
@@ -81,6 +96,7 @@ async function updateUserSelection(dateRangeId, selectionState) {
         console.error("Błąd podczas aktualizacji wyboru użytkownika:", error);
     }
 }
+
 
 function createDateItem(dateObj, userSelections, voteCounts) {
     const dateItem = document.createElement("div");
@@ -340,13 +356,13 @@ function displayVotesInModal(votes, dateRangeId) {
 
     votes.sort((a, b) => {
         const order = { yes: 1, if_needed: 2 };
-        return (order[a.state] || 3) - (order[b.state] || 3);
+        return order[a.state] - order[b.state];
     });
 
     votes.forEach(vote => {
         const listItem = document.createElement("li");
-        listItem.className = `vote-item vote-${vote.state || 'no-vote'}`;
-        listItem.textContent = `${vote.firstName} ${vote.lastName} - ${vote.state === 'yes' ? 'Available' : vote.state === 'if_needed' ? 'If needed' : 'No vote'}`;
+        listItem.className = `vote-item vote-${vote.state}`;
+        listItem.textContent = `${vote.firstName} ${vote.lastName} - ${vote.state === 'yes' ? 'Available' : 'If needed'}`;
         voteList.appendChild(listItem);
     });
 
@@ -388,5 +404,4 @@ async function renderAll() {
 
 document.addEventListener("DOMContentLoaded", renderAll);
 
-// TODO zrobic by jednak uzytkownicy ktorzy nei wybrali nic nie byli wyswietlani (Moze zrobic by wogole ich do bazy danych nie dowawac)
 // TODO zrobic zebatke dal ownera spotkania by mogl usuwac ludzi ze spotkania
