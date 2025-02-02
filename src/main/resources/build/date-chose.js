@@ -136,7 +136,15 @@ function createDateItem(dateObj, userSelections, voteCounts) {
     updateCheckmarkAppearance(checkmark, currentState, dateItem);
     updateVotesDisplay();
 
-    const handleClick = async () => {
+    let isProcessing = false;
+
+    const handleClick = async (event) => {
+        if (isProcessing) return;
+
+        isProcessing = true;
+        const dateItem = event.currentTarget;
+        const dateRangeId = dateItem.dataset.dateRangeId;
+
         switch (currentState) {
             case SelectionState.NONE:
                 currentState = SelectionState.YES;
@@ -150,14 +158,21 @@ function createDateItem(dateObj, userSelections, voteCounts) {
         }
 
         updateCheckmarkAppearance(checkmark, currentState, dateItem);
-        await updateUserSelection(dateObj.id, currentState);
 
-        // Pobierz zaktualizowane liczby głosów i odśwież wyświetlanie
-        cachedVoteCounts = await fetchVoteCounts();
-        voteCounts = cachedVoteCounts;
-        updateVotesDisplay();
-        await renderPopularTimeSlots();
+        try {
+            await updateUserSelection(dateRangeId, currentState);
+
+            cachedVoteCounts = await fetchVoteCounts();
+            voteCounts = cachedVoteCounts;
+            updateVotesDisplay();
+            await renderPopularTimeSlots();
+        } catch (error) {
+            console.error("Błąd podczas aktualizacji wyboru:", error);
+        } finally {
+            isProcessing = false;
+        }
     };
+
 
     dateItem.addEventListener("click", handleClick);
 
@@ -373,6 +388,5 @@ async function renderAll() {
 
 document.addEventListener("DOMContentLoaded", renderAll);
 
-// TODO zastanowic sie jak zrobic by nie bugowalo sie przy szybkim klikaniu w jakas date(moze ustawic opuznienie lub cos takiego)
 // TODO zrobic by jednak uzytkownicy ktorzy nei wybrali nic nie byli wyswietlani (Moze zrobic by wogole ich do bazy danych nie dowawac)
 // TODO zrobic zebatke dal ownera spotkania by mogl usuwac ludzi ze spotkania
