@@ -296,7 +296,7 @@ async function renderPopularTimeSlots() {
 // Funkcja do pobierania szczegółowych głosów dla konkretnej daty
 async function fetchVotesForDate(dateRangeId) {
     try {
-        const response = await fetch(`http://localhost:8080/api/votes/${dateRangeId}`, {
+        const response = await fetch(`http://localhost:8080/api/getVotes/${dateRangeId}`, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
@@ -348,6 +348,15 @@ window.onclick = function(event) {
     }
 }
 
+function displayOrganizerName(meetingDates) {
+    if (meetingDates.length > 0) {
+        const organizerName = meetingDates[0].addedBy;
+        const organizerInfoElement = document.getElementById("organizer-info");
+        organizerInfoElement.textContent = `${organizerName} is organizing the meeting`;
+    }
+}
+
+
 const logoutButton = document.querySelector('.logout-button');
 logoutButton.addEventListener('click', () => {
     localStorage.clear();
@@ -357,8 +366,9 @@ logoutButton.addEventListener('click', () => {
 // Główna funkcja renderująca
 async function renderAll() {
     const { meetingDates, voteCounts, userSelections } = await fetchAllData();
+    displayOrganizerName(meetingDates);
     renderDates(meetingDates, userSelections, voteCounts);
-    renderPopularTimeSlots();
+    await renderPopularTimeSlots();
 }
 
 document.addEventListener("DOMContentLoaded", renderAll);
