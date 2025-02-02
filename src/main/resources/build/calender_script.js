@@ -131,11 +131,11 @@ class Calendar {
                             <label>Duration</label>
                             <select id="duration-${dateString}" data-date="${dateString}">
                                 <option>Select Duration Time</option>
-                                <option value="none">None</option>
+                                <option value="None">None</option>
                                 <option value="1">1 hour</option>
                                 <option value="2">2 hours</option>
                                 <option value="3">3 hours</option>
-                                <option value="allDay">All Day</option>
+                                <option value="All Day">All Day</option>
                             </select>
                         </div>
                     </div>
