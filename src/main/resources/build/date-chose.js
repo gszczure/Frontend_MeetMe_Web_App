@@ -372,3 +372,7 @@ async function renderAll() {
 }
 
 document.addEventListener("DOMContentLoaded", renderAll);
+
+// TODO zastanowic sie jak zrobic by nie bugowalo sie przy szybkim klikaniu w jakas date(moze ustawic opuznienie lub cos takiego)
+// TODO zrobic by jednak uzytkownicy ktorzy nei wybrali nic nie byli wyswietlani (Moze zrobic by wogole ich do bazy danych nie dowawac)
+// TODO zrobic zebatke dal ownera spotkania by mogl usuwac ludzi ze spotkania
