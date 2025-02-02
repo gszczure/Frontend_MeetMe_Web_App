@@ -2,10 +2,10 @@
 :root {
     --bg-color: #f4f4f9;
     --text-color: #333;
-    --header-bg: #4CAF50;
+    --header-bg: #2e3856;
     --header-text: #fff;
-    --button-bg: #4CAF50;
-    --button-hover: #45a049;
+    --button-bg: #2e3856;
+    --button-hover: #646e9e;
     --meeting-bg: #f9f9f9;
     --meeting-border: #ddd;
     --link-hover: #4CAF50;
@@ -21,10 +21,10 @@
 body.dark-theme {
     --bg-color: #1c1c1e;
     --text-color: #f0f0f0;
-    --header-bg: #0a398f;
+    --header-bg: #2e3856;
     --header-text: #fff;
-    --button-bg: #0a398f;
-    --button-hover: #2196f3;
+    --button-bg: #2e3856;
+    --button-hover: #646e9e;
     --meeting-bg: #2e2e2e;
     --meeting-border: #444;
     --link-hover: #1e88e5;

@@ -272,17 +272,87 @@ async function renderPopularTimeSlots() {
                             <div class="vote-circle yes">${slot.votes.yes || 0}</div>
                             <div class="vote-circle if-needed">${slot.votes.if_needed || 0}</div>
                         </div>
-                        <button class="view-votes-button">
+                        <button class="view-votes-button" data-date-range-id="${slot.id}">
                             View Votes (${slot.totalVotes})
                         </button>
                     </div>
                 `).join('')}
             </div>
         `;
+
+        const viewVotesButtons = document.querySelectorAll('.view-votes-button');
+        viewVotesButtons.forEach(button => {
+            button.addEventListener('click', async (event) => {
+                const dateRangeId = event.target.getAttribute('data-date-range-id');
+                await fetchVotesForDate(dateRangeId);
+            });
+        });
+
     } catch (error) {
         console.error("Błąd podczas renderowania popularnych terminów:", error);
     }
 }
+
+// Funkcja do pobierania szczegółowych głosów dla konkretnej daty
+async function fetchVotesForDate(dateRangeId) {
+    try {
+        const response = await fetch(`http://localhost:8080/api/votes/${dateRangeId}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        if (response.ok) {
+            const votes = await response.json();
+            displayVotesInModal(votes, dateRangeId);
+        } else {
+            console.error("Błąd pobierania głosów dla tej daty");
+        }
+    } catch (error) {
+        console.error("Błąd podczas pobierania głosów:", error);
+    }
+}
+
+function displayVotesInModal(votes, dateRangeId) {
+    const modal = document.getElementById("modal1");
+    const dateHeader = document.getElementById("date-header");
+    const voteList = document.getElementById("vote-list");
+
+    const dateObj = cachedMeetingDates.find(date => date.id === Number(dateRangeId));
+    dateHeader.textContent = formatDateForDisplay(dateObj.startDate);
+
+    voteList.innerHTML = "";
+
+    votes.sort((a, b) => {
+        const order = { yes: 1, if_needed: 2 };
+        return (order[a.state] || 3) - (order[b.state] || 3);
+    });
+
+    votes.forEach(vote => {
+        const listItem = document.createElement("li");
+        listItem.className = `vote-item vote-${vote.state || 'no-vote'}`;
+        listItem.textContent = `${vote.firstName} ${vote.lastName} - ${vote.state === 'yes' ? 'Available' : vote.state === 'if_needed' ? 'If needed' : 'No vote'}`;
+        voteList.appendChild(listItem);
+    });
+
+    modal.style.display = "block";
+}
+
+function closeModal(modalId) {
+    document.getElementById(modalId).style.display = "none";
+}
+
+window.onclick = function(event) {
+    if (event.target.className === "modal") {
+        event.target.style.display = "none";
+    }
+}
+
+const logoutButton = document.querySelector('.logout-button');
+logoutButton.addEventListener('click', () => {
+    localStorage.clear();
+    window.location.href = 'index.html';
+});
 
 // Główna funkcja renderująca
 async function renderAll() {

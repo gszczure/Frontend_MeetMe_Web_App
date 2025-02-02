@@ -43,6 +43,19 @@
     <h2>Most Popular Time Slots</h2>
     <div id="popular-slots-list" class="popular-slots-list"></div>
   </section>
+
+  <!-- Modal dla szczegółowych głosów -->
+  <div id="modal1" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal1')">&times;</span>
+      <h2>Votes for <span id="date-header">Date</span></h2>
+      <p><span id="votes-status">X</span> out of Y people voted</p>
+      <ul class="vote-list" id="vote-list">
+        <!-- Tutaj będą dynamicznie ładowane głosy -->
+      </ul>
+    </div>
+  </div>
+
 </main>
 </body>
 </html>
