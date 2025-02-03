@@ -6,10 +6,7 @@ const userId = localStorage.getItem("userId");
 const backButton = document.getElementById("back-button");
 const logoutButton = document.querySelector('.logout-button');
 
-// TODO dodac zapisywanie wybranej daty
-// TODO dodac jakis napis o lacznej liczbie osob
 // TODO dodac usuwanie dat lub ich modyfikacje przez walsciciela
-// TODO dodac miejsce gdzie bedzie sie wyswietlac kto co wybral
 async function fetchCommonDates() {
     if (!token || !meetingId) {
         alert("You must be logged in and have a valid meeting selected.");
