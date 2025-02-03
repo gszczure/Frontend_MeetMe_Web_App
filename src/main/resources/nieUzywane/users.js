@@ -9,7 +9,6 @@ const meetingTitle = localStorage.getItem('currentMeetingTitle');
 const meetingOwnerId = localStorage.getItem('meetingOwnerId');
 const currentUserId = localStorage.getItem('userId');
 
-//TODO usunqac to ze najpierw musi sie zaladowac bo i tak w html mam defer czyli najpierw beda sie ladowac
 document.addEventListener('DOMContentLoaded', async () => {
     if (meetingId && meetingTitle && meetingOwnerId && currentUserId) {
         titleElement.textContent = `Users for meeting: "${meetingTitle}"`;
@@ -77,7 +76,7 @@ async function loadUsersForMeeting(meetingId) {
 
     try {
         const response = await fetch(
-            `https://backendmeetingapp-1.onrender.com/api/meetings/${meetingId}/participants`,
+            `http://localhost:8080/api/meetings/${meetingId}/participants`,
             {
             headers: {
                 'Authorization': `Bearer ${token}`,

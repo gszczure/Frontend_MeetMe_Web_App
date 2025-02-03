@@ -12,8 +12,6 @@ const meetingId = localStorage.getItem("currentMeetingId");
 const token = localStorage.getItem("token");
 const userId = localStorage.getItem("userId");
 
-//TODO DODAC NAPIS LI W TEAM AVALIBITY JAK W SELECTED  DATE RANGES
-
 // Globalna zmienna przechowująca otwarte spotkania
 let currentlyOpenDetails = null;
 
