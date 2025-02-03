@@ -8,7 +8,7 @@
 
 main {
     padding: 20px;
-    max-width: 800px;
+    max-width: 1200px;
     margin: 20px auto;
     background: var(--meeting-bg, #ffffff);
     border-radius: 8px;
@@ -20,6 +20,7 @@ main {
     flex-wrap: wrap;
     gap: 20px;
     justify-content: center;
+    margin-bottom: 40px;
 }
 
 .date-item {
@@ -146,22 +147,18 @@ main {
     visibility: visible;
 }
 
-.popular-slots {
-    margin-top: 40px;
-    padding: 20px;
-}
-
 .popular-slots h2 {
-    font-size: 2rem;
-    margin-bottom: 30px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #2c3e50;
+    margin-bottom: 8px;
 }
 
 .popular-slots-list {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-    margin-top: 2rem;
-
+    gap: 50px;
+    margin: 20px;
 }
 
 /* Responsywność */
@@ -287,6 +284,7 @@ main {
 .vote-item {
     padding: 10px;
     margin-bottom: 5px;
+    margin-top: 5px;
     border-radius: 4px;
 }
 
@@ -300,17 +298,74 @@ main {
     border: 1px solid rgba(255, 193, 7, 0.2);
 }
 
-.organizer-info {
-    font-weight: bold;
-    color: #333;
-    margin-left: 20px;
-    font-size: 1rem;
-    min-height: 24px;
+.organizer-header {
     display: flex;
-    align-items: center;
     flex-direction: column;
+    gap: 10px;
+    margin-bottom: 15px;
 }
 
-p {
-    margin: 5px;
+.title-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 30px;
+}
+
+.organizer-info {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #2c3e50;
+    margin-bottom: 8px;
+}
+
+.comment {
+    font-size: 1rem;
+    color: #666;
+    text-align: left;
+    margin-left: 30px;
+}
+
+.separator {
+    width: 100%;
+    height: 1px;
+    background-color: #ddd;
+    margin: 20px 0;
+}
+
+.controls {
+    display: flex;
+    gap: 12px;
+}
+
+.controls button {
+    padding: 8px 14px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background-color: #f9f9f9;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+
+.controls button:hover {
+    background-color: #e6e6e6;
+}
+
+.meeting-details {
+    margin-bottom: 20px;
+}
+
+.meeting-details h1 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #2c3e50;
+    margin-bottom: 8px;
+}
+
+.meeting-details p {
+    font-size: 0.95rem;
+    color: #7f8c8d;
+    line-height: 1.4;
 }

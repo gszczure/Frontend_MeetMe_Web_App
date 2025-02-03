@@ -19,11 +19,25 @@
 </header>
 
 <main>
-  <div class="organizer-info" id="organizer-info"></div>
-  <div class="content-header">
+  <div class="organizer-header">
+    <div class="title-section">
+      <div class="organizer-info" id="organizer-info"></div>
+      <div class="controls">
+        <button>Edit</button>
+        <button>Share</button>
+      </div>
+    </div>
+    <div class="comment"></div>
+  </div>
+
+    <div class="separator"></div>
+
+  <div class="meeting-details">
     <h1>Vote for the best times to meet</h1>
     <p>Select all the times when you are available to help the organizer find the best time for this event.</p>
-    <div class="options">
+  </div>
+
+  <div class="options">
       <button class="option-btn yes">
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
           <path d="M13.3332 4L5.99984 11.3333L2.6665 8" stroke="#22c55e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -40,17 +54,18 @@
   </div>
 
   <div id="date-list" class="date-list"></div>
+
+  <div class="separator"></div>
+
   <section class="popular-slots">
     <h2>Most Popular Time Slots</h2>
     <div id="popular-slots-list" class="popular-slots-list"></div>
   </section>
 
-  <!-- Modal dla szczegółowych głosów -->
   <div id="modal1" class="modal">
     <div class="modal-content">
       <span class="close" onclick="closeModal('modal1')">&times;</span>
       <h2>Votes for <span id="date-header">Date</span></h2>
-      <p><span id="votes-status">X</span> out of Y people voted</p>
       <ul class="vote-list" id="vote-list">
         <!-- Tutaj będą dynamicznie ładowane głosy -->
       </ul>

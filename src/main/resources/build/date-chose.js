@@ -1,6 +1,7 @@
 const token = localStorage.getItem("token");
 const userId = localStorage.getItem("userId");
 const meetingId = localStorage.getItem("currentMeetingId");
+const name = localStorage.getItem("currentMeetingName");
 
 // Enum dla stanów wyboru
 const SelectionState = {
@@ -22,6 +23,30 @@ async function fetchAllData() {
     const userSelections = await fetchUserSelections();
     return { meetingDates: cachedMeetingDates, voteCounts: cachedVoteCounts, userSelections };
 }
+
+// Funkcja do pobierania komentarza dla spotkania
+async function fetchMeetingComment() {
+    try {
+        const response = await fetch(`http://localhost:8080/api/meetings/${meetingId}/comment`, {
+            method: "GET",
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        if (response.ok) {
+            // Zakładamy, że backend zwraca zwykły tekst komentarza
+            const comment = await response.text();
+            return comment;
+        } else {
+            console.error("Nie udało się pobrać komentarza spotkania");
+            return "";
+        }
+    } catch (error) {
+        console.error("Błąd podczas pobierania komentarza:", error);
+        return "";
+    }
+}
+
 
 // Funkcja do pobierania wyborów użytkownika z backendu
 async function fetchUserSelections() {
@@ -379,12 +404,21 @@ window.onclick = function(event) {
     }
 }
 
+// TODO uproscic to
 function displayOrganizerName(meetingDates) {
     if (meetingDates.length > 0) {
         const organizerName = meetingDates[0].addedBy;
         const organizerInfoElement = document.getElementById("organizer-info");
-        organizerInfoElement.textContent = `${organizerName} is organizing the meeting`;
+
+        organizerInfoElement.innerHTML = `<div class="organizer-name">${name}</div>`;
     }
+}
+
+async function displayMeetingComment() {
+    const commentElement = document.querySelector(".comment");
+    let comment = await fetchMeetingComment();
+    comment = comment.slice(1, -1); // usuwa pierwszy i ostatni znak bo sa to cudzyslowia
+    commentElement.textContent = comment ? comment : null;
 }
 
 
@@ -397,7 +431,8 @@ logoutButton.addEventListener('click', () => {
 // Główna funkcja renderująca
 async function renderAll() {
     const { meetingDates, voteCounts, userSelections } = await fetchAllData();
-    displayOrganizerName(meetingDates);
+    await displayOrganizerName(meetingDates);
+    await displayMeetingComment();
     renderDates(meetingDates, userSelections, voteCounts);
     await renderPopularTimeSlots();
 }
@@ -405,3 +440,5 @@ async function renderAll() {
 document.addEventListener("DOMContentLoaded", renderAll);
 
 // TODO zrobic zebatke dal ownera spotkania by mogl usuwac ludzi ze spotkania
+// TODO pomysles nad priorytetem kolejnosci wysweitlania most popular date np (3.YES 1.IfNeeded > 3.IfNeeded 1.YES)
+// TODO dodac max-widh dla paskow z iloscia glosow aby przy wiekszej ilosci osob nie wyjechaly po za kwadrat
