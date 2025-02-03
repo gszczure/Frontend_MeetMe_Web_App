@@ -125,14 +125,7 @@ h1 {
     margin-bottom: 16px;
 }
 
-.date-input {
-    margin-bottom: 24px;
-    padding: 16px;
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-}
-
+.date-input,
 .apply-all-form {
     margin-bottom: 24px;
     padding: 16px;
@@ -141,11 +134,7 @@ h1 {
     box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
 
-.apply-all-form h3 {
-    font-size: 16px;
-    margin-bottom: 16px;
-}
-
+.apply-all-form h3,
 .date-input h3 {
     font-size: 16px;
     margin-bottom: 16px;
@@ -155,6 +144,7 @@ h1 {
     display: flex;
     gap: 16px;
     margin-bottom: 16px;
+    flex-direction: row-reverse;
 }
 
 .input-field {
@@ -180,10 +170,16 @@ h1 {
     border: none;
     background: none;
     cursor: pointer;
-    color: #718096;
+    color: var(--delete-button-bg);
+    font-size: 1.2rem;
 }
 
-#save-dates-button {
+.remove-date:hover {
+    color: var(--delete-button-hover);
+    transform: scale(1.2);
+}
+
+#save\&create-button {
     display: block;
     width: 100%;
     padding: 12px;
@@ -195,7 +191,7 @@ h1 {
     margin-top: 16px;
 }
 
-#save-dates-button:hover {
+#save\&create-button:hover {
     background: #f7fafc;
 }
 
@@ -245,4 +241,47 @@ h1 {
 
 #selectedDatesList::-webkit-scrollbar-thumb:hover {
     background-color: #555;
+}
+
+
+.meeting-form {
+    background: white;
+    padding: 24px;
+    border-radius: 8px;
+    margin-bottom: 24px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.meeting-form input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 4px;
+    margin-bottom: 16px;
+    font-size: 16px;
+}
+
+.meeting-form input:focus {
+    outline: none;
+    border-color: #2563eb;
+}
+
+.meeting-form label {
+    display: block;
+    font-size: 14px;
+    color: #4a5568;
+    margin-bottom: 8px;
+}
+
+.start-time-container {
+    transition: all 0.3s ease;
+    opacity: 1;
+    transform: translateX(0);
+    display: inline-block;
+}
+
+.start-time-container.hidden {
+    opacity: 0;
+    transform: translateX(-100px);
+    pointer-events: none;
 }

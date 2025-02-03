@@ -12,49 +12,52 @@ header .logout-button:hover {
     background-color: var(--delete-button-hover);
 }
 
-/* Main Section Styles */
 main {
     padding: 20px;
-    max-width: 800px;
+    max-width: 1000px;
     margin: 20px auto;
     background: var(--meeting-bg);
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* Section Styles */
 section {
     margin-bottom: 30px;
 }
 
 section h2 {
     text-align: center;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
     color: var(--link-hover);
 }
 
-/* Input and Button Styles */
+.input-group {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
 input {
-    width: calc(100% - 100px);
+    flex: 1;
     padding: 10px;
-    margin-right: 10px;
     border: 1px solid var(--meeting-border);
     border-radius: 4px;
     font-size: 1rem;
 }
 
-button {
+.join-button {
     background-color: var(--button-bg);
     color: var(--text);
     border: none;
     padding: 10px 20px;
     border-radius: 4px;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: all 0.3s ease;
 }
 
-button:hover {
+.join-button:hover {
     background-color: var(--button-hover);
+    transform: translateY(-1px);
 }
 
 /* Meeting List Styles */
@@ -64,119 +67,119 @@ button:hover {
 }
 
 #meeting-container {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
 }
 
-
-.meeting {
+.meeting-card {
     background-color: var(--meeting-bg);
     border: 1px solid var(--meeting-border);
     border-radius: 8px;
-    padding: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
     display: flex;
     flex-direction: column;
-}
-
-.meeting:hover{
-    transform: scale(1.04);
-    transition: transform 0.3s ease;
-}
-
-/* Meeting details */
-.meeting-details {
-    display: none;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-top: 10px;
     gap: 10px;
 }
 
-/* Kontener kodu spotkania */
-.meeting-code-container {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    margin-bottom: 10px;
-    flex: 1 1 100%;
-    color: var(--meeting-code-color);
-    white-space: nowrap;
-}
-
-/* Button in "Your Meetings */
-.details-button-container {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-}
-
-.details-button {
-    background-color: var(--details-button-bg);
-    color: white;
-    border: none;
-    padding: 8px 15px;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-.details-button:hover {
-    background-color: var(--details-button-hover);
-}
-
-/* Przycisk Delete */
-.delete-button {
-    margin-left: auto; /* Przesuwa przycisk na prawo */
-    background-color: var(--delete-button-bg);
-    color: white;
-    border: none;
-    padding: 8px 15px;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-.delete-button:hover {
-    background-color: var(--delete-button-hover);
-}
-
-.meeting-title-container {
-    display: flex;
-    justify-content: space-between; /* Rozstawia nazwę i kod */
-    align-items: center; /* Wyśrodkowuje pionowo */
-    font-size: 1.2rem;
-    font-weight: bold;
-    cursor: pointer;
+.meeting-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
 .meeting-name {
+    font-size: 1.2rem;
+    font-weight: bold;
     color: var(--text-color);
 }
 
 .meeting-code {
     color: var(--meeting-code-color);
-    font-size: 0.9rem; /* Kod może być nieco mniejszy */
-    margin-left: auto; /* Przesuwa kod na prawo */
-    white-space: nowrap; /* Zapobiega zawijaniu kodu */
+    font-size: 0.9rem;
 }
 
-.meeting-date-label {
-    font-weight: bold;
-    margin-bottom: 5px;
-    color: var(--text-color); /* Kolor tekstu */
-    text-align: left;
-    font-size: 1rem; /* Rozmiar tekstu */
-    width: 100%; /* Ustaw pełną szerokość */
+@media (max-width: 600px) {
+    #meeting-container {
+        grid-template-columns: 1fr;
+    }
+
+    .input-group {
+        flex-direction: column;
+    }
+
+    button {
+        width: 100%;
+    }
 }
 
-.meeting-date-label.none {
-    color: red;
+.meetings-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 0 10px;
 }
 
-.meeting-date-label.set {
-    color: green;
+.meetings-header h2 {
+    margin: 0;
+}
+
+.create-meeting-button {
+    background-color: var(--button-bg);
+    color: var(--text);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.create-meeting-button:hover {
+    background-color: var(--button-hover);
+    transform: translateY(-2px);
+}
+
+.meeting-card {
+    background-color: var(--meeting-bg);
+    border: 1px solid var(--meeting-border);
+    border-radius: 8px;
+    padding: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    position: relative;
+}
+
+.meeting-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.delete-meeting {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    color: var(--delete-button-bg);
+    font-size: 1.2rem;
+    padding: 5px;
+    cursor: pointer;
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.meeting-card:hover .delete-meeting {
+    opacity: 1;
+}
+
+.delete-meeting:hover {
+    color: var(--delete-button-hover);
+    transform: scale(1.2);
 }
 
