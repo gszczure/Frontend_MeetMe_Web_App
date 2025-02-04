@@ -442,3 +442,4 @@ document.addEventListener("DOMContentLoaded", renderAll);
 // TODO zrobic zebatke dal ownera spotkania by mogl usuwac ludzi ze spotkania
 // TODO pomysles nad priorytetem kolejnosci wysweitlania most popular date np (3.YES 1.IfNeeded > 3.IfNeeded 1.YES)
 // TODO dodac max-widh dla paskow z iloscia glosow aby przy wiekszej ilosci osob nie wyjechaly po za kwadrat
+// TODO uproscic JSONA lafujacego spotkania bo narazie powtarzaja sie kilka razy niepotrzebne dane czyli user id i imie i nazwisko
