@@ -13,6 +13,7 @@ class Calendar {
     init() {
         this.renderCalendar();
         this.attachEventListeners();
+        this.initMobileButton();
     }
 
     renderCalendar() {
@@ -165,68 +166,76 @@ class Calendar {
             this.renderSelectedDates();
         });
 
+        let isProcessing = false;
+
         // Zdarzenie kliknięcia przycisku zapisu
         document.getElementById('save&create-button').addEventListener('click', async () => {
-            // Walidacja – nazwa spotkania nie może być pusta
-            const meetingName = document.getElementById('meeting-name').value.trim();
-            const comment = document.getElementById('meeting-description').value.trim();
+            if (isProcessing) return
 
-            if (!meetingName) {
-                alert("Meeting name cannot be empty!");
-                return;
-            }
+            isProcessing = true;
+            try {
+                const meetingName = document.getElementById('meeting-name').value.trim();
+                const comment = document.getElementById('meeting-description').value.trim();
 
-            if (this.selectedDates.size === 0) {
-                alert('Please select at least one date.');
-                return;
-            }
-
-            // Walidacja wyboru duration i pola start time gdy wybrano czas liczbowy
-            if (this.isApplyAllClicked) {
-                const durationForAll = document.getElementById('durationForAllDates').value;
-                if (!durationForAll) {
-                    alert('Please select a duration for all dates.');
+                if (!meetingName) {
+                    alert("Meeting name cannot be empty!");
                     return;
                 }
-                if (['1', '2', '3'].includes(durationForAll)) {
-                    const startTime = document.getElementById('timeForAllDates').value;
-                    if (!startTime) {
-                        alert('Please select a start time when choosing a numeric duration.');
-                        return;
-                    }
+
+                if (this.selectedDates.size === 0) {
+                    alert('Please select at least one date.');
+                    return;
                 }
-            } else {
-                for (let date of this.selectedDates) {
-                    const durationSelect = document.getElementById(`duration-${date}`);
-                    if (!durationSelect || !durationSelect.value) {
-                        alert(`Please select a duration for ${date}.`);
+
+                // Walidacja wyboru duration i pola start time gdy wybrano czas liczbowy
+                if (this.isApplyAllClicked) {
+                    const durationForAll = document.getElementById('durationForAllDates').value;
+                    if (!durationForAll) {
+                        alert('Please select a duration for all dates.');
                         return;
                     }
-                    if (['1', '2', '3'].includes(durationSelect.value)) {
-                        const startTimeInput = document.getElementById(`startTime-${date}`);
-                        if (!startTimeInput || !startTimeInput.value) {
-                            alert(`Please select a start time for ${date} when choosing a numeric duration.`);
+                    if (['1', '2', '3'].includes(durationForAll)) {
+                        const startTime = document.getElementById('timeForAllDates').value;
+                        if (!startTime) {
+                            alert('Please select a start time when choosing a numeric duration.');
                             return;
                         }
                     }
+                } else {
+                    for (let date of this.selectedDates) {
+                        const durationSelect = document.getElementById(`duration-${date}`);
+                        if (!durationSelect || !durationSelect.value) {
+                            alert(`Please select a duration for ${date}.`);
+                            return;
+                        }
+                        if (['1', '2', '3'].includes(durationSelect.value)) {
+                            const startTimeInput = document.getElementById(`startTime-${date}`);
+                            if (!startTimeInput || !startTimeInput.value) {
+                                alert(`Please select a start time for ${date} when choosing a numeric duration.`);
+                                return;
+                            }
+                        }
+                    }
                 }
+
+                // Najpierw tworzymy spotkanie
+                const meeting = await this.createMeeting();
+                if (!meeting) return;
+
+                if (comment) {
+                    const commentSaved = await this.saveComment(meeting.id, comment);
+                    if (!commentSaved) return;
+                }
+
+                // Następnie zapisujemy daty
+                const success = await this.saveSelectedDates(meeting.id);
+                if (!success) return;
+
+                alert(`Meeting created successfully! Share this code with others: ${meeting.code}`);
+                window.location.href = 'main.html';
+            } finally {
+                isProcessing = false
             }
-
-            // Najpierw tworzymy spotkanie
-            const meeting = await this.createMeeting();
-            if (!meeting) return;
-
-            if (comment) {
-                const commentSaved = await this.saveComment(meeting.id, comment);
-                if (!commentSaved) return;
-            }
-
-            // Następnie zapisujemy daty
-            const success = await this.saveSelectedDates(meeting.id);
-            if (!success) return;
-
-            alert(`Meeting created successfully! Share this code with others: ${meeting.code}`);
-            window.location.href = 'main.html';
         });
 
         // Obsługa zmiany w polach select – animacja ukrywania/pokazywania pola start time
@@ -384,6 +393,18 @@ class Calendar {
             console.error('Error saving dates:', error);
             alert('An error occurred while saving dates.');
             return false;
+        }
+    }
+
+    initMobileButton() {
+        const desktopButton = document.getElementById("save&create-button")
+        const mobileButton = document.querySelector(".mobile-footer-button")
+
+        if (desktopButton && mobileButton) {
+            mobileButton.addEventListener("click", (e) => {
+                e.preventDefault()
+                    desktopButton.click()
+            })
         }
     }
 }
