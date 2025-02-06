@@ -3,6 +3,8 @@ const joinButton = document.querySelector('.join-button');
 const meetingCodeInput = document.querySelector('#join-code');
 const createMeetingButton = document.querySelector('.create-meeting-button');
 
+//TODO dodac isprocessing jak w data-chose.js by blokowac klikanie drugi raz guziak usuwania
+
 // Funkcja do sprawdzania, czy użytkownik jest właścicielem spotkania
 function isOwner(ownerId) {
     const currentUserId = localStorage.getItem('userId');
