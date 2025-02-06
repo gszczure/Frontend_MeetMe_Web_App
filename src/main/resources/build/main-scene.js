@@ -66,8 +66,7 @@ function addMeetingToUI(meeting) {
     }
 
     meetingCard.addEventListener('click', () => {
-        localStorage.setItem('currentMeetingId', meeting.id);
-        localStorage.setItem('currentMeetingName', meeting.name);
+        localStorage.setItem('code', meeting.code)
         window.location.href = 'date-chose.html';
     });
 

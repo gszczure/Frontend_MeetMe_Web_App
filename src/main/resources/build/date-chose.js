@@ -1,7 +1,7 @@
 const token = localStorage.getItem("token");
 const userId = localStorage.getItem("userId");
-const meetingId = localStorage.getItem("currentMeetingId");
-const name = localStorage.getItem("currentMeetingName");
+const meetingCode = localStorage.getItem('code')
+
 
 // Enum dla stanów wyboru
 const SelectionState = {
@@ -16,45 +16,56 @@ let cachedVoteCounts = null;
 
 // Funkcja do pobierania wszystkich potrzebnych danych
 async function fetchAllData() {
-    if (!cachedMeetingDates) {
-        cachedMeetingDates = await fetchMeetingDates();
-    }
-    cachedVoteCounts = await fetchVoteCounts();
-    const userSelections = await fetchUserSelections();
-    return { meetingDates: cachedMeetingDates, voteCounts: cachedVoteCounts, userSelections };
-}
 
-// Funkcja do pobierania komentarza dla spotkania
-async function fetchMeetingComment() {
+    if (!meetingCode) {
+        console.error("Brak meetingCode w URL");
+        return;
+    }
+
     try {
-        const response = await fetch(`http://localhost:8080/api/meetings/${meetingId}/comment`, {
-            method: "GET",
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        });
-        if (response.ok) {
-            // Zakładamy, że backend zwraca zwykły tekst komentarza
-            const comment = await response.text();
-            return comment;
-        } else {
-            console.error("Nie udało się pobrać komentarza spotkania");
-            return "";
+        const response = await fetch(
+            `http://localhost:8080/api/meeting-details/details/${meetingCode}`,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }
+            );
+
+        if (!response.ok) {
+            throw new Error("Nie znaleziono spotkania");
         }
+
+        const meetingDetails = await response.json();
+        meetingId = meetingDetails.meetingId;
+
+        // Cache the meeting dates
+        cachedMeetingDates = meetingDetails.dateRanges;
+
+        // Fetch vote counts and user selections
+        cachedVoteCounts = await fetchVoteCounts();
+        const userSelections = await fetchUserSelections();
+
+        return {
+            meetingDetails,
+            meetingDates: cachedMeetingDates,
+            voteCounts: cachedVoteCounts,
+            userSelections
+        };
     } catch (error) {
-        console.error("Błąd podczas pobierania komentarza:", error);
-        return "";
+        console.error("Błąd podczas pobierania danych spotkania:", error);
     }
 }
-
 
 // Funkcja do pobierania wyborów użytkownika z backendu
 async function fetchUserSelections() {
     try {
-        const response = await fetch(`http://localhost:8080/api/selections/${meetingId}/${userId}/user_selections`, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
+        const response = await fetch(
+            `http://localhost:8080/api/date-selections/${meetingId}/${userId}/user_selections`,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
         });
         if (response.ok) {
             return await response.json();
@@ -68,13 +79,15 @@ async function fetchUserSelections() {
     }
 }
 
-// Funkcja do pobierania liczby głosów
+// Funkcja do pobierania liczby głosów (YES, IF_NEEDED)
 async function fetchVoteCounts() {
     try {
-        const response = await fetch(`http://localhost:8080/api/selections/${meetingId}/votes`, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
+        const response = await fetch(
+            `http://localhost:8080/api/date-selections/${meetingId}/votes`,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
         });
         if (response.ok) {
             return await response.json();
@@ -92,11 +105,13 @@ async function fetchVoteCounts() {
 async function updateUserSelection(dateRangeId, selectionState) {
     try {
         if (selectionState === SelectionState.NONE) {
-            const response = await fetch(`http://localhost:8080/api/selections/${meetingId}/${userId}/${dateRangeId}/delete_selection`, {
-                method: "DELETE",
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
+            const response = await fetch(
+                `http://localhost:8080/api/date-selections/${meetingId}/${userId}/${dateRangeId}/delete_selection`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                method: "DELETE"
             });
 
             if (!response.ok) {
@@ -105,7 +120,9 @@ async function updateUserSelection(dateRangeId, selectionState) {
             return;
         }
 
-        const response = await fetch(`http://localhost:8080/api/selections/${meetingId}/${userId}/${dateRangeId}/update_selection`, {
+        const response = await fetch(
+            `http://localhost:8080/api/date-selections/${meetingId}/${userId}/${dateRangeId}/update_selection`,
+            {
             method: "POST",
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -122,6 +139,30 @@ async function updateUserSelection(dateRangeId, selectionState) {
     }
 }
 
+// Funkcja do pobierania szczegółowych głosów dla konkretnej daty
+async function fetchVotesForDate(dateRangeId) {
+    if (!token) {
+        alert("You must be logged in to see votes.");
+        return;
+    }
+
+    try {
+        const response = await fetch(`http://localhost:8080/api/meeting-details/getVotes/${dateRangeId}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        if (response.ok) {
+            const votes = await response.json();
+            displayVotesInModal(votes, dateRangeId);
+        } else {
+            console.error("Błąd pobierania głosów dla tej daty");
+        }
+    } catch (error) {
+        console.error("Błąd podczas pobierania głosów:", error);
+    }
+}
 
 function createDateItem(dateObj, userSelections, voteCounts) {
     const dateItem = document.createElement("div");
@@ -214,7 +255,6 @@ function createDateItem(dateObj, userSelections, voteCounts) {
         }
     };
 
-
     dateItem.addEventListener("click", handleClick);
 
     dateItem.appendChild(dateSpan);
@@ -244,34 +284,6 @@ function updateCheckmarkAppearance(checkmark, state, dateItem) {
             checkmark.classList.add("hidden");
             checkmark.classList.remove("green-check", "yellow-plus");
             break;
-    }
-}
-
-// Funkcja do pobierania danych z API
-async function fetchMeetingDates() {
-    if (!token || !meetingId) {
-        alert("You must be logged in and have a valid meeting selected.");
-        return;
-    }
-
-    try {
-        const response = await fetch(`http://localhost:8080/api/date-ranges/meeting/${meetingId}/date`, {
-            method: "GET",
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        });
-
-        if (response.ok) {
-            const data = await response.json();
-            return data;
-        } else {
-            alert("Błąd wczytywania dat!");
-            return [];
-        }
-    } catch (error) {
-        console.error("Błąd:", error);
-        return [];
     }
 }
 
@@ -349,26 +361,6 @@ async function renderPopularTimeSlots() {
     }
 }
 
-// Funkcja do pobierania szczegółowych głosów dla konkretnej daty
-async function fetchVotesForDate(dateRangeId) {
-    try {
-        const response = await fetch(`http://localhost:8080/api/getVotes/${dateRangeId}`, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        });
-
-        if (response.ok) {
-            const votes = await response.json();
-            displayVotesInModal(votes, dateRangeId);
-        } else {
-            console.error("Błąd pobierania głosów dla tej daty");
-        }
-    } catch (error) {
-        console.error("Błąd podczas pobierania głosów:", error);
-    }
-}
-
 function displayVotesInModal(votes, dateRangeId) {
     const modal = document.getElementById("modal1");
     const dateHeader = document.getElementById("date-header");
@@ -404,24 +396,6 @@ window.onclick = function(event) {
     }
 }
 
-// TODO uproscic to
-function displayOrganizerName(meetingDates) {
-    if (meetingDates.length > 0) {
-        const organizerName = meetingDates[0].addedBy;
-        const organizerInfoElement = document.getElementById("organizer-info");
-
-        organizerInfoElement.innerHTML = `<div class="organizer-name">${name}</div>`;
-    }
-}
-
-async function displayMeetingComment() {
-    const commentElement = document.querySelector(".comment");
-    let comment = await fetchMeetingComment();
-    comment = comment.slice(1, -1); // usuwa pierwszy i ostatni znak bo sa to cudzyslowia
-    commentElement.textContent = comment ? comment : null;
-}
-
-
 const logoutButton = document.querySelector('.logout-button');
 logoutButton.addEventListener('click', () => {
     localStorage.clear();
@@ -430,14 +404,23 @@ logoutButton.addEventListener('click', () => {
 
 // Główna funkcja renderująca
 async function renderAll() {
-    const { meetingDates, voteCounts, userSelections } = await fetchAllData();
-    await displayOrganizerName(meetingDates);
-    await displayMeetingComment();
-    renderDates(meetingDates, userSelections, voteCounts);
+    const { meetingDetails, meetingDates, voteCounts, userSelections } = await fetchAllData();
+
+    const organizerInfoElement = document.getElementById("organizer-info");
+    organizerInfoElement.innerHTML = `<div class="organizer-name">${meetingDetails.name}</div>`;
+
+    const commentElement = document.querySelector(".comment");
+    commentElement.textContent = meetingDetails.comment || null;
+
+    await renderDates(meetingDates, userSelections, voteCounts);
+
     await renderPopularTimeSlots();
 }
 
-document.addEventListener("DOMContentLoaded", renderAll);
+// Update the document ready event listener
+document.addEventListener("DOMContentLoaded", async () => {
+    await renderAll();
+});
 
 // TODO zrobic zebatke dal ownera spotkania by mogl usuwac ludzi ze spotkania
 // TODO pomysles nad priorytetem kolejnosci wysweitlania most popular date np (3.YES 1.IfNeeded > 3.IfNeeded 1.YES)

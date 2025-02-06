@@ -1,5 +1,4 @@
 const token = localStorage.getItem("token");
-const userId = localStorage.getItem("userId");
 
 // TODO sprawdzic blad jak w[isze start time a potem duration na none ustawie i stworze spotkanie
 class Calendar {
@@ -168,7 +167,6 @@ class Calendar {
 
         let isProcessing = false;
 
-        // Zdarzenie kliknięcia przycisku zapisu
         document.getElementById('save&create-button').addEventListener('click', async () => {
             if (isProcessing) return
 
@@ -218,18 +216,8 @@ class Calendar {
                     }
                 }
 
-                // Najpierw tworzymy spotkanie
                 const meeting = await this.createMeeting();
                 if (!meeting) return;
-
-                if (comment) {
-                    const commentSaved = await this.saveComment(meeting.id, comment);
-                    if (!commentSaved) return;
-                }
-
-                // Następnie zapisujemy daty
-                const success = await this.saveSelectedDates(meeting.id);
-                if (!success) return;
 
                 alert(`Meeting created successfully! Share this code with others: ${meeting.code}`);
                 window.location.href = 'main.html';
@@ -276,6 +264,28 @@ class Calendar {
             return null;
         }
 
+        let dateRanges = [];
+        if (this.isApplyAllClicked) {
+            const startTime = document.getElementById('timeForAllDates').value;
+            const duration = document.getElementById('durationForAllDates').value;
+
+            dateRanges = [...this.selectedDates].map(date => ({
+                startDate: date,
+                startTime: startTime || null,
+                duration: duration || null,
+            }));
+        } else {
+            dateRanges = [...this.selectedDates].map(date => {
+                const startTimeInput = document.getElementById(`startTime-${date}`);
+                const durationSelect = document.getElementById(`duration-${date}`);
+                return {
+                    startDate: date,
+                    startTime: startTimeInput ? startTimeInput.value : null,
+                    duration: durationSelect ? durationSelect.value : null,
+                };
+            });
+        }
+
         try {
             const response = await fetch('http://localhost:8080/api/meetings/create', {
                 method: 'POST',
@@ -285,13 +295,15 @@ class Calendar {
                 },
                 body: JSON.stringify({
                     name: meetingName,
-                    description: meetingDescription
+                    comment: meetingDescription,
+                    dateRanges: dateRanges
                 })
             });
 
             if (response.ok) {
                 const data = await response.json();
-                return data;
+                alert(`Meeting created successfully! Share this code with others: ${data.code}`);
+                window.location.href = 'main.html';
             } else {
                 alert('Failed to create meeting.');
                 return null;
@@ -300,99 +312,6 @@ class Calendar {
             console.error('Error:', error);
             alert('An error occurred while creating the meeting.');
             return null;
-        }
-    }
-
-    async saveComment(meetingId, comment) {
-        if (!meetingId || !token) {
-            alert('Invalid meeting data for comment saving.');
-            return false;
-        }
-        try {
-            const response = await fetch(`http://localhost:8080/api/meetings/${meetingId}/comment`, {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                },
-                // Przesyłamy komentarz jako zwykły tekst – backend go trimuje
-                body: JSON.stringify(comment)
-            });
-
-            if (response.ok) {
-                return true;
-            } else {
-                const errorMessage = await response.text();
-                alert(`Error saving comment: ${errorMessage}`);
-                return false;
-            }
-        } catch (error) {
-            console.error('Error saving comment:', error);
-            alert('An error occurred while saving the comment.');
-            return false;
-        }
-    }
-
-    async saveSelectedDates(meetingId) {
-        if (!meetingId || !token || !userId) {
-            alert('Invalid meeting data.');
-            return false;
-        }
-
-        if (this.selectedDates.size === 0) {
-            alert('Please select at least one date.');
-            return false;
-        }
-
-        let dateRanges = [];
-        if (this.isApplyAllClicked) {
-            const startTime = document.getElementById('timeForAllDates').value;
-            const duration = document.getElementById('durationForAllDates').value;
-
-            dateRanges = [...this.selectedDates].map(date => ({
-                meetingId: meetingId,
-                userId: userId,
-                startDate: date,
-                startTime: startTime || null,
-                duration: duration || null,
-                yesVotes: 1
-            }));
-        } else {
-            dateRanges = [...this.selectedDates].map(date => {
-                const startTimeInput = document.getElementById(`startTime-${date}`);
-                const durationSelect = document.getElementById(`duration-${date}`);
-                return {
-                    meetingId: meetingId,
-                    userId: userId,
-                    startDate: date,
-                    startTime: startTimeInput ? startTimeInput.value : null,
-                    duration: durationSelect ? durationSelect.value : null,
-                    yesVotes: 1
-                };
-            });
-        }
-
-        try {
-            const response = await fetch('http://localhost:8080/api/date-ranges', {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(dateRanges)
-            });
-
-            if (response.ok) {
-                return true;
-            } else {
-                const errorMessage = await response.text();
-                alert(`Error saving dates: ${errorMessage}`);
-                return false;
-            }
-        } catch (error) {
-            console.error('Error saving dates:', error);
-            alert('An error occurred while saving dates.');
-            return false;
         }
     }
 
