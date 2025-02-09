@@ -1,6 +1,7 @@
 const token = localStorage.getItem("token");
 const userId = localStorage.getItem("userId");
 const meetingCode = localStorage.getItem('code')
+let isProcessing = false
 
 
 // Enum dla stanów wyboru
@@ -218,8 +219,6 @@ function createDateItem(dateObj, userSelections, voteCounts) {
     updateCheckmarkAppearance(checkmark, currentState, dateItem);
     updateVotesDisplay();
 
-    let isProcessing = false;
-
     const handleClick = async (event) => {
         if (isProcessing) return;
 
@@ -386,11 +385,7 @@ function displayVotesInModal(votes, dateRangeId) {
     modal.style.display = "block";
 }
 
-function closeModal(modalId) {
-    document.getElementById(modalId).style.display = "none";
-}
-
-window.onclick = function(event) {
+window.onclick = (event) => {
     if (event.target.className === "modal") {
         event.target.style.display = "none";
     }
@@ -422,7 +417,102 @@ document.addEventListener("DOMContentLoaded", async () => {
     await renderAll();
 });
 
-// TODO zrobic zebatke dal ownera spotkania by mogl usuwac ludzi ze spotkania
 // TODO pomysles nad priorytetem kolejnosci wysweitlania most popular date np (3.YES 1.IfNeeded > 3.IfNeeded 1.YES)
 // TODO dodac max-widh dla paskow z iloscia glosow aby przy wiekszej ilosci osob nie wyjechaly po za kwadrat
-// TODO uproscic JSONA lafujacego spotkania bo narazie powtarzaja sie kilka razy niepotrzebne dane czyli user id i imie i nazwisko
+
+async function removeParticipant(userId) {
+    try {
+        const response = await fetch(
+            `http://localhost:8080/api/meetings/${meetingId}/participants/${userId}`,
+            {
+            method: "DELETE",
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        if (response.ok) {
+            return true;
+        } else {
+            console.error("Failed to remove participant");
+            return false;
+        }
+    } catch (error) {
+        console.error("Error removing participant:", error);
+        return false;
+    }
+}
+
+async function fetchParticipants() {
+    try {
+        const response = await fetch(
+            `http://localhost:8080/api/meetings/${meetingId}/participants`,
+            {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        if (response.ok) {
+            return await response.json();
+        } else {
+            console.error("Failed to fetch participants");
+            return null;
+        }
+    } catch (error) {
+        console.error("Error fetching participants:", error);
+        return null;
+    }
+}
+
+async function showParticipantsModal() {
+    const participantsData = await fetchParticipants();
+    if (!participantsData) return;
+
+    const { owner, participants } = participantsData;
+    const participantsList = document.getElementById("participants-list");
+    const participantCount = document.getElementById("participant-count");
+    const isOwner = owner.id === Number.parseInt(userId);
+
+    participantsList.innerHTML = "";
+    participantCount.textContent = participants.length + 1; // plus jeden bo jeszcze owner
+
+    const ownerLi = document.createElement("li");
+    ownerLi.innerHTML = `${owner.firstName} ${owner.lastName} <strong>(Owner)</strong>`;
+    participantsList.appendChild(ownerLi);
+
+    // TODO zrobic potwierdzenie przy usuwaniu (czy na pewno chcesz usunac... )
+    participants.forEach((participant) => {
+        const li = document.createElement("li");
+        li.innerHTML = `
+            ${participant.firstName} ${participant.lastName}
+            ${isOwner ? `<button class="remove-participant" data-user-id="${participant.id}">&times;</button>` : ""}
+        `;
+        participantsList.appendChild(li);
+    });
+
+    if (isOwner) {
+        const removeButtons = document.querySelectorAll(".remove-participant");
+        removeButtons.forEach((button) => {
+            button.addEventListener("click", async (e) => {
+                if (isProcessing) return;
+                isProcessing = true;
+                const userId = e.target.getAttribute("data-user-id");
+                removeButtons.forEach((btn) => (btn.disabled = true));
+                const success = await removeParticipant(userId);
+                if (success) {
+                    e.target.parentElement.remove();
+                    participantCount.textContent = Number.parseInt(participantCount.textContent) - 1;
+                }
+                removeButtons.forEach((btn) => (btn.disabled = false));
+                isProcessing = false;
+            });
+        });
+    }
+
+    document.getElementById("participants-modal").style.display = "block";
+}
+
+document.getElementById("participants-btn").addEventListener("click", showParticipantsModal);
+
+function closeModal(modalId) {
+    document.getElementById(modalId).style.display = "none";
+}

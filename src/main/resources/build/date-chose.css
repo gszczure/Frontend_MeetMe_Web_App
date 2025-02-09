@@ -58,7 +58,8 @@ main {
     align-items: center;
 }
 
-.yes-bar, .if-needed-bar {
+.yes-bar,
+.if-needed-bar {
     height: 20px;
     border-radius: 4px;
     line-height: 20px;
@@ -84,7 +85,8 @@ main {
     margin-bottom: 5px;
 }
 
-.time, .duration {
+.time,
+.duration {
     font-size: 0.9em;
     color: #7f8c8d;
     margin-bottom: 3px;
@@ -181,11 +183,10 @@ main {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     position: relative;
     height: 194px;
-
 }
 
 .popular-slot-card::before {
-    content: '';
+    content: "";
     position: absolute;
     left: 0;
     top: 0;
@@ -362,3 +363,45 @@ main {
     color: #7f8c8d;
     line-height: 1.4;
 }
+
+#participants-btn {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+#participants-btn svg {
+    width: 16px;
+    height: 16px;
+}
+
+#participants-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+#participants-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+#participants-list li:last-child {
+    border-bottom: none;
+}
+
+.remove-participant {
+    background: none;
+    border: none;
+    color: var(--delete-button-bg);
+    cursor: pointer;
+    font-size: 18px;
+}
+
+.remove-participant:hover {
+    color: var(--delete-button-hover);
+    transform: scale(1.2);
+}
+

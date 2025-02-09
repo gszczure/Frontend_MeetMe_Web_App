@@ -60,6 +60,7 @@ function addMeetingToUI(meeting) {
         codeDiv.textContent = `Code: ${meeting.code}`;
         meetingCard.appendChild(codeDiv);
 
+        // TODO &times zrobic zamiast x
         const deleteButton = document.createElement('button');
         deleteButton.classList.add('delete-meeting');
         deleteButton.innerHTML = '×';

@@ -25,12 +25,21 @@
       <div class="controls">
         <button>Edit</button>
         <button>Share</button>
+        <button id="participants-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M17 21V19C17 17.9391 16.5786 16.9217 15.8284 16.1716C15.0783 15.4214 14.0609 15 13 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M9 11C11.2091 11 13 9.20914 13 7C13 4.79086 11.2091 3 9 3C6.79086 3 5 4.79086 5 7C5 9.20914 6.79086 11 9 11Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M23 21V19C22.9993 18.1137 22.7044 17.2528 22.1614 16.5523C21.6184 15.8519 20.8581 15.3516 20 15.13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M16 3.13C16.8604 3.35031 17.623 3.85071 18.1676 4.55232C18.7122 5.25392 19.0078 6.11683 19.0078 7.005C19.0078 7.89318 18.7122 8.75608 18.1676 9.45769C17.623 10.1593 16.8604 10.6597 16 10.88" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Participants
+        </button>
       </div>
     </div>
     <div class="comment"></div>
   </div>
 
-    <div class="separator"></div>
+  <div class="separator"></div>
 
   <div class="meeting-details">
     <h1>Vote for the best times to meet</h1>
@@ -38,19 +47,18 @@
   </div>
 
   <div class="options">
-      <button class="option-btn yes">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-          <path d="M13.3332 4L5.99984 11.3333L2.6665 8" stroke="#22c55e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-        Yes
-      </button>
-      <button class="option-btn if-needed">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-          <path d="M8 3.33325V12.6666M12.6667 7.99992L3.33333 7.99992" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-        If Needed (2 clicks)
-      </button>
-    </div>
+    <button class="option-btn yes">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <path d="M13.3332 4L5.99984 11.3333L2.6665 8" stroke="#22c55e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      Yes
+    </button>
+    <button class="option-btn if-needed">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <path d="M8 3.33325V12.6666M12.6667 7.99992L3.33333 7.99992" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      If Needed (2 clicks)
+    </button>
   </div>
 
   <div id="date-list" class="date-list"></div>
@@ -69,6 +77,15 @@
       <ul class="vote-list" id="vote-list">
         <!-- Tutaj będą dynamicznie ładowane głosy -->
       </ul>
+    </div>
+  </div>
+
+  <div id="participants-modal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('participants-modal')">&times;</span>
+      <h2>Meeting Participants</h2>
+      <p>Total participants: <span id="participant-count"></span></p>
+      <ul id="participants-list"></ul>
     </div>
   </div>
 
