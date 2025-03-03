@@ -5,9 +5,9 @@
     transform: translateX(-50%);
     background-color: #4CAF50;
     color: white;
-    padding: 16px;
+    padding: 16px 40px 16px 16px;
     border-radius: 4px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     transition: top 0.5s ease;
     z-index: 1000;
     display: flex;
@@ -21,13 +21,23 @@
     top: 20px;
 }
 
+.notification.alert {
+    background-color: #f44336;
+}
+
 #notification-close {
     position: absolute;
-    top: 8px;
-    right: 8px;
+    top: 12px;
+    right: 12px;
     background: none;
     border: none;
     color: white;
     font-size: 20px;
     cursor: pointer;
+    padding: 6px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
+
+
