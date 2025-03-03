@@ -47,9 +47,7 @@ body.dark-theme {
     justify-content: center;
     align-items: center;
     position: absolute;
-    /*top: 50%;*/
-    /*transform: translateY(-50%);*/
-    right: 110px;
+    right: 140px;
     transition: background-color 0.3s;
 }
 
@@ -113,6 +111,11 @@ header .logout-button {
 
 header .logout-button:hover {
     background-color: var(--delete-button-hover);
+    scale: 1.05;
+}
+
+.logout-button svg {
+    vertical-align: middle;
 }
 
 .separator {
