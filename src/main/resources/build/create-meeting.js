@@ -335,36 +335,19 @@ class Calendar {
                     comment: meetingDescription,
                     dateRanges: dateRanges,
                 }),
-            });
+            })
 
             if (response.ok) {
                 const data = await response.json();
+                const meetingLink = `https://backendmeetingapp-1.onrender.com/api/meetings/join/${data.code}`
 
-                if (!data.code) {
-                    showAlert("Błąd: Brak kodu spotkania w odpowiedzi.");
-                    return;
-                }
-
-                const meetingLink = `https://backendmeetingapp-1.onrender.com/api/meetings/join/${data.code}`;
-
-                // Sprawdzamy, czy przeglądarka obsługuje Clipboard API
-                if (navigator.clipboard && navigator.clipboard.writeText) {
-                    try {
-                        await navigator.clipboard.writeText(meetingLink);
-                    } catch (clipboardError) {
-                        console.warn("Clipboard API nie działa, używam metody awaryjnej.");
-                        CopyTextForIphone(meetingLink);
-                    }
-                } else {
-                    // Safari i starsze przeglądarki
-                    CopyTextForIphone(meetingLink);
-                }
-
-                showNotification("Meeting created successfully! The link has been copied to your clipboard.");
+                showNotification("Meeting created successfully!")
 
                 setTimeout(() => {
-                    window.location.href = "index.html";
-                }, 2000);
+                    //TODO przeslac code dalej zeby odrazu przenioslo do date-chose
+                    window.location.href = meetingLink;
+                }, 3000);
+
             } else {
                 showAlert("Failed to create meeting.");
                 return null;
@@ -374,9 +357,9 @@ class Calendar {
             showAlert("An error occurred while creating the meeting.");
             return null;
         }
-}
+    }
 
-        initMobileButton() {
+    initMobileButton() {
         const desktopButton = document.getElementById("save&create-button");
         const mobileButton = document.querySelector(".mobile-footer-button");
 
@@ -388,32 +371,6 @@ class Calendar {
         }
     };
 }
-
-// Funkcja do kopiowania w Safari na telefonach bo clipboard nie dziala
-function CopyTextForIphone(text) {
-    const textArea = document.createElement("textarea");
-    textArea.value = text;
-
-    // Ustawienia wymagane do kopiowania w Safari
-    textArea.style.position = "fixed";
-    textArea.style.top = "-9999px";
-
-    document.body.appendChild(textArea);
-    textArea.focus();
-    textArea.select();
-
-    try {
-        const successful = document.execCommand("copy");
-        if (!successful) {
-            console.error("Kopiowanie nie powiodło się w Safari.");
-        }
-    } catch (err) {
-        console.error("Błąd kopiowania: ", err);
-    }
-
-    document.body.removeChild(textArea);
-}
-
 
 const calendar = new Calendar();
 
