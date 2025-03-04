@@ -404,7 +404,7 @@ async function handleLogin() {
 
                 setTimeout(() => {
                     document.getElementById("save&create-button").click();
-                },500);
+                },3000);
             } else {
                 showAlert("Invalid username or password. Please try again.");
             }
