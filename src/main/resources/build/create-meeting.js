@@ -355,7 +355,7 @@ class Calendar {
 
                 setTimeout(() => {
                     window.location.href = "index.html";
-                }, 10000);
+                }, 2000);
             } else {
                 showAlert("Failed to create meeting.");
                 return null;
