@@ -297,7 +297,6 @@ class Calendar {
         if (!token) {
             document.getElementById("login-overlay").style.display = "flex";
             setupLoginForm();
-            isProcessing = false;
             return;
         }
 
@@ -335,15 +334,26 @@ class Calendar {
                     comment: meetingDescription,
                     dateRanges: dateRanges,
                 }),
-            })
+            });
 
             if (response.ok) {
                 const data = await response.json();
-                const meetingLink = `https://backendmeetingapp-1.onrender.com/api/meetings/join/${data.code}`
-                await navigator.clipboard.writeText(meetingLink)
-                showNotification("Meeting created successfully! The link has been copied to your clipboard.")
+                const meetingLink = `https://backendmeetingapp-1.onrender.com/api/meetings/join/${data.code}`;
+
+                console.log("📋 Próbuję skopiować link:", meetingLink);
+
+                try {
+                    // Spróbuj użyć nowoczesnego Clipboard API
+                    await navigator.clipboard.writeText(meetingLink);
+                    console.log("✅ Link skopiowany do schowka przez Clipboard API!");
+                } catch (clipboardError) {
+                    console.warn("⚠️ Clipboard API nie działa. Używam metody fallback.", clipboardError);
+                    fallbackCopyText(meetingLink);
+                }
+
+                showNotification("Meeting created successfully! The link has been copied to your clipboard.");
+
                 setTimeout(() => {
-                    //TODO przeslac code dalej zeby odrazu przenioslo do date-chose
                     window.location.href = "index.html";
                 }, 10000);
             } else {
@@ -364,10 +374,23 @@ class Calendar {
         if (desktopButton && mobileButton) {
             mobileButton.addEventListener("click", (e) => {
                 e.preventDefault();
+                console.log(" Kliknięto przycisk mobilny!");
                 desktopButton.click();
-            })
+            });
+        } else {
+            console.warn(" Nie znaleziono przycisków!");
         }
-    };
+    }
+
+}
+function fallbackCopyText(text) {
+    const textArea = document.createElement("textarea");
+    textArea.value = text;
+    document.body.appendChild(textArea);
+    textArea.select();
+    document.execCommand("copy");
+    document.body.removeChild(textArea);
+    alert("Link skopiowany!");
 }
 
 const calendar = new Calendar();
