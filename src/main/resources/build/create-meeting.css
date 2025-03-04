@@ -347,6 +347,7 @@ h1 {
 
     .calendar-grid {
         font-size: 12px;
+        width: 100%;
     }
 
     .date {
@@ -379,7 +380,7 @@ h1 {
     .form-group input:focus ~ label,
     .form-group input:not(:placeholder-shown) ~ label {
         top: -24px;
-        font-size: 14px;
+        font-size: 16px;
     }
 
 }

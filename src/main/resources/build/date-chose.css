@@ -168,6 +168,12 @@ main {
     .popular-slots-list {
         grid-template-columns: repeat(2, 1fr);
     }
+
+    .controls {
+        display: flex;
+        gap: 12px;
+        flex-direction: column;
+    }
 }
 
 @media (max-width: 480px) {
