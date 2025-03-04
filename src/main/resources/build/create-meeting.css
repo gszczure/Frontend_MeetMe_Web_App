@@ -165,6 +165,7 @@ h1 {
     padding: 8px;
     border: 1px solid #e2e8f0;
     border-radius: 4px;
+    color: black;
 }
 
 .remove-date {
@@ -374,6 +375,13 @@ h1 {
         max-width: 790px;
         padding: 30px;
     }
+
+    .form-group input:focus ~ label,
+    .form-group input:not(:placeholder-shown) ~ label {
+        top: -24px;
+        font-size: 14px;
+    }
+
 }
 
 .mobile-footer {
@@ -391,6 +399,7 @@ h1 {
 @media (max-width: 768px) {
     .mobile-footer {
         display: block;
+        z-index: unset;
     }
 
     #save\&create-button {
