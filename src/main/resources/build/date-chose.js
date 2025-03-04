@@ -1,8 +1,9 @@
-const token = localStorage.getItem("token");
-const userId = localStorage.getItem("userId");
-const meetingCode = localStorage.getItem('code')
-let isProcessing = false
-
+let userId = localStorage.getItem("userId");
+let meetingId = null;
+let isProcessing = false;
+let cachedMeetingDates = null;
+let cachedVoteCounts = null;
+let guest = false;
 
 // Enum dla stanów wyboru
 const SelectionState = {
@@ -11,62 +12,106 @@ const SelectionState = {
     IF_NEEDED: "if_needed",
 };
 
-// Zmienne do przechowywania danych w pamięci podręcznej
-let cachedMeetingDates = null;
-let cachedVoteCounts = null;
+function disableButtonsIfGuest(guest) {
+    const participantsBtn = document.getElementById("participants-btn");
 
-// Funkcja do pobierania wszystkich potrzebnych danych
+    if (guest) {
+        participantsBtn.classList.add("disabled-button");
+
+        function blockClick(e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            showNotification("The meeting participants list can only be viewed by registered users.");
+        }
+
+        // Najpierw usuwamy stare eventy, żeby nie dodawać wielu
+        participantsBtn.replaceWith(participantsBtn.cloneNode(true));
+        const newBtn = document.getElementById("participants-btn");
+        newBtn.classList.add("disabled-button");
+        newBtn.addEventListener("click", blockClick);
+    } else {
+        participantsBtn.classList.remove("disabled-button");
+    }
+}
+
+function getMeetingCode() {
+    const urlParams = new URLSearchParams(window.location.search);
+    let code = urlParams.get("code");
+    if (!code) {
+        code = localStorage.getItem("code");
+    }
+    return code;
+}
+
+function getToken() {
+    return localStorage.getItem("token");
+}
+
+function formatDateForDisplay(dateString) {
+    const date = new Date(dateString);
+    const options = { day: "numeric", month: "long", year: "numeric" };
+    return new Intl.DateTimeFormat("en-GB", options).format(date);
+}
+
 async function fetchAllData() {
-
+    const meetingCode = getMeetingCode();
     if (!meetingCode) {
-        console.error("Brak meetingCode w URL");
+        console.error("Brak meetingCode");
+        return;
+    }
+
+    const token = getToken();
+    if (!token) {
+        console.error("Invalid token.");
         return;
     }
 
     try {
         const response = await fetch(
-            `http://localhost:8080/api/meeting-details/details/${meetingCode}`,
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            }
-            );
+            `https://backendmeetingapp-1.onrender.com/api/meeting-details/details/${meetingCode}`, {
+            headers: { "Authorization": `Bearer ${token}` }
+        });
 
         if (!response.ok) {
             throw new Error("Nie znaleziono spotkania");
         }
 
         const meetingDetails = await response.json();
+
         meetingId = meetingDetails.meetingId;
 
-        // Cache the meeting dates
         cachedMeetingDates = meetingDetails.dateRanges;
-
-        // Fetch vote counts and user selections
         cachedVoteCounts = await fetchVoteCounts();
         const userSelections = await fetchUserSelections();
+
+        guest = meetingDetails.guest;
+
+        disableButtonsIfGuest(guest);
 
         return {
             meetingDetails,
             meetingDates: cachedMeetingDates,
             voteCounts: cachedVoteCounts,
-            userSelections
+            userSelections,
+            guest
         };
     } catch (error) {
         console.error("Błąd podczas pobierania danych spotkania:", error);
     }
 }
 
-// Funkcja do pobierania wyborów użytkownika z backendu
 async function fetchUserSelections() {
+    const token = getToken();
+
+    if (!token) {
+        console.error("Invalid token.");
+        return;
+    }
     try {
-        const response = await fetch(
-            `http://localhost:8080/api/date-selections/${meetingId}/${userId}/user_selections`,
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
+        const response = await fetch(`https://backendmeetingapp-1.onrender.com/api/date-selections/${meetingId}/${userId}/user_selections`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
         });
         if (response.ok) {
             return await response.json();
@@ -80,15 +125,18 @@ async function fetchUserSelections() {
     }
 }
 
-// Funkcja do pobierania liczby głosów (YES, IF_NEEDED)
 async function fetchVoteCounts() {
+    const token = getToken();
+
+    if (!token) {
+        console.error("Invalid token.");
+        return;
+    }
     try {
-        const response = await fetch(
-            `http://localhost:8080/api/date-selections/${meetingId}/votes`,
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
+        const response = await fetch(`https://backendmeetingapp-1.onrender.com/api/date-selections/${meetingId}/votes`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
         });
         if (response.ok) {
             return await response.json();
@@ -102,35 +150,40 @@ async function fetchVoteCounts() {
     }
 }
 
-// Funkcja do aktualizacji wyboru użytkownika w backendzie
 async function updateUserSelection(dateRangeId, selectionState) {
+    const token = getToken();
+    if (!token) {
+        console.error("Invalid token.");
+        return;
+    }
     try {
         if (selectionState === SelectionState.NONE) {
             const response = await fetch(
-                `http://localhost:8080/api/date-selections/${meetingId}/${userId}/${dateRangeId}/delete_selection`,
+                `https://backendmeetingapp-1.onrender.com/api/date-selections/${meetingId}/${userId}/${dateRangeId}/delete_selection`,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
-                method: "DELETE"
-            });
+                    method: "DELETE",
+                },
+            );
 
             if (!response.ok) {
                 console.error("Nie udało się usunąć wyboru użytkownika");
             }
             return;
         }
-
         const response = await fetch(
-            `http://localhost:8080/api/date-selections/${meetingId}/${userId}/${dateRangeId}/update_selection`,
+            `https://backendmeetingapp-1.onrender.com/api/date-selections/${meetingId}/${userId}/${dateRangeId}/update_selection`,
             {
-            method: "POST",
-            headers: {
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json",
+                method: "POST",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ state: selectionState }),
             },
-            body: JSON.stringify({ state: selectionState }),
-        });
+        );
 
         if (!response.ok) {
             console.error("Nie udało się zaktualizować wyboru użytkownika");
@@ -140,15 +193,15 @@ async function updateUserSelection(dateRangeId, selectionState) {
     }
 }
 
-// Funkcja do pobierania szczegółowych głosów dla konkretnej daty
 async function fetchVotesForDate(dateRangeId) {
+    const token = getToken();
     if (!token) {
-        alert("You must be logged in to see votes.");
+        console.error("Invalid token.");
         return;
     }
 
     try {
-        const response = await fetch(`http://localhost:8080/api/meeting-details/getVotes/${dateRangeId}`, {
+        const response = await fetch(`https://backendmeetingapp-1.onrender.com/api/meeting-details/getVotes/${dateRangeId}`, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
@@ -162,6 +215,56 @@ async function fetchVotesForDate(dateRangeId) {
         }
     } catch (error) {
         console.error("Błąd podczas pobierania głosów:", error);
+    }
+}
+
+async function removeParticipant(userId) {
+    const token = getToken();
+    if (!token) {
+        console.error("Invalid token.");
+        return;
+    }
+    try {
+        const response = await fetch(`https://backendmeetingapp-1.onrender.com/api/meetings/${meetingId}/participants/${userId}`, {
+            method: "DELETE",
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        if (response.ok) {
+            return true;
+            // TODO dodac zeby ladowalo od nowa strone
+        } else {
+            console.error("Failed to remove participant");
+            return false;
+        }
+    } catch (error) {
+        console.error("Error removing participant:", error);
+        return false;
+    }
+}
+
+async function fetchParticipants() {
+    const token = getToken();
+    if (!token) {
+        console.error("Invalid token.");
+        return;
+    }
+    try {
+        const response = await fetch(`https://backendmeetingapp-1.onrender.com/api/meetings/${meetingId}/participants`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        if (response.ok) {
+            return await response.json();
+        } else {
+            console.error("Failed to fetch participants");
+            return null;
+        }
+    } catch (error) {
+        console.error("Error fetching participants:", error);
+        return null;
     }
 }
 
@@ -209,10 +312,10 @@ function createDateItem(dateObj, userSelections, voteCounts) {
         const yesVotes = votes.yes || 0;
         const ifNeededVotes = votes.if_needed || 0;
 
-        yesBar.style.width = `${yesVotes * 15}px`;
+        yesBar.style.width = `${Math.min(yesVotes * 15, 100)}px`;
         yesBar.textContent = yesVotes > 0 ? `${yesVotes}` : "";
 
-        ifNeededBar.style.width = `${ifNeededVotes * 15}px`;
+        ifNeededBar.style.width = `${Math.min(ifNeededVotes * 15, 100)}px`;
         ifNeededBar.textContent = ifNeededVotes > 0 ? `${ifNeededVotes}` : "";
     };
 
@@ -286,7 +389,6 @@ function updateCheckmarkAppearance(checkmark, state, dateItem) {
     }
 }
 
-// Funkcja renderująca wszystkie daty na stronie
 async function renderDates(meetingDates, userSelections, voteCounts) {
     const dateList = document.getElementById("date-list");
     dateList.innerHTML = "";
@@ -298,67 +400,84 @@ async function renderDates(meetingDates, userSelections, voteCounts) {
     });
 }
 
-function formatDateForDisplay(dateString) {
-    const date = new Date(dateString);
-    const options = { day: "numeric", month: "long", year: "numeric" };
-    return new Intl.DateTimeFormat("en-GB", options).format(date);
-}
-
 async function renderPopularTimeSlots() {
     try {
         const meetingDates = cachedMeetingDates;
         const voteCounts = cachedVoteCounts;
 
-        const combinedData = meetingDates.map(date => ({
+        const combinedData = meetingDates.map((date) => ({
             ...date,
             votes: voteCounts[date.id] || { yes: 0, if_needed: 0 },
-            totalVotes: (voteCounts[date.id]?.yes || 0) + (voteCounts[date.id]?.if_needed || 0)
+            totalVotes: (voteCounts[date.id]?.yes || 0) + (voteCounts[date.id]?.if_needed || 0),
         }));
 
         combinedData.sort((a, b) => b.totalVotes - a.totalVotes);
-
         const popularSlots = combinedData.slice(0, 3);
 
-        let popularSlotsSection = document.querySelector('.popular-slots');
+        let popularSlotsSection = document.querySelector(".popular-slots");
         if (!popularSlotsSection) {
-            popularSlotsSection = document.createElement('section');
-            popularSlotsSection.className = 'popular-slots';
-            document.querySelector('main').appendChild(popularSlotsSection);
+            popularSlotsSection = document.createElement("section");
+            popularSlotsSection.className = "popular-slots";
+            document.querySelector("main").appendChild(popularSlotsSection);
         }
 
         popularSlotsSection.innerHTML = `
             <h2>Most Popular Time Slots</h2>
             <div class="popular-slots-list">
-                ${popularSlots.map((slot, index) => `
-                    <div class="popular-slot-card ${['green', 'blue', 'yellow'][index]}">
-                        <div class="popular-slot-date">${formatDateForDisplay(slot.startDate)}</div>
-                        <div class="popular-slot-time">
-                            ${slot.startTime} (${slot.duration}h)
+                ${popularSlots
+            .map(
+                (slot, index) => `
+                        <div class="popular-slot-card ${["green", "blue", "yellow"][index]}">
+                            <div class="popular-slot-date">${formatDateForDisplay(slot.startDate)}</div>
+                            <div class="popular-slot-time">
+                                ${slot.startTime} (${slot.duration}h)
+                            </div>
+                            <div class="vote-circles">
+                                <div class="vote-circle yes">${slot.votes.yes || 0}</div>
+                                <div class="vote-circle if-needed">${slot.votes.if_needed || 0}</div>
+                            </div>
+                            <button class="view-votes-button" data-date-range-id="${slot.id}">
+                                View Votes (${slot.totalVotes})
+                            </button>
                         </div>
-                        <div class="vote-circles">
-                            <div class="vote-circle yes">${slot.votes.yes || 0}</div>
-                            <div class="vote-circle if-needed">${slot.votes.if_needed || 0}</div>
-                        </div>
-                        <button class="view-votes-button" data-date-range-id="${slot.id}">
-                            View Votes (${slot.totalVotes})
-                        </button>
-                    </div>
-                `).join('')}
+                    `,
+            )
+            .join("")}
             </div>
         `;
 
-        const viewVotesButtons = document.querySelectorAll('.view-votes-button');
-        viewVotesButtons.forEach(button => {
-            button.addEventListener('click', async (event) => {
-                const dateRangeId = event.target.getAttribute('data-date-range-id');
-                await fetchVotesForDate(dateRangeId);
-            });
-        });
+        const viewVotesButtons = document.querySelectorAll(".view-votes-button");
 
+        viewVotesButtons.forEach((button) => {
+            if (guest) {
+                button.classList.add("disabled-button");
+
+                function blockClick(e) {
+                    e.preventDefault();
+                    e.stopImmediatePropagation();
+                    showNotification("The view votes list can only be viewed by registered users.");
+                }
+
+                // Zamieniamy guzik na klon, żeby usunąć stare eventy
+                const newButton = button.cloneNode(true);
+                button.replaceWith(newButton);
+                newButton.classList.add("disabled-button");
+                newButton.addEventListener("click", blockClick);
+            } else {
+                button.classList.remove("disabled-button");
+
+                // Normalny event dla zalogowanych użytkowników
+                button.addEventListener("click", async (event) => {
+                    const dateRangeId = event.target.getAttribute("data-date-range-id");
+                    await fetchVotesForDate(dateRangeId);
+                });
+            }
+        });
     } catch (error) {
         console.error("Błąd podczas renderowania popularnych terminów:", error);
     }
 }
+
 
 function displayVotesInModal(votes, dateRangeId) {
     const modal = document.getElementById("modal1");
@@ -378,92 +497,20 @@ function displayVotesInModal(votes, dateRangeId) {
     votes.forEach(vote => {
         const listItem = document.createElement("li");
         listItem.className = `vote-item vote-${vote.state}`;
-        listItem.textContent = `${vote.firstName} ${vote.lastName} - ${vote.state === 'yes' ? 'Available' : 'If needed'}`;
+        listItem.textContent = `${vote.firstName} ${vote.lastName} - ${vote.state === "yes" ? "Available" : "If needed"}`;
         voteList.appendChild(listItem);
     });
 
     modal.style.display = "block";
 }
 
-window.onclick = (event) => {
-    if (event.target.className === "modal") {
-        event.target.style.display = "none";
-    }
-}
-
-const logoutButton = document.querySelector('.logout-button');
-logoutButton.addEventListener('click', () => {
-    localStorage.clear();
-    window.location.href = 'index.html';
-});
-
-// Główna funkcja renderująca
-async function renderAll() {
-    const { meetingDetails, meetingDates, voteCounts, userSelections } = await fetchAllData();
-
-    const organizerInfoElement = document.getElementById("organizer-info");
-    organizerInfoElement.innerHTML = `<div class="organizer-name">${meetingDetails.name}</div>`;
-
-    const commentElement = document.querySelector(".comment");
-    commentElement.textContent = meetingDetails.comment || null;
-
-    await renderDates(meetingDates, userSelections, voteCounts);
-
-    await renderPopularTimeSlots();
-}
-
-// Update the document ready event listener
-document.addEventListener("DOMContentLoaded", async () => {
-    await renderAll();
-});
-
-// TODO pomysles nad priorytetem kolejnosci wysweitlania most popular date np (3.YES 1.IfNeeded > 3.IfNeeded 1.YES)
-// TODO dodac max-widh dla paskow z iloscia glosow aby przy wiekszej ilosci osob nie wyjechaly po za kwadrat
-
-async function removeParticipant(userId) {
-    try {
-        const response = await fetch(
-            `http://localhost:8080/api/meetings/${meetingId}/participants/${userId}`,
-            {
-            method: "DELETE",
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        });
-        if (response.ok) {
-            return true;
-        } else {
-            console.error("Failed to remove participant");
-            return false;
-        }
-    } catch (error) {
-        console.error("Error removing participant:", error);
-        return false;
-    }
-}
-
-async function fetchParticipants() {
-    try {
-        const response = await fetch(
-            `http://localhost:8080/api/meetings/${meetingId}/participants`,
-            {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        });
-        if (response.ok) {
-            return await response.json();
-        } else {
-            console.error("Failed to fetch participants");
-            return null;
-        }
-    } catch (error) {
-        console.error("Error fetching participants:", error);
-        return null;
-    }
-}
-
 async function showParticipantsModal() {
+    const token = getToken();
+
+    if (!token) {
+        return;
+    }
+
     const participantsData = await fetchParticipants();
     if (!participantsData) return;
 
@@ -483,9 +530,9 @@ async function showParticipantsModal() {
     participants.forEach((participant) => {
         const li = document.createElement("li");
         li.innerHTML = `
-            ${participant.firstName} ${participant.lastName}
-            ${isOwner ? `<button class="remove-participant" data-user-id="${participant.id}">&times;</button>` : ""}
-        `;
+      ${participant.firstName} ${participant.lastName}
+      ${isOwner ? `<button class="remove-participant" data-user-id="${participant.id}">&times;</button>` : ""}
+    `;
         participantsList.appendChild(li);
     });
 
@@ -511,8 +558,211 @@ async function showParticipantsModal() {
     document.getElementById("participants-modal").style.display = "block";
 }
 
+window.onclick = (event) => {
+    if (event.target.className === "modal") {
+        event.target.style.display = "none";
+    }
+};
+
+const logoutButton = document.querySelector(".logout-button");
+logoutButton.addEventListener("click", () => {
+    localStorage.clear();
+    window.location.href = "index.html";
+});
+
 document.getElementById("participants-btn").addEventListener("click", showParticipantsModal);
 
 function closeModal(modalId) {
     document.getElementById(modalId).style.display = "none";
 }
+
+
+// Główna funkcja renderująca
+async function renderAll() {
+    const data = await fetchAllData();
+    if (!data) return;
+
+    const { meetingDetails, meetingDates, voteCounts, userSelections } = data;
+
+    const organizerInfoElement = document.getElementById("organizer-info");
+    organizerInfoElement.innerHTML = `<div class="organizer-name">${meetingDetails.name}</div>`;
+
+    const commentElement = document.querySelector(".comment");
+    commentElement.textContent = meetingDetails.comment || null;
+
+    disableButtonsIfGuest(guest);
+
+    await renderDates(meetingDates, userSelections, voteCounts);
+
+    await renderPopularTimeSlots();
+}
+
+// Logowanie
+async function handleLogin() {
+    const username = document.getElementById("username").value;
+    const password = document.getElementById("password").value;
+
+    if (username && password) {
+        try {
+            const response = await fetch("https://backendmeetingapp-1.onrender.com/api/auth/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ username, password }),
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                localStorage.setItem("token", data.token);
+                localStorage.setItem("userId", data.userId);
+                userId = data.userId;
+                localStorage.setItem("isAuthenticated", "true");
+
+                document.getElementById("login-overlay").style.display = "none";
+                await handleAutoJoinMeeting();
+                await renderAll();
+                showNotification("Successfully logged in.")
+            } else {
+                showAlert("Invalid username or password. Please try again.");
+            }
+        } catch (error) {
+            console.error("Error logging in:", error);
+            showAlert("Error logging in. Please try again.");
+        }
+    } else {
+        showAlert("Please enter both username and password.");
+    }
+}
+
+// Guest Logowanie
+async function handleGuestLogin() {
+    const firstName = document.getElementById("firstName").value;
+    const lastName = document.getElementById("lastName").value;
+
+    if (firstName && lastName) {
+        try {
+            const response = await fetch("https://backendmeetingapp-1.onrender.com/api/auth/guest-login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ firstName, lastName }),
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                localStorage.setItem("token", data.token);
+                localStorage.setItem("userId", data.userId);
+                userId = data.userId;
+                localStorage.setItem("isGuest", "true");
+
+                document.getElementById("login-overlay").style.display = "none";
+                await handleAutoJoinMeeting();
+                await renderAll();
+                showNotification("You are logged in as a guest. Some features may be restricted.")
+            } else {
+                console.error("Failed to login:", response.statusText);
+                showAlert("Failed to login as guest. Please try again.");
+            }
+        } catch (error) {
+            console.error("Error logging in:", error);
+            showAlert("Error logging in as guest. Please try again.");
+        }
+    } else {
+        showAlert("Please enter both your first and last name.");
+    }
+}
+
+// auto-joining meetings
+async function handleAutoJoinMeeting() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const code = urlParams.get("code");
+
+    if (!code) return;
+
+    const token = getToken();
+    if (!token) return;
+
+    try {
+        const response = await fetch("https://backendmeetingapp-1.onrender.com/api/meetings/join", {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ code })
+        });
+
+        if (!response.ok) {
+            console.error("Failed to auto-join meeting");
+        }
+    } catch (error) {
+        console.error("Error auto-joining meeting:", error);
+    }
+}
+
+const shareButton = document.getElementById("share-btn")
+if (shareButton) {
+    shareButton.addEventListener("click", async () => {
+        const meetingCode = getMeetingCode()
+        if (meetingCode && meetingCode !== "null") {
+            const meetingLink = `https://backendmeetingapp-1.onrender.com/api/meetings/join/${meetingCode}`
+
+            try {
+                await navigator.clipboard.writeText(meetingLink)
+                showNotification("Meeting link has been copied to your clipboard!")
+            } catch (err) {
+                showNotification("Failed to copy meeting link to clipboard.")
+            }
+        } else {
+            showNotification("Invalid meeting code.")
+        }
+    })
+}
+
+function setupLoginForm() {
+    const showLoginFormLink = document.getElementById("show-login-form");
+    const showGuestLoginLink = document.getElementById("show-guest-login");
+    const loginFormContainer = document.getElementById("login-form-container");
+    const guestLoginContainer = document.getElementById("guest-login-container");
+    const loginButton = document.getElementById("login-button-auth");
+    const guestLoginButton = document.getElementById("login-button");
+
+
+    showLoginFormLink.addEventListener("click", (e) => {
+        e.preventDefault();
+        loginFormContainer.style.display = "block";
+        guestLoginContainer.style.display = "none";
+    });
+
+    showGuestLoginLink.addEventListener("click", (e) => {
+        e.preventDefault();
+        loginFormContainer.style.display = "none";
+        guestLoginContainer.style.display = "block";
+    });
+
+    loginButton.addEventListener("click", handleLogin);
+    guestLoginButton.addEventListener("click", handleGuestLogin);
+}
+
+const token = localStorage.getItem("token");
+const loginOverlay = document.getElementById("login-overlay");
+
+if (token) {
+    loginOverlay.style.display = "none";
+    userId = localStorage.getItem("userId");
+    renderAll();
+} else {
+    loginOverlay.style.display = "flex";
+    setupLoginForm();
+}
+
+// TODO pomysles nad priorytetem kolejnosci wysweitlania most popular date np (3.YES 1.IfNeeded > 3.IfNeeded 1.YES)
+// TODO dodac jakies wyglady dla guzikow ktore nei sa dostepne dla gosci
+// TODO zrobic is processing w kazdym guziku (viev votes i participants) bo w tych brakuje
+//TODO jak usune uzytkownika to ma sie wszystko zaladowac ponownie (w sumei to nie wszytko bo tylko pasek kolorow glosow i na dole lista glosow) VOTES ma sie zaladowac jeszcze raz
+// TODO zrobi w participants X czerwonego jak przy usuwaniu ludzi
+//TODO naprawic blad ze jak spamie participants to sie wysweitli po wczytaniu wszystkiego (zrobic zeby te guziki byly disabled na poczatku albo zeby funckjie odpowiadajace endpoitom dobrym byly dopiero mozliwe zeby wysylac dane po jakims czasie)
+// TODO zrobic na telefonei inaczej guziki edit share oraz participants
+//TODO dodac wyglady po najechaniu na daty do wyboru (krawedzie sie podswieca)

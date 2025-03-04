@@ -127,7 +127,7 @@ section h2 {
 
 .empty-state {
     text-align: center;
-    padding: 3rem 0;
+    padding: 1rem 0;
     color: #b0b0b0;
     grid-column: span 3;
 }
@@ -141,6 +141,7 @@ section h2 {
     .create-meeting-button {
         width: 100%;
         justify-content: center;
+        margin-top: 20px;
     }
 
     #meeting-container {
@@ -151,6 +152,18 @@ section h2 {
 @media (min-width: 769px) and (max-width: 1024px) {
     #meeting-container {
         grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .delete-meeting:hover {
+        color: var(--delete-button-bg);
+        background-color: transparent;
+        transform: none;
+    }
+    .meeting-card:hover {
+        transform: none;
+        box-shadow: none;
     }
 }
 

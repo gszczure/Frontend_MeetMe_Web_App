@@ -234,10 +234,10 @@ async function deleteDateRange(dateRangeId) {
 loadSavedDateRanges();
 
 backButton.addEventListener('click', () => {
-    window.location.href = 'main.html';
+    window.location.href = 'index.html';
 });
 
 logoutButton.addEventListener('click', () => {
     localStorage.clear();
-    window.location.href = 'index.html';
+    window.location.href = 'login-register.html';
 });

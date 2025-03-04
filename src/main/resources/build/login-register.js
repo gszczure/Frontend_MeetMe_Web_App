@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             try {
                 const response = await fetch(
-                    'http://localhost:8080/api/auth/login',
+                    'https://backendmeetingapp-1.onrender.com/api/auth/login',
                     {
                     method: 'POST',
                     headers: {
@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const data = await response.json();
                     localStorage.setItem('token', data.token);
                     localStorage.setItem('userId', data.userId);
-                    window.location.href = 'main.html';
+                    window.location.href = 'index.html';
                 } else {
                     document.getElementById('message').textContent = 'Incorrect username or password!';
                 }
@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             try {
                 const response = await fetch(
-                    'http://localhost:8080/api/auth/register',
+                    'https://backendmeetingapp-1.onrender.com/api/auth/register',
                     {
                     method: 'POST',
                     headers: {
@@ -95,7 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
 
                 if (response.ok) {
-                    window.location.href = 'index.html';
+                    window.location.href = 'login-register.html';
                 } else {
                     document.getElementById('message').textContent = 'Registration failed.';
                 }

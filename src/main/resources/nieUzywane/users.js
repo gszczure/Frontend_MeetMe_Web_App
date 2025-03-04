@@ -166,7 +166,7 @@ async function handleLeaveMeetingButtonClick(meetingId) {
 
         if (response.ok) {
             alert("Successfully left the meeting.");
-            window.location.href = 'main.html';
+            window.location.href = 'index.html';
         } else {
             const errorMessage = `Failed to leave meeting. Server responded with code ${response.status}`;
             console.error(errorMessage);
@@ -182,11 +182,11 @@ async function handleLeaveMeetingButtonClick(meetingId) {
 // Obsługa przycisków
 logoutButton.addEventListener('click', () => {
     localStorage.clear();
-    window.location.href = 'index.html';
+    window.location.href = 'login-register.html';
 });
 
 backButton.addEventListener('click', () => {
-    window.location.href = 'main.html';
+    window.location.href = 'index.html';
 });
 
 leaveMeetingButton.addEventListener('click', () => {

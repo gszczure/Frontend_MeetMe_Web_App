@@ -1,6 +1,4 @@
 const meetingContainer = document.querySelector('#meeting-container');
-const joinButton = document.querySelector('.join-button');
-const meetingCodeInput = document.querySelector('#join-code');
 const createMeetingButton = document.querySelector('.create-meeting-button');
 
 //TODO dodac isprocessing jak w data-chose.js by blokowac klikanie drugi raz guziak usuwania
@@ -19,12 +17,12 @@ async function deleteMeeting(meetingId, event) {
 
     const token = localStorage.getItem('token');
     if (!token) {
-        alert("You must be logged in to delete a meeting.");
+        showAlert("You must be logged in to delete a meeting.");
         return;
     }
 
     try {
-        const response = await fetch(`http://localhost:8080/api/meetings/${meetingId}`, {
+        const response = await fetch(`https://backendmeetingapp-1.onrender.com/api/meetings/${meetingId}`, {
             method: 'DELETE',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -35,11 +33,11 @@ async function deleteMeeting(meetingId, event) {
         if (response.ok) {
             loadMeetings();
         } else {
-            alert('Failed to delete meeting.');
+            showAlert('Failed to delete meeting.');
         }
     } catch (error) {
         console.error('Error:', error);
-        alert('An error occurred while deleting the meeting.');
+        showAlert('An error occurred while deleting the meeting.');
     }
 }
 
@@ -55,11 +53,6 @@ function addMeetingToUI(meeting) {
     meetingCard.appendChild(nameDiv);
 
     if (isOwner(meeting.owner.id)) {
-        const codeDiv = document.createElement('div');
-        codeDiv.classList.add('meeting-code');
-        codeDiv.textContent = `Code: ${meeting.code}`;
-        meetingCard.appendChild(codeDiv);
-
         // TODO &times zrobic zamiast x
         const deleteButton = document.createElement('button');
         deleteButton.classList.add('delete-meeting');
@@ -78,79 +71,51 @@ function addMeetingToUI(meeting) {
 
 // Funkcja do ładowania spotkań
 async function loadMeetings() {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token")
+
     if (!token) {
-        alert("You must be logged in to load meetings.");
+        const loginMessage = document.createElement("div");
+        loginMessage.classList.add("empty-state");
+        loginMessage.innerHTML = `The list of meetings is available only for logged-in users. <br> 
+                          I encourage you to <a href="login-register.html">Sign up</a>!`;
+        meetingContainer.appendChild(loginMessage);
         return;
     }
-
     try {
-        const response = await fetch('http://localhost:8080/api/meetings/for-user', {
-            method: 'GET',
+        const response = await fetch("https://backendmeetingapp-1.onrender.com/api/meetings/for-user", {
+            method: "GET",
             headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json',
-            }
-        });
-
-        if (response.ok) {
-            const meetings = await response.json();
-            meetings.sort((a, b) => a.name.localeCompare(b.name));
-            meetingContainer.innerHTML = '';
-            meetings.forEach(meeting => addMeetingToUI(meeting));
-        } else {
-            alert('Failed to load meetings.');
-        }
-    } catch (error) {
-        console.error('Error:', error);
-        alert('An error occurred while loading meetings.');
-    }
-}
-
-// Funkcja do dołączania do spotkania
-async function handleJoinButtonAction() {
-    const meetingCode = meetingCodeInput.value.trim();
-    if (!meetingCode) {
-        alert("Meeting code cannot be empty.");
-        return;
-    }
-
-    const token = localStorage.getItem('token');
-    if (!token) {
-        alert("You must be logged in to join a meeting.");
-        return;
-    }
-
-    try {
-        const response = await fetch('http://localhost:8080/api/meetings/join', {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
             },
-            body: JSON.stringify({ code: meetingCode })
-        });
+        })
 
         if (response.ok) {
-            alert("Successfully joined the meeting.");
-            meetingCodeInput.value = '';
-            loadMeetings();
-        } else if (response.status === 409) {
-            alert("You already belong to this meeting.");
+            const meetings = await response.json()
+            meetings.sort((a, b) => a.name.localeCompare(b.name))
+
+            meetingContainer.innerHTML = ""
+
+            if (meetings.length === 0) {
+                const emptyState = document.createElement("div")
+                emptyState.classList.add("empty-state")
+                emptyState.textContent = "Nie masz jeszcze żadnych spotkań. Utwórz nowe spotkanie, aby rozpocząć."
+                meetingContainer.appendChild(emptyState)
+            } else {
+                meetings.forEach((meeting) => addMeetingToUI(meeting))
+            }
         } else {
-            alert("Invalid meeting code.");
+            showAlert("Nie udało się załadować spotkań.")
         }
     } catch (error) {
-        console.error('Error:', error);
-        alert("An error occurred while joining the meeting.");
+        console.error("Error:", error);
+        showAlert("Wystąpił błąd podczas ładowania spotkań.");
     }
 }
 
 createMeetingButton.addEventListener('click', () => {
     window.location.href = 'create-meeting.html';
 });
-
-joinButton.addEventListener('click', handleJoinButtonAction);
 
 const logoutButton = document.querySelector('.logout-button');
 logoutButton.addEventListener('click', () => {

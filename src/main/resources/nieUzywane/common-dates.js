@@ -114,7 +114,7 @@ async function setMeetingDate(selectedDate) {
 
         if (response.ok) {
             alert("Meeting date has been successfully saved.");
-            window.location.href = 'main.html';
+            window.location.href = 'index.html';
         } else {
             alert(`Failed to save the meeting date. Server responded with code ${response.status}`);
         }
@@ -135,10 +135,10 @@ function formatDateForDatabase(dateString) {
 fetchCommonDates();
 
 backButton.addEventListener('click', () => {
-    window.location.href = 'main.html';
+    window.location.href = 'index.html';
 });
 
 logoutButton.addEventListener('click', () => {
     localStorage.clear();
-    window.location.href = 'index.html'
+    window.location.href = 'login-register.html'
 })

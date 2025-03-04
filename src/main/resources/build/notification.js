@@ -28,7 +28,7 @@ function initializeNotification() {
         }, duration)
     }
 
-    window.showAlert = (message, duration = 3000) => {
+    window.showAlert = (message, duration = 4000) => {
         window.showNotification(message, duration, "alert")
     }
 
