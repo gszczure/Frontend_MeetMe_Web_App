@@ -340,18 +340,20 @@ class Calendar {
             if (response.ok) {
                 const data = await response.json();
                 const meetingLink = `https://backendmeetingapp-1.onrender.com/api/meetings/join/${data.code}`
+
                 try {
                     await navigator.clipboard.writeText(meetingLink);
-                    console.log("✅ Link skopiowany do schowka przez Clipboard API!");
                 } catch (clipboardError) {
-                    console.warn("⚠️ Clipboard API nie działa. Używam metody fallback.", clipboardError);
-                    fallbackCopyText(meetingLink);
+                    CopyTextForIphone(meetingLink);
                 }
+
                 showNotification("Meeting created successfully! The link has been copied to your clipboard.")
+
                 setTimeout(() => {
                     //TODO przeslac code dalej zeby odrazu przenioslo do date-chose
                     window.location.href = "index.html";
                 }, 2000);
+
             } else {
                 showAlert("Failed to create meeting.");
                 return null;
@@ -377,14 +379,13 @@ class Calendar {
 }
 
 // Funkcja do kopiowania w Safari na telefonach bo clipboard nie dziala
-function fallbackCopyText(text) {
+function CopyTextForIphone(text) {
     const textArea = document.createElement("textarea");
     textArea.value = text;
     document.body.appendChild(textArea);
     textArea.select();
     document.execCommand("copy");
     document.body.removeChild(textArea);
-    alert("Link skopiowany!");
 }
 
 const calendar = new Calendar();
