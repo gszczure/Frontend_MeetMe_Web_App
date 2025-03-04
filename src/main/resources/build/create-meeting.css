@@ -330,6 +330,12 @@ h1 {
     color: transparent;
 }
 
+@media (max-width: 375px) {
+
+    .calendar-grid {
+        font-size: 8px;
+    }
+}
 
 @media (max-width: 768px) {
     .calendar-container {
@@ -347,7 +353,6 @@ h1 {
 
     .calendar-grid {
         font-size: 12px;
-        width: 100%;
     }
 
     .date {

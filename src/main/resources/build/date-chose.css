@@ -107,9 +107,9 @@ main {
     border: 1px solid #e0e0e0;
     border-radius: 6px;
     background: none;
-    cursor: pointer;
     font-size: 14px;
     transition: background-color 0.2s, border-color 0.2s;
+    color: black;
 }
 
 .option-btn.yes {
@@ -347,6 +347,7 @@ main {
     font-size: 14px;
     font-weight: 500;
     transition: background-color 0.2s;
+    color: black;
 }
 
 .controls button:hover {
