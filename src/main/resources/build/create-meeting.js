@@ -345,7 +345,7 @@ class Calendar {
                 setTimeout(() => {
                     //TODO przeslac code dalej zeby odrazu przenioslo do date-chose
                     window.location.href = "index.html";
-                }, 3000);
+                }, 10000);
             } else {
                 showAlert("Failed to create meeting.");
                 return null;
