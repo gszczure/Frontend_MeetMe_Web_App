@@ -368,6 +368,12 @@ h1 {
     .form-group:first-child {
         margin-bottom: 24px;
     }
+
+    .login-form {
+        width: 100%;
+        max-width: 790px;
+        padding: 30px;
+    }
 }
 
 .mobile-footer {
@@ -397,6 +403,7 @@ h1 {
 
     main {
         padding-bottom: 80px;
+        width: 100%;
     }
 }
 
