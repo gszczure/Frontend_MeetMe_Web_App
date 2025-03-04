@@ -168,22 +168,6 @@ main {
     .popular-slots-list {
         grid-template-columns: repeat(2, 1fr);
     }
-
-    #participants-list {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        margin: 0 auto;
-        padding: 0;
-        width: 90%;
-        max-width: 500px;
-    }
-
-    .modal-content {
-        width: 90%;
-        max-width: 500px;
-        margin: 15% auto;
-    }
 }
 
 @media (max-width: 480px) {
