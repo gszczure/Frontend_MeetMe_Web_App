@@ -330,13 +330,6 @@ h1 {
     color: transparent;
 }
 
-@media (max-width: 375px) {
-
-    .calendar-grid {
-        font-size: 8px;
-    }
-}
-
 @media (max-width: 768px) {
     .calendar-container {
         flex-direction: column;
