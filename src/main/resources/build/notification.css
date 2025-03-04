@@ -1,6 +1,6 @@
 .notification {
     position: fixed;
-    top: -100px;
+    top: -120px;
     left: 50%;
     transform: translateX(-50%);
     background-color: #4CAF50;
@@ -41,7 +41,7 @@
 
 @media (max-width: 768px) {
     .notification {
-        max-width: 90%;
+        max-width: 100%;
         padding: 16px 30px 16px 16px;
     }
 }
