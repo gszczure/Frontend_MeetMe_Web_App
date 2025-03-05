@@ -63,7 +63,7 @@ function addMeetingToUI(meeting) {
 
     meetingCard.addEventListener('click', () => {
         localStorage.setItem('code', meeting.code)
-        window.location.href = 'date-chose.html';
+        window.location.href = `https://backendmeetingapp-1.onrender.com/api/meetings/join/${meeting.code}`;
     });
 
     meetingContainer.appendChild(meetingCard);
