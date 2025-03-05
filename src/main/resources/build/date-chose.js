@@ -37,9 +37,6 @@ function disableButtonsIfGuest(guest) {
 function getMeetingCode() {
     const urlParams = new URLSearchParams(window.location.search);
     let code = urlParams.get("code");
-    if (!code) {
-        code = localStorage.getItem("code");
-    }
     return code;
 }
 
@@ -752,6 +749,7 @@ const loginOverlay = document.getElementById("login-overlay");
 if (token) {
     loginOverlay.style.display = "none";
     userId = localStorage.getItem("userId");
+    handleAutoJoinMeeting();
     renderAll();
 } else {
     loginOverlay.style.display = "flex";

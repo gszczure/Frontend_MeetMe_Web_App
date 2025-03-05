@@ -62,7 +62,6 @@ function addMeetingToUI(meeting) {
     }
 
     meetingCard.addEventListener('click', () => {
-        localStorage.setItem('code', meeting.code)
         window.location.href = `https://backendmeetingapp-1.onrender.com/api/meetings/join/${meeting.code}`;
     });
 
@@ -77,7 +76,7 @@ async function loadMeetings() {
         const loginMessage = document.createElement("div");
         loginMessage.classList.add("empty-state");
         loginMessage.innerHTML = `The list of meetings is available only for logged-in users. <br> 
-                          I encourage you to <a href="login-register.html">Sign up</a>!`;
+                          I encourage you to <a href="register.html">Sign up</a>!`;
         meetingContainer.appendChild(loginMessage);
         return;
     }
