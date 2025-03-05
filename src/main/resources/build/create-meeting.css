@@ -432,6 +432,7 @@ h1 {
 
     .selected-dates {
         padding-bottom: 80px;
+        padding-top: initial;
     }
 
     main {
