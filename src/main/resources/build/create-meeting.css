@@ -333,6 +333,7 @@ h1 {
 @media (max-width: 768px) {
     .calendar-container {
         flex-direction: column;
+        padding: 0 8px;
     }
 
     .calendar {
@@ -346,11 +347,17 @@ h1 {
 
     .calendar-grid {
         font-size: 12px;
+        gap: 2px;
     }
 
     .date {
-        width: 40px;
-        height: 40px;
+        width: 32px;
+        height: 32px;
+        font-size: 12px;
+    }
+
+    .weekday {
+        font-size: 12px;
     }
 
     .meeting-form {
@@ -380,7 +387,9 @@ h1 {
         top: -24px;
         font-size: 16px;
     }
-
+    main {
+        padding: 12px;
+    }
 }
 
 .mobile-footer {
