@@ -36,5 +36,5 @@ function checkToken() {
 
 function logout() {
     localStorage.clear();
-    window.location.href = "index.html";
+    window.location.href = "https://meetme-web-q5ol.onrender.com/index.html";
 }
