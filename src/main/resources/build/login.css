@@ -2,14 +2,16 @@ body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f9;
     color: #333;
-    display: flex;
-    justify-content: center;
     align-items: center;
     height: 100vh;
     margin: 0;
 }
 
 .container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     background: #fff;
     padding: 20px;
     border-radius: 5px;
@@ -58,12 +60,8 @@ p {
 }
 
 a {
-    color: #007BFF;
-    text-decoration: none;
-}
-
-a:hover {
-    text-decoration: underline;
+    color: var(--primary-blue);
+    text-decoration:underline;
 }
 
 #message {
