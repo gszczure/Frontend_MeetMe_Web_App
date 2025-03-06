@@ -8,7 +8,7 @@
 main {
     padding: 20px;
     max-width: 980px;
-    margin: 20px auto;
+    margin: auto;
     background: var(--meeting-bg);
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -466,7 +466,7 @@ h1 {
 }
 
 /* Login Overlay Styles */
-.overlay {
+.overlayLogin {
     position: fixed;
     top: 0;
     left: 0;
