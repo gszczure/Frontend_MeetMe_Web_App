@@ -195,7 +195,7 @@ body.menu-open .overlay {
 .close-menu {
     position: absolute;
     top: 290px;
-    left: 260px;
+    left: calc(100% + 80px);
     border: none;
     background-color: #ffffff;
     font-size: 1.5rem;
