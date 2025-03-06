@@ -1,89 +1,25 @@
 /* General Styles */
 :root {
+    --primary-blue: #1a73e8;
+    --primary-dark-blue: #0d47a1;
+    --primary-light-blue: #4285f4;
+    --secondary-blue: #64b5f6;
+
     --bg-color: #f4f4f9;
     --text-color: #333;
-    --header-bg: #2e3856;
-    --header-text: #fff;
-    --button-bg: #2e3856;
-    --button-hover: #646e9e;
+    --header-bg: var(--primary-dark-blue);
+    --header-text: #333;
+    --button-bg: var(--primary-blue);
+    --button-hover: var(--primary-light-blue);
     --meeting-bg: #f9f9f9;
     --meeting-border: #ddd;
-    --link-hover: #2e3856;
+    --link-hover: var(--secondary-blue);
     --delete-button-bg: #f44336;
     --delete-button-hover: #d32f2f;
-    --details-button-bg: #2196F3;
-    --details-button-hover: #1976D2;
-    --meeting-code-color: red;
+    --details-button-bg: var(--primary-blue);
+    --details-button-hover: var(--primary-light-blue);
+    --meeting-code-color: var(--primary-dark-blue);
     --text: white;
-}
-
-/* Dark Theme Variables */
-body.dark-theme {
-    --bg-color: #1c1c1e;
-    --text-color: #f0f0f0;
-    --header-bg: #2e3856;
-    --header-text: #fff;
-    --button-bg: #2e3856;
-    --button-hover: #646e9e;
-    --meeting-bg: #2e2e2e;
-    --meeting-border: #444;
-    --link-hover: #1e88e5;
-    --delete-button-bg: #d32f2f;
-    --delete-button-hover: #b71c1c;
-    --details-button-bg: #0a398f;
-    --details-button-hover: #2196f3;
-    --meeting-code-color: #ff5252;
-    --text: white;
-}
-
-/*Theme switch button*/
-#theme-switch {
-    height: 50px;
-    width: 50px;
-    padding: 0;
-    border-radius: 50%;
-    background-color: var(--button-bg);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: absolute;
-    right: 140px;
-    transition: background-color 0.3s;
-}
-
-/*Theme switch button display (Moon on lightMode, Sun on darkMode)*/
-#theme-switch svg:last-child {
-    display: none;
-}
-.dark-theme #theme-switch svg:first-child {
-    display: none;
-}
-.dark-theme #theme-switch svg:last-child {
-    display: block;
-}
-
-#theme-switch:hover {
-    background-color: var(--button-hover);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-}
-
-/*Header strony (pasek na górze)*/
-header {
-    background-color: var(--header-bg);
-    color: var(--header-text);
-    display: flex;
-    z-index: 1000;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 20px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    /*position: sticky;*/
-    top: 0;
-}
-
-header .logo {
-    font-size: 1.5rem;
-    font-weight: bold;
 }
 
 * {
@@ -99,28 +35,211 @@ body {
     line-height: 1.6;
 }
 
-header .logout-button {
-    background-color: var(--delete-button-bg);
-    color: white;
-    border: none;
-    padding: 10px 20px;
+hr {
+    border: 0;
+    height: 1px;
+    background-color: #ddd;
+    margin: 20px 0;
+}
+
+/* Header styles */
+header {
+    color: var(--header-text);
+    display: flex;
+    z-index: 1000;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    height: 100px;
+    padding-left: 50px;
+    padding-right: 50px;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.logo span:first-child {
+    color: var(--primary-blue);
+}
+
+.logo span:last-child {
+    color: var(--header-text);
+}
+
+.header-controls {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.header-action {
+    color: var(--header-text);
+    text-decoration: none;
+    font-weight: 500;
+    padding: 8px 16px;
     border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.header-action:hover {
+    color: var(--primary-blue);
+}
+
+/* Menu for mobile */
+.hamburger-menu {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+    height: 30px;
+    background: transparent;
+    border: none;
+    padding: 0;
+    z-index: 10;
     cursor: pointer;
-    transition: background-color 0.3s;
 }
 
-header .logout-button:hover {
-    background-color: var(--delete-button-hover);
-    scale: 1.05;
+.hamburger-menu svg {
+    color: var(--header-text);
 }
 
-.logout-button svg {
-    vertical-align: middle;
+/* Mobile menu styles */
+.mobile-menu {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: -100%;
+    width: 75%;
+    height: 100%;
+    background: white;
+    z-index: 1001;
+    flex-direction: column;
+    padding: 25px 50px;
+    transition: left 0.3s ease-in-out;
+}
+
+.nav-slide-items {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 15px;
+    position: relative;
+}
+
+.mobile-menu-title {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: left;
+    width: 100%;
+    padding-bottom: 25px;
+}
+
+.mobile-menu-title span:first-child {
+    color: var(--primary-blue);
+}
+
+.mobile-menu-title span:last-child {
+    color: var(--text-color);
+}
+
+.mobile-menu .header-action {
+    width: 100%;
+    text-align: left;
+    padding: 25px 0;
+    font-size: 0.9rem;
+    border-radius: 0;
+    color: var(--text-color);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin: 0;
+}
+
+.mobile-menu .header-action:hover,
+.mobile-menu .header-action.signup:hover {
+    color: var(--primary-blue);
+    background-color: transparent;
+}
+
+.mobile-menu .header-action.signup {
+    background-color: transparent;
+    color: var(--text-color);
+}
+
+.overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+body.menu-open .mobile-menu {
+    left: 0;
+}
+
+body.menu-open .overlay {
+    display: block;
+    opacity: 1;
+}
+
+.close-menu {
+    position: absolute;
+    top: 300px;
+    left: 300px;
+    border: none;
+    background-color: #ffffff;
+    font-size: 1.5rem;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s ease;
 }
 
 .separator {
     width: 100%;
     height: 1px;
-    background-color: #ddd;
+    background-color: var(--meeting-border);
     margin: 20px 0;
 }
+
+@media (max-width: 768px) {
+    .hamburger-menu {
+        display: flex;
+    }
+
+    .header-controls {
+        display: none;
+    }
+
+    body.menu-open .mobile-menu {
+        display: flex;
+    }
+
+    header {
+        padding-right: 25px;
+        padding-left: 25px;
+    }
+
+    .logo {
+        font-size: 2rem;
+    }
+}
+
+@media (min-width: 769px) {
+    .header-controls {
+        margin-left: auto;
+    }
+}
+
