@@ -1,3 +1,5 @@
+let url = "http://localhost:8080";
+
 document.addEventListener('DOMContentLoaded', () => {
     // Logowanie
     const loginForm = document.getElementById('loginForm');
@@ -10,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             try {
                 const response = await fetch(
-                    'https://backendmeetingapp-1.onrender.com/api/auth/login',
+                    `${url}/api/auth/login`,
                     {
                     method: 'POST',
                     headers: {
@@ -78,7 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             try {
                 const response = await fetch(
-                    'https://backendmeetingapp-1.onrender.com/api/auth/register',
+                    `${url}/api/auth/register`,
                     {
                     method: 'POST',
                     headers: {
@@ -95,7 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
 
                 if (response.ok) {
-                    window.location.href = 'login-register.html';
+                    window.location.href = 'login.html';
                 } else {
                     document.getElementById('message').textContent = 'Registration failed.';
                 }

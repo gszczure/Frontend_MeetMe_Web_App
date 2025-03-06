@@ -1,5 +1,6 @@
 const meetingContainer = document.querySelector('#meeting-container');
 const createMeetingButton = document.querySelector('.create-meeting-button');
+let url = "http://localhost:8080";
 
 //TODO dodac isprocessing jak w data-chose.js by blokowac klikanie drugi raz guziak usuwania
 
@@ -22,7 +23,7 @@ async function deleteMeeting(meetingId, event) {
     }
 
     try {
-        const response = await fetch(`https://backendmeetingapp-1.onrender.com/api/meetings/${meetingId}`, {
+        const response = await fetch(`${url}/api/meetings/${meetingId}`, {
             method: 'DELETE',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -62,7 +63,8 @@ function addMeetingToUI(meeting) {
     }
 
     meetingCard.addEventListener('click', () => {
-        window.location.href = `https://backendmeetingapp-1.onrender.com/api/meetings/join/${meeting.code}`;
+        // window.location.href = `https://backendmeetingapp-1.onrender.com/api/meetings/join/${meeting.code}`;
+        window.location.href = "date-chose.html";
     });
 
     meetingContainer.appendChild(meetingCard);
@@ -76,12 +78,12 @@ async function loadMeetings() {
         const loginMessage = document.createElement("div");
         loginMessage.classList.add("empty-state");
         loginMessage.innerHTML = `The list of meetings is available only for logged-in users. <br> 
-                          I encourage you to <a href="register.html">Sign up</a>!`;
+                          I encourage you to <a href="login.html">Log in</a>!`;
         meetingContainer.appendChild(loginMessage);
         return;
     }
     try {
-        const response = await fetch("https://backendmeetingapp-1.onrender.com/api/meetings/for-user", {
+        const response = await fetch(`${url}/api/meetings/for-user`, {
             method: "GET",
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -98,28 +100,22 @@ async function loadMeetings() {
             if (meetings.length === 0) {
                 const emptyState = document.createElement("div")
                 emptyState.classList.add("empty-state")
-                emptyState.textContent = "Nie masz jeszcze żadnych spotkań. Utwórz nowe spotkanie, aby rozpocząć."
+                emptyState.textContent = "You don't have any meetings yet. Create a new meeting to get started."
                 meetingContainer.appendChild(emptyState)
             } else {
                 meetings.forEach((meeting) => addMeetingToUI(meeting))
             }
         } else {
-            showAlert("Nie udało się załadować spotkań.")
+            showAlert("Failed to load meetings.")
         }
     } catch (error) {
         console.error("Error:", error);
-        showAlert("Wystąpił błąd podczas ładowania spotkań.");
+        showAlert("An error occurred while loading the meetings.");
     }
 }
 
 createMeetingButton.addEventListener('click', () => {
     window.location.href = 'create-meeting.html';
-});
-
-const logoutButton = document.querySelector('.logout-button');
-logoutButton.addEventListener('click', () => {
-    localStorage.clear();
-    window.location.href = 'index.html';
 });
 
 // Załaduj spotkania po załadowaniu strony

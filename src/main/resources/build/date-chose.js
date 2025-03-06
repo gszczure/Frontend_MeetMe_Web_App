@@ -4,6 +4,8 @@ let isProcessing = false;
 let cachedMeetingDates = null;
 let cachedVoteCounts = null;
 let guest = false;
+let url = "http://localhost:8080";
+
 
 // Enum dla stanów wyboru
 const SelectionState = {
@@ -65,7 +67,7 @@ async function fetchAllData() {
 
     try {
         const response = await fetch(
-            `https://backendmeetingapp-1.onrender.com/api/meeting-details/details/${meetingCode}`, {
+            `${url}/api/meeting-details/details/${meetingCode}`, {
             headers: { "Authorization": `Bearer ${token}` }
         });
 
@@ -105,7 +107,7 @@ async function fetchUserSelections() {
         return;
     }
     try {
-        const response = await fetch(`https://backendmeetingapp-1.onrender.com/api/date-selections/${meetingId}/${userId}/user_selections`, {
+        const response = await fetch(`${url}/api/date-selections/${meetingId}/${userId}/user_selections`, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
@@ -130,7 +132,7 @@ async function fetchVoteCounts() {
         return;
     }
     try {
-        const response = await fetch(`https://backendmeetingapp-1.onrender.com/api/date-selections/${meetingId}/votes`, {
+        const response = await fetch(`${url}/api/date-selections/${meetingId}/votes`, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
@@ -156,7 +158,7 @@ async function updateUserSelection(dateRangeId, selectionState) {
     try {
         if (selectionState === SelectionState.NONE) {
             const response = await fetch(
-                `https://backendmeetingapp-1.onrender.com/api/date-selections/${meetingId}/${userId}/${dateRangeId}/delete_selection`,
+                `${url}/api/date-selections/${meetingId}/${userId}/${dateRangeId}/delete_selection`,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -171,7 +173,7 @@ async function updateUserSelection(dateRangeId, selectionState) {
             return;
         }
         const response = await fetch(
-            `https://backendmeetingapp-1.onrender.com/api/date-selections/${meetingId}/${userId}/${dateRangeId}/update_selection`,
+            `${url}/api/date-selections/${meetingId}/${userId}/${dateRangeId}/update_selection`,
             {
                 method: "POST",
                 headers: {
@@ -198,7 +200,7 @@ async function fetchVotesForDate(dateRangeId) {
     }
 
     try {
-        const response = await fetch(`https://backendmeetingapp-1.onrender.com/api/meeting-details/getVotes/${dateRangeId}`, {
+        const response = await fetch(`${url}/api/meeting-details/getVotes/${dateRangeId}`, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
@@ -222,7 +224,7 @@ async function removeParticipant(userId) {
         return;
     }
     try {
-        const response = await fetch(`https://backendmeetingapp-1.onrender.com/api/meetings/${meetingId}/participants/${userId}`, {
+        const response = await fetch(`${url}/api/meetings/${meetingId}/participants/${userId}`, {
             method: "DELETE",
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -248,7 +250,7 @@ async function fetchParticipants() {
         return;
     }
     try {
-        const response = await fetch(`https://backendmeetingapp-1.onrender.com/api/meetings/${meetingId}/participants`, {
+        const response = await fetch(`${url}/api/meetings/${meetingId}/participants`, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
@@ -561,12 +563,6 @@ window.onclick = (event) => {
     }
 };
 
-const logoutButton = document.querySelector(".logout-button");
-logoutButton.addEventListener("click", () => {
-    localStorage.clear();
-    window.location.href = "index.html";
-});
-
 document.getElementById("participants-btn").addEventListener("click", showParticipantsModal);
 
 function closeModal(modalId) {
@@ -601,7 +597,7 @@ async function handleLogin() {
 
     if (username && password) {
         try {
-            const response = await fetch("https://backendmeetingapp-1.onrender.com/api/auth/login", {
+            const response = await fetch(`${url}/api/auth/login`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -639,7 +635,7 @@ async function handleGuestLogin() {
 
     if (firstName && lastName) {
         try {
-            const response = await fetch("https://backendmeetingapp-1.onrender.com/api/auth/guest-login", {
+            const response = await fetch(`${url}/api/auth/guest-login`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -682,7 +678,7 @@ async function handleAutoJoinMeeting() {
     if (!token) return;
 
     try {
-        const response = await fetch("https://backendmeetingapp-1.onrender.com/api/meetings/join", {
+        const response = await fetch(`${url}/api/meetings/join`, {
             method: "POST",
             headers: {
                 "Authorization": `Bearer ${token}`,

@@ -1,5 +1,6 @@
 let token = localStorage.getItem("token");
 let isProcessing = false;
+let url = "http://localhost:8080";
 
 // TODO sprawdzic blad jak w[isze start time a potem duration na none ustawie i stworze spotkanie
 class Calendar {
@@ -324,7 +325,7 @@ class Calendar {
         }
 
         try {
-            const response = await fetch("https://backendmeetingapp-1.onrender.com/api/meetings/create", {
+            const response = await fetch(`${url}/api/meetings/create`, {
                 method: "POST",
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -344,8 +345,8 @@ class Calendar {
                 showNotification("Meeting created successfully!")
 
                 setTimeout(() => {
-                    //TODO przeslac code dalej zeby odrazu przenioslo do date-chose
-                    window.location.href = meetingLink;
+                    // window.location.href = meetingLink;
+                    window.location.href = "index.html"
                 }, 3000);
 
             } else {
@@ -374,12 +375,6 @@ class Calendar {
 
 const calendar = new Calendar();
 
-const logoutButton = document.querySelector(".logout-button");
-logoutButton.addEventListener("click", () => {
-    localStorage.clear();
-    window.location.href = "index.html";
-})
-
 // Logowanie
 async function handleLogin() {
     const username = document.getElementById("username").value;
@@ -387,7 +382,7 @@ async function handleLogin() {
 
     if (username && password) {
         try {
-            const response = await fetch("https://backendmeetingapp-1.onrender.com/api/auth/login", {
+            const response = await fetch(`${url}/api/auth/login`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -426,7 +421,7 @@ async function handleGuestLogin() {
 
     if (firstName && lastName) {
         try {
-            const response = await fetch("https://backendmeetingapp-1.onrender.com/api/auth/guest-login", {
+            const response = await fetch(`${url}/api/auth/guest-login`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
