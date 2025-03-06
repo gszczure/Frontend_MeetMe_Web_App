@@ -1,6 +1,8 @@
 const meetingContainer = document.querySelector('#meeting-container');
 const createMeetingButton = document.querySelector('.create-meeting-button');
-let url = "http://localhost:8080";
+// let url = "http://localhost:8080";
+let url = "https://backendmeetingapp-1.onrender.com"
+
 
 //TODO dodac isprocessing jak w data-chose.js by blokowac klikanie drugi raz guziak usuwania
 

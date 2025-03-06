@@ -4,7 +4,9 @@ let isProcessing = false;
 let cachedMeetingDates = null;
 let cachedVoteCounts = null;
 let guest = false;
-let url = "http://localhost:8080";
+// let url = "http://localhost:8080";
+let url = "https://backendmeetingapp-1.onrender.com"
+
 
 
 // Enum dla stanów wyboru
