@@ -47,7 +47,8 @@
     }
 
     .notification.show {
-        top: 2px;
+        top: 0;
+        border-radius: 0;
     }
 }
 
