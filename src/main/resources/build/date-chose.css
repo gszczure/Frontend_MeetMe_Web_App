@@ -416,7 +416,7 @@ main {
 }
 
 /* Login Overlay Styles */
-.overlay {
+.overlayLogin {
     position: fixed;
     top: 0;
     left: 0;
