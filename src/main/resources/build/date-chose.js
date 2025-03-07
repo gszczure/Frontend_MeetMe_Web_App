@@ -702,7 +702,7 @@ if (shareButton) {
     shareButton.addEventListener("click", async () => {
         const meetingCode = getMeetingCode()
         if (meetingCode && meetingCode !== "null") {
-            const meetingLink = `https://backendmeetingapp-1.onrender.com/api/meetings/join/${meetingCode}`
+            const meetingLink = `https://backendmeetingapp-1.onrender.com/api/meetings/${meetingCode}`
 
             try {
                 await navigator.clipboard.writeText(meetingLink)
@@ -755,10 +755,7 @@ if (token) {
 }
 
 // TODO pomysles nad priorytetem kolejnosci wysweitlania most popular date np (3.YES 1.IfNeeded > 3.IfNeeded 1.YES)
-// TODO dodac jakies wyglady dla guzikow ktore nei sa dostepne dla gosci
 // TODO zrobic is processing w kazdym guziku (viev votes i participants) bo w tych brakuje
-//TODO jak usune uzytkownika to ma sie wszystko zaladowac ponownie (w sumei to nie wszytko bo tylko pasek kolorow glosow i na dole lista glosow) VOTES ma sie zaladowac jeszcze raz
 // TODO zrobi w participants X czerwonego jak przy usuwaniu ludzi
 //TODO naprawic blad ze jak spamie participants to sie wysweitli po wczytaniu wszystkiego (zrobic zeby te guziki byly disabled na poczatku albo zeby funckjie odpowiadajace endpoitom dobrym byly dopiero mozliwe zeby wysylac dane po jakims czasie)
 // TODO zrobic na telefonei inaczej guziki edit share oraz participants
-//TODO dodac wyglady po najechaniu na daty do wyboru (krawedzie sie podswieca)

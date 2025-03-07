@@ -65,7 +65,7 @@ function addMeetingToUI(meeting) {
     }
 
     meetingCard.addEventListener('click', () => {
-        window.location.href = `https://backendmeetingapp-1.onrender.com/api/meetings/join/${meeting.code}`;
+        window.location.href = `https://backendmeetingapp-1.onrender.com/api/meetings/${meeting.code}`;
         // window.location.href = "date-chose.html";
     });
 
