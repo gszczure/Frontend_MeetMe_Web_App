@@ -702,7 +702,7 @@ if (shareButton) {
     shareButton.addEventListener("click", async () => {
         const meetingCode = getMeetingCode()
         if (meetingCode && meetingCode !== "null") {
-            const meetingLink = `https://backendmeetingapp-1.onrender.com/api/meetings/${meetingCode}`
+            const meetingLink = `https://backendmeetingapp-1.onrender.com/api/meetings/join/${meetingCode}`
 
             try {
                 await navigator.clipboard.writeText(meetingLink)
