@@ -175,7 +175,7 @@ main {
         flex-direction: column;
     }
 
-    .controls button span {
+    .controls span {
         display: none;
     }
 }
@@ -352,7 +352,6 @@ main {
     font-weight: 500;
     transition: background-color 0.2s;
     color: black;
-    align-items: center;
 }
 
 .controls button:hover {
