@@ -175,7 +175,7 @@ main {
         flex-direction: column;
     }
 
-    .controls span {
+    .controls button span {
         display: none;
     }
 }
