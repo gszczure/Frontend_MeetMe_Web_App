@@ -279,13 +279,13 @@ main {
     max-width: 500px;
 }
 
-.close {
-    color: #FF0000FF;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-    cursor: pointer;
-}
+/*.close {*/
+/*    color: #FF0000FF;*/
+/*    float: right;*/
+/*    font-size: 28px;*/
+/*    font-weight: bold;*/
+/*    cursor: pointer;*/
+/*}*/
 
 .vote-list {
     list-style: none;
@@ -412,128 +412,6 @@ main {
     color: var(--delete-button-hover);
     transform: scale(1.2);
 }
-
-/* Login Overlay Styles */
-.overlayLogin {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.7);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-    display: none;
-}
-
-.login-form {
-    background-color: white;
-    padding: 40px;
-    border-radius: 12px;
-    width: 450px;
-    max-width: 90%;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-    border: 3px solid #2563eb;
-
-}
-
-.login-form h2 {
-    margin-bottom: 40px;
-    color: #2c3e50;
-    font-size: 28px;
-    text-align: center;
-    font-weight: 500;
-}
-
-.form-field {
-    margin-bottom: 24px;
-}
-
-.form-field label {
-    display: block;
-    font-size: 16px;
-    color: #333;
-    margin-bottom: 8px;
-    font-weight: 500;
-    text-align: left;
-}
-
-.form-field input {
-    display: block;
-    width: 100%;
-    padding: 12px 0;
-    border: none;
-    border-bottom: 1px solid #ccc;
-    font-size: 16px;
-    background: transparent;
-    transition: border-color 0.3s ease;
-    text-align: left;
-}
-
-.form-field input:focus {
-    outline: none;
-    border-color: #2563eb;
-}
-
-.form-field input::placeholder {
-    color: #999;
-}
-
-.form-actions {
-    margin-top: 40px;
-}
-
-.no-account,
-.has-account {
-    color: #666;
-    font-size: 14px;
-    margin-bottom: 16px;
-}
-
-.login-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    padding: 12px 20px;
-    background-color: white;
-    color: #2563eb;
-    border: 1px solid #2563eb;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: 500;
-    transition: all 0.3s ease;
-}
-
-.login-button svg {
-    margin-left: 8px;
-}
-
-.login-button:hover {
-    background-color: #2563eb;
-    color: white;
-
-}
-
-.switch-form {
-    margin-top: 24px;
-    text-align: center;
-}
-
-.switch-form a {
-    color: #2563eb;
-    text-decoration: none;
-    cursor: pointer;
-    font-size: 14px;
-}
-
-.switch-form a:hover {
-    text-decoration: underline;
-}
-
 
 .disabled-button {
     opacity: 0.6;
