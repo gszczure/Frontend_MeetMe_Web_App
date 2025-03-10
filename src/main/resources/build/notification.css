@@ -4,7 +4,7 @@
     left: 50%;
     transform: translateX(-50%);
     background-color: #4CAF50;
-    color: white;
+    color: var(--text);
     padding: 16px 40px 16px 16px;
     border-radius: 4px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
@@ -30,7 +30,7 @@
     right: 12px;
     background: none;
     border: none;
-    color: white;
+    color: var(--text);
     font-size: 20px;
     cursor: pointer;
     padding: 6px 10px;
