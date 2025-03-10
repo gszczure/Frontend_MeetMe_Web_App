@@ -41,6 +41,7 @@
     color: #333;
     margin-bottom: 8px;
     font-weight: 500;
+    text-align: left;
 }
 
 .form-field input {
@@ -52,6 +53,7 @@
     font-size: 16px;
     background: transparent;
     transition: border-color 0.3s ease;
+    text-align: left;
 }
 
 .form-field input:focus {
