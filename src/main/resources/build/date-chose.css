@@ -10,7 +10,7 @@ main {
     padding: 20px;
     max-width: 1200px;
     margin: auto;
-    background: var(--meeting-bg, #ffffff);
+    background: var(--meeting-bg);
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
@@ -64,7 +64,7 @@ main {
     border-radius: 4px;
     line-height: 20px;
     text-align: center;
-    color: white;
+    color: var(--text);
     font-size: 12px;
     transition: width 0.3s;
 }
@@ -247,8 +247,8 @@ main {
 .view-votes-button {
     width: 100%;
     padding: 8px;
-    background-color: #2e3856;
-    color: #ffffff;
+    background-color: var(--primary-dark-blue);
+    color: var(--text);
     border: none;
     border-radius: 8px;
     font-weight: 500;
@@ -373,12 +373,6 @@ main {
     font-size: 0.95rem;
     color: #7f8c8d;
     line-height: 1.4;
-}
-
-#participants-btn {
-    display: flex;
-    align-items: center;
-    gap: 5px;
 }
 
 #participants-btn svg {

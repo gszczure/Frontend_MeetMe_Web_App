@@ -7,7 +7,6 @@
 
     --bg-color: #f4f4f9;
     --text-color: #333;
-    --header-bg: var(--primary-dark-blue);
     --header-text: #333;
     --button-bg: var(--primary-blue);
     --button-hover: var(--primary-light-blue);
@@ -16,9 +15,6 @@
     --link-hover: var(--secondary-blue);
     --delete-button-bg: #f44336;
     --delete-button-hover: #d32f2f;
-    --details-button-bg: var(--primary-blue);
-    --details-button-hover: var(--primary-light-blue);
-    --meeting-code-color: var(--primary-dark-blue);
     --text: white;
 }
 
