@@ -257,7 +257,7 @@ main {
 }
 
 .view-votes-button:hover {
-    background-color: #646e9e;
+    background-color: var(--primary-blue);
 }
 
 .modal {
@@ -278,14 +278,6 @@ main {
     border-radius: 8px;
     max-width: 500px;
 }
-
-/*.close {*/
-/*    color: #FF0000FF;*/
-/*    float: right;*/
-/*    font-size: 28px;*/
-/*    font-weight: bold;*/
-/*    cursor: pointer;*/
-/*}*/
 
 .vote-list {
     list-style: none;
