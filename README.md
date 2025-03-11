@@ -1,8 +1,6 @@
 > [!IMPORTANT]  
 > I am continuously working on improving the application code.  
 > 
-> All **CSS**, **HTML**, and **JavaScript** files are located within a single directory because this setup was necessary for rendering the page on the Render platform.
-
 
 # MeetMeApp
 
