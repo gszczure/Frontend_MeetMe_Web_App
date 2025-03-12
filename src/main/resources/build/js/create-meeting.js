@@ -456,7 +456,6 @@ async function handleGuestLogin() {
     }
 }
 
-// TODO przeniesc to do osobnego js z osobnym css do wygladu do panelu pseudo logowania
 function setupLoginForm() {
     const showLoginFormLink = document.getElementById("show-login-form");
     const showGuestLoginLink = document.getElementById("show-guest-login");
