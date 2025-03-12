@@ -80,7 +80,7 @@ async function loadMeetings() {
         const loginMessage = document.createElement("div");
         loginMessage.classList.add("empty-state");
         loginMessage.innerHTML = `The list of meetings is available only for logged-in users. <br> 
-                          I encourage you to <a href="../html/login.html">Log in</a>!`;
+                          I encourage you to <a href="https://meetme-web-q5ol.onrender.com/login.html">Log in</a>!`;
         meetingContainer.appendChild(loginMessage);
         return;
     }
