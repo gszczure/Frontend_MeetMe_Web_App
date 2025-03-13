@@ -25,7 +25,7 @@ Below, you'll find details about the features and technologies used in MeetMeApp
 
 ## Technologies
 
-- **Backend**: The backend code of the app is available on GitHub: [Backend_MeetMeApp](https://github.com/gszczure/BACKENDMEETINGAPP)
+- **Backend**: The backend code of the app is available on GitHub: [Backend_MeetMe_App](https://github.com/gszczure/Backend_MeetMe_App)
 - **Frontend**: The frontend was developed using **CSS**, **HTML**, and **JavaScript**.
 - **Authentication**: **JWT (JSON Web Token)** is used for user authentication, ensuring secure session management.
 - **Database**: The application uses a **PostgreSQL** database, and user passwords are **hashed** before being saved in the database to provide an additional layer of security.
