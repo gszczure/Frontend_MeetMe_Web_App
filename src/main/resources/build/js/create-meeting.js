@@ -343,7 +343,7 @@ class Calendar {
 
             if (response.ok) {
                 const data = await response.json();
-                const meetingLink = `https://backendmeetingapp-1.onrender.com/api/meetings/join/${data.code}`
+                const meetingLink = `${url}/api/meetings/join/${data.code}`
 
                 showNotification("Meeting created successfully!")
 

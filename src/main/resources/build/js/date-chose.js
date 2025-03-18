@@ -699,7 +699,6 @@ async function handleAutoJoinMeeting() {
     }
 }
 
-//TODO DO ZMIANY SHARE LINK
 const shareButton = document.getElementById("share-btn")
 if (shareButton) {
     shareButton.addEventListener("click", async () => {
