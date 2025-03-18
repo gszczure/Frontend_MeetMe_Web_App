@@ -5,7 +5,9 @@ let cachedMeetingDates = null;
 let cachedVoteCounts = null;
 let guest = false;
 // let url = "http://localhost:8080";
-let url = "https://backendmeetingapp-1.onrender.com"
+// let url = "https://backendmeetingapp-1.onrender.com"
+let url = "https://backendmeetmeapp-production.up.railway.app"
+
 
 
 
@@ -697,6 +699,7 @@ async function handleAutoJoinMeeting() {
     }
 }
 
+//TODO DO ZMIANY SHARE LINK
 const shareButton = document.getElementById("share-btn")
 if (shareButton) {
     shareButton.addEventListener("click", async () => {

@@ -1,7 +1,9 @@
 let token = localStorage.getItem("token");
 let isProcessing = false;
 // let url = "http://localhost:8080";
-let url = "https://backendmeetingapp-1.onrender.com"
+// let url = "https://backendmeetingapp-1.onrender.com"
+let url = "https://backendmeetmeapp-production.up.railway.app"
+
 
 // TODO sprawdzic blad jak w[isze start time a potem duration na none ustawie i stworze spotkanie
 class Calendar {
