@@ -140,5 +140,5 @@ backButton.addEventListener('click', () => {
 
 logoutButton.addEventListener('click', () => {
     localStorage.clear();
-    window.location.href = 'login-register.html'
+    window.location.href = 'login.html'
 })

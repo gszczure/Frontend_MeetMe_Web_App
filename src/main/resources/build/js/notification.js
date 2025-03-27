@@ -37,5 +37,6 @@ function initializeNotification() {
     })
 }
 
-initializeNotification();
+document.body.classList.add("blocked");
 
+initializeNotification();

@@ -182,7 +182,7 @@ async function handleLeaveMeetingButtonClick(meetingId) {
 // Obsługa przycisków
 logoutButton.addEventListener('click', () => {
     localStorage.clear();
-    window.location.href = 'login-register.html';
+    window.location.href = 'login.html';
 });
 
 backButton.addEventListener('click', () => {
